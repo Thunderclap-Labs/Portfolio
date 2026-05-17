@@ -1,0 +1,83 @@
+- generic [ref=e2]:
+  - generic:
+    - navigation:
+      - generic [ref=e4]:
+        - link "Anduril Homepage" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e7]
+        - generic [ref=e9]:
+          - link "Sea" [ref=e10] [cursor=pointer]:
+            - generic [ref=e11]: Sea
+            - text: Sea
+          - link "Land" [ref=e12] [cursor=pointer]:
+            - generic [ref=e13]: Land
+            - text: Land
+          - link "Air" [ref=e14] [cursor=pointer]:
+            - generic [ref=e15]: Air
+            - text: Air
+          - link "Space" [ref=e16] [cursor=pointer]:
+            - /url: /space/space
+            - generic [ref=e17]: Space
+          - link "Lattice" [ref=e18] [cursor=pointer]:
+            - generic [ref=e19]: Lattice
+            - text: Lattice
+          - link "Arsenal-1" [ref=e20] [cursor=pointer]:
+            - /url: /arsenal-1
+            - generic [ref=e21]: Arsenal-1
+        - generic [ref=e22]:
+          - generic [ref=e23] [cursor=pointer]: Search
+          - generic [ref=e24]:
+            - generic [ref=e25] [cursor=pointer]: Company
+            - generic [ref=e26] [cursor=pointer]: Company
+  - generic [ref=e32]:
+    - generic [ref=e33]:
+      - paragraph [ref=e36]:
+        - text: We use optional analytics cookies to understand how you use our site so we can improve it. View our
+        - link "Privacy Policy" [ref=e37] [cursor=pointer]:
+          - /url: /privacy-policy
+        - text: for details.
+      - generic [ref=e38]:
+        - button "Accept" [ref=e39] [cursor=pointer]
+        - button "Reject" [ref=e40] [cursor=pointer]
+    - generic [ref=e41]:
+      - main [ref=e42]:
+        - generic [ref=e48]:
+          - generic [ref=e49]:
+            - heading "Arsenal-1" [level=5] [ref=e50]
+            - link "Rebuild the Arsenal" [ref=e51] [cursor=pointer]:
+              - /url: /arsenal-1
+              - paragraph [ref=e52]: Rebuild the Arsenal
+              - img [ref=e54]
+          - generic [ref=e57]:
+            - generic [ref=e58]:
+              - paragraph [ref=e59]: Designed by Anduril
+              - paragraph [ref=e60]: Built in Ohio
+            - generic:
+              - paragraph
+            - generic [ref=e61]:
+              - paragraph [ref=e62]: Arsenal-1
+              - paragraph [ref=e63]: A new standard in defense manufacturing.
+        - generic [ref=e64]:
+          - generic [ref=e65]:
+            - heading "News & Insights" [level=4] [ref=e66]
+            - link "All articles" [ref=e67] [cursor=pointer]:
+              - /url: /news
+              - paragraph [ref=e68]: All articles
+              - img [ref=e70]
+          - link "5/5/2026 Anduril, Team of Partners to Work on Space Force’s Space-Based Interceptors for Golden Dome for America Anduril, Team of Partners to Work on Space Force’s Space-Based Interceptors for Golden Dome for America Read more" [ref=e74] [cursor=pointer]:
+            - /url: /news/anduril-team-of-partners-to-work-on-space-force-s-space-based-interceptors-for-golden-dome-for-america
+            - generic [ref=e75]:
+              - generic [ref=e76]:
+                - paragraph [ref=e78]: 5/5/2026
+                - generic [ref=e79]:
+                  - heading "Anduril, Team of Partners to Work on Space Force’s Space-Based Interceptors for Golden Dome for America" [level=5] [ref=e80]
+                  - heading [level=5] [ref=e81]: Anduril, Team of Partners to Work on Space Force’s Space-Based Interceptors for Golden Dome for America
+              - paragraph [ref=e82]: Anduril, Team of Partners to Work on Space Force’s Space-Based Interceptors for Golden Dome for America
+              - link "Read more" [ref=e83]:
+                - /url: /news/anduril-team-of-partners-to-work-on-space-force-s-space-based-interceptors-for-golden-dome-for-america
+                - paragraph [ref=e84]: Read more
+                - img [ref=e86]
+            - img [ref=e89]
+            - img [ref=e91]
+      - contentinfo [ref=e93]
+  - img [ref=e95]
