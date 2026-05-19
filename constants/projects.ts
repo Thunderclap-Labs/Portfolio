@@ -27,7 +27,7 @@ export const featuredProjects: FeaturedProject[] = [
     tagline: "Engineering the Rain.",
     description:
       "Drone and rocket-based weather modification systems for enhanced precipitation, drought combat, and water resource management.",
-    image: "/images/projects/cloudseeding.png",
+    image: "/images/projects/cloud.png",
     categories: ["Aerospace", "Atmospheric", "Hardware"],
     active: true,
     href: "/cloud-seeding",

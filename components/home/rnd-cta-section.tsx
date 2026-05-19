@@ -1,71 +1,117 @@
 import Link from "next/link";
 
+const CAPABILITIES = [
+  {
+    title: "Rapid Prototyping",
+    desc: "Fast turnaround from concept to functional prototype using CNC, 3D printing, and custom electronics.",
+  },
+  {
+    title: "Systems Engineering",
+    desc: "End-to-end system design, integration, and optimization across hardware and software.",
+  },
+  {
+    title: "Testing & Validation",
+    desc: "Rigorous testing protocols for aerospace components, propellants, and electronic systems.",
+  },
+];
+
 export function RndCtaSection() {
   return (
-    <section className="py-[84px]" style={{ background: "var(--color-bg)" }}>
-      <div className="container-content">
-        <div className="flex flex-col items-center text-center gap-6 max-w-[640px] mx-auto">
-          <span className="eyebrow text-white">R&amp;D Services</span>
+    <section className="bg-bg text-white border-t border-white/10">
+      <div className="container-content max-w-280 mx-auto px-6">
+        {/* Top: editorial split */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-b border-white/15">
+          <div className="py-10.5 md:py-16 md:border-r border-white/15 flex flex-col justify-between gap-10 md:pr-8">
+            <div>
+              <span className="block font-medium text-[10.5px] uppercase tracking-[0.42px] text-white/60 mb-5 leading-[105%]">
+                R&amp;D Services
+              </span>
+              <h2 className="text-[35px] font-normal leading-[125%] tracking-[-0.7px] text-white">
+                Become Our R&amp;D Partner.
+              </h2>
+            </div>
 
-          <h2
-            className="text-white m-0"
-            style={{ fontSize: "clamp(28px, 4vw, 45px)", fontWeight: 700, letterSpacing: "-0.7px", lineHeight: "115%" }}
-          >
-            Become Our R&amp;D Partner
-          </h2>
+            <div className="flex flex-wrap items-center gap-6">
+              <Link
+                href="/contact"
+                className="group inline-flex items-center gap-3 bg-white text-bg px-7 py-4 text-[14.7px] tracking-[-0.126px] outline-1 outline-white transition-colors duration-300 ease-out hover:bg-transparent hover:text-white"
+              >
+                Partner Up
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 10 10"
+                  fill="none"
+                  aria-hidden="true"
+                  className="transition-transform duration-300 ease-out group-hover:translate-x-1 group-hover:-translate-y-1"
+                >
+                  <path
+                    d="M1 9L9 1M9 1H3M9 1V7"
+                    stroke="currentColor"
+                    strokeWidth="1.4"
+                    strokeLinecap="square"
+                  />
+                </svg>
+              </Link>
+              <Link
+                href="/rnd"
+                className="group inline-flex items-center gap-2 text-[14.7px] tracking-[-0.126px] text-white/60 hover:text-white transition-colors duration-300 ease-out"
+              >
+                Learn More
+                <svg
+                  width="10"
+                  height="10"
+                  viewBox="0 0 10 10"
+                  fill="none"
+                  aria-hidden="true"
+                  className="transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                >
+                  <path
+                    d="M1 9L9 1M9 1H3M9 1V7"
+                    stroke="currentColor"
+                    strokeWidth="1.4"
+                    strokeLinecap="square"
+                  />
+                </svg>
+              </Link>
+            </div>
+          </div>
 
-          <p className="m-0 body-text" style={{ color: "var(--color-text-muted)", maxWidth: "480px" }}>
-            We partner with companies and institutions for rapid prototyping,
-            systems engineering, and testing & validation across aerospace,
-            chemistry, and defense technologies.
-          </p>
-
-          <div className="flex flex-wrap gap-4 mt-2 justify-center">
-            <Link href="/contact" className="btn-border-light">
-              Partner Up
-              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-                <path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </Link>
-            <Link href="/rnd" className="action-link text-white" style={{ opacity: 0.55 }}>
-              Learn More
-              <svg width="8" height="8" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-                <path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </Link>
+          <div className="py-10.5 md:py-16 flex flex-col justify-end md:pl-8">
+            <div className="flex flex-col gap-6 max-w-xl">
+              <p className="text-[14.7px] leading-[120%] tracking-[-0.126px] text-white/80">
+                We partner with companies and institutions for rapid prototyping,
+                systems engineering, and testing &amp; validation across
+                aerospace, chemistry, and defense technologies.
+              </p>
+              <p className="text-[14.7px] leading-[120%] tracking-[-0.126px] text-white/40">
+                From early concept to flight-ready hardware — bring us the
+                problem, leave with the solution.
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Capabilities row */}
-        <div
-          className="grid grid-cols-1 sm:grid-cols-3 gap-px mt-16 bg-[rgba(255,255,255,0.08)]"
-        >
-          {[
-            {
-              title: "Rapid Prototyping",
-              desc: "Fast turnaround from concept to functional prototype using CNC, 3D printing, and custom electronics.",
-            },
-            {
-              title: "Systems Engineering",
-              desc: "End-to-end system design, integration, and optimization across hardware and software.",
-            },
-            {
-              title: "Testing & Validation",
-              desc: "Rigorous testing protocols for aerospace components, propellants, and electronic systems.",
-            },
-          ].map((cap) => (
+        {/* Capabilities — numbered process steps */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
+          {CAPABILITIES.map((cap, index) => (
             <div
               key={cap.title}
-              className="flex flex-col gap-3 p-8"
-              style={{ background: "rgba(255,255,255,0.03)" }}
+              className="group relative py-10 md:py-12 md:border-r last:border-r-0 border-white/15 transition-colors duration-300 ease-out hover:bg-white/3 md:px-8 first:pl-0 last:pr-0"
             >
-              <h3
-                className="text-white m-0"
-                style={{ fontSize: "18px", fontWeight: 700, letterSpacing: "-0.21px" }}
-              >
+              <div className="flex items-baseline justify-between mb-8">
+                <span className="text-[42px] leading-[100%] tracking-[-1px] font-normal text-white">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span className="font-medium text-[10.5px] uppercase tracking-[0.42px] text-white/40 leading-[105%]">
+                  Capability
+                </span>
+              </div>
+              <div className="h-px w-12 bg-white/30 transition-all duration-300 ease-out group-hover:w-20 group-hover:bg-white/70 mb-5" />
+              <h3 className="text-[14.7px] font-bold leading-[115%] tracking-[-0.126px] text-white mb-3">
                 {cap.title}
               </h3>
-              <p className="m-0 body-text" style={{ color: "var(--color-text-muted)" }}>
+              <p className="text-[14.7px] leading-[120%] tracking-[-0.126px] text-white/50">
                 {cap.desc}
               </p>
             </div>

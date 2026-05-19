@@ -1,9 +1,11 @@
 import { HeroSection } from "@/components/home/hero-section";
 import { AboutSection } from "@/components/home/about-section";
 import { AchievementsSection } from "@/components/home/achievements-section";
+import { ByTheNumbersSection } from "@/components/home/by-the-numbers-section";
 import { PartnersSection } from "@/components/home/partners-section";
 import { ProjectsShowcaseSection } from "@/components/home/projects-showcase-section";
 import { RndCtaSection } from "@/components/home/rnd-cta-section";
+import { NewsSection } from "@/components/home/news-section";
 
 export default function Home() {
   return (
@@ -12,8 +14,10 @@ export default function Home() {
       <ProjectsShowcaseSection />
       <AboutSection />
       <AchievementsSection />
-      <PartnersSection />
+      <ByTheNumbersSection />
+      <NewsSection />
       <RndCtaSection />
+      <PartnersSection />
     </>
   );
 }
