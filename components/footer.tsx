@@ -41,9 +41,10 @@ export function Footer() {
               <Image
                 src="/logo.png"
                 alt="Thunderclap Labs Logo"
-                height={36}
                 width={160}
-                style={{ height: "2.25rem", width: "auto" }}
+                height={36}
+                sizes="160px"
+                style={{ width: "auto", height: "36px" }}
               />
             </Link>
             <p

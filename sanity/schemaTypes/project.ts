@@ -1,23 +1,32 @@
 import { defineField, defineType } from "sanity";
 
-const CATEGORY_OPTIONS = [
-  { title: "News", value: "news" },
-  { title: "Insight", value: "insight" },
-  { title: "Press", value: "press" },
-  { title: "Case Study", value: "case-study" },
-  { title: "Technical", value: "technical" },
-  { title: "Announcement", value: "announcement" },
+const STATUS_OPTIONS = [
+  { title: "Active", value: "active" },
+  { title: "In Development", value: "in-development" },
+  { title: "Concept", value: "concept" },
+  { title: "Archived", value: "archived" },
 ];
 
-export const articleType = defineType({
-  name: "article",
-  title: "Article",
+const CATEGORY_OPTIONS = [
+  { title: "Aerospace", value: "aerospace" },
+  { title: "Atmospheric", value: "atmospheric" },
+  { title: "Defense", value: "defense" },
+  { title: "AI", value: "ai" },
+  { title: "Hardware", value: "hardware" },
+  { title: "Chemistry", value: "chemistry" },
+  { title: "Research", value: "research" },
+  { title: "Software", value: "software" },
+  { title: "Satellites", value: "satellites" },
+];
+
+export const projectType = defineType({
+  name: "project",
+  title: "Project",
   type: "document",
   groups: [
     { name: "card", title: "Card" },
     { name: "meta", title: "Metadata" },
     { name: "content", title: "Content" },
-    { name: "related", title: "Related" },
   ],
   fields: [
     // ─── Card ────────────────────────────────────────────────────────────────
@@ -37,11 +46,21 @@ export const articleType = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
-      name: "date",
-      title: "Publish Date",
-      type: "datetime",
+      name: "tagline",
+      title: "Tagline",
+      description: "Short scramble phrase shown on card hover (e.g. \"See Everything. Miss Nothing.\").",
+      type: "string",
       group: "card",
-      validation: (r) => r.required(),
+      validation: (r) => r.required().max(80),
+    }),
+    defineField({
+      name: "summary",
+      title: "Summary",
+      description: "One to two sentence summary used in listings and previews.",
+      type: "text",
+      rows: 3,
+      group: "card",
+      validation: (r) => r.required().max(300),
     }),
     defineField({
       name: "mainImage",
@@ -57,11 +76,13 @@ export const articleType = defineType({
           validation: (r) => r.required().warning("Alt text is important for accessibility."),
         }),
       ],
+      validation: (r) => r.required(),
     }),
+
     defineField({
       name: "heroImage",
       title: "Hero Image",
-      description: "Wide-format image shown at the top of the article detail page. Falls back to Cover Image if empty.",
+      description: "Wide-format image shown at the top of the project detail page. If left empty, the Cover Image is used instead.",
       type: "image",
       group: "card",
       options: { hotspot: true },
@@ -74,59 +95,30 @@ export const articleType = defineType({
         }),
       ],
     }),
-    defineField({
-      name: "description",
-      title: "Short Description",
-      description: "A one or two sentence excerpt shown in listings and previews.",
-      type: "text",
-      rows: 3,
-      group: "card",
-      validation: (r) => r.required().max(300),
-    }),
 
     // ─── Metadata ────────────────────────────────────────────────────────────
     defineField({
-      name: "category",
-      title: "Category",
+      name: "status",
+      title: "Status",
       type: "string",
       group: "meta",
-      options: { list: CATEGORY_OPTIONS, layout: "radio" },
-      initialValue: "news",
+      options: { list: STATUS_OPTIONS, layout: "radio" },
+      initialValue: "active",
+      validation: (r) => r.required(),
     }),
     defineField({
-      name: "tags",
-      title: "Tags",
-      description: "Freeform topical tags (e.g. \"propulsion\", \"AI\", \"funding\").",
+      name: "categories",
+      title: "Categories",
       type: "array",
       group: "meta",
       of: [{ type: "string" }],
-      options: { layout: "tags" },
-    }),
-    defineField({
-      name: "author",
-      title: "Author",
-      type: "string",
-      group: "meta",
-    }),
-    defineField({
-      name: "authorRole",
-      title: "Author Role",
-      description: "e.g. \"Chief Engineer\", \"Communications Lead\".",
-      type: "string",
-      group: "meta",
-    }),
-    defineField({
-      name: "readingTime",
-      title: "Reading Time (minutes)",
-      description: "Manual override. Leave empty to hide.",
-      type: "number",
-      group: "meta",
-      validation: (r) => r.min(1).max(120).integer(),
+      options: { list: CATEGORY_OPTIONS },
+      validation: (r) => r.required().min(1),
     }),
     defineField({
       name: "featured",
-      title: "Featured",
-      description: "Pin to the top of the listing and News section.",
+      title: "Featured on Homepage",
+      description: "Show this project in the homepage showcase grid.",
       type: "boolean",
       group: "meta",
       initialValue: false,
@@ -134,23 +126,53 @@ export const articleType = defineType({
     defineField({
       name: "showInNavbar",
       title: "Show in Navbar",
-      description: "Show this article in the site navbar dropdown (max 4 shown).",
+      description: "Show this project in the site navbar dropdown (max 4 shown).",
       type: "boolean",
       group: "meta",
       initialValue: false,
     }),
     defineField({
-      name: "keyTakeaways",
-      title: "Key Takeaways",
-      description: "Short bullet points highlighted in the sidebar.",
+      name: "order",
+      title: "Display Order",
+      description: "Lower numbers appear first. Leave blank to sort by date.",
+      type: "number",
+      group: "meta",
+    }),
+    defineField({
+      name: "startDate",
+      title: "Start Date",
+      type: "datetime",
+      group: "meta",
+    }),
+    defineField({
+      name: "endDate",
+      title: "End Date",
+      description: "Leave empty for ongoing projects.",
+      type: "datetime",
+      group: "meta",
+    }),
+    defineField({
+      name: "keyTech",
+      title: "Key Technologies",
+      description: "Short tags displayed on the detail page (e.g. \"LiDAR\", \"CFD\", \"Solid Propellant\").",
       type: "array",
       group: "meta",
       of: [{ type: "string" }],
+      options: { layout: "tags" },
     }),
     defineField({
-      name: "links",
+      name: "collaborators",
+      title: "Collaborators",
+      description: "Partners, institutions, or external contributors.",
+      type: "array",
+      group: "meta",
+      of: [{ type: "string" }],
+      options: { layout: "tags" },
+    }),
+    defineField({
+      name: "externalLinks",
       title: "External Links",
-      description: "Optional references, press links, or related resources.",
+      description: "Press coverage, papers, demos, repos.",
       type: "array",
       group: "meta",
       of: [
@@ -169,7 +191,7 @@ export const articleType = defineType({
     defineField({
       name: "body",
       title: "Body",
-      description: "Full article content. Supports headings, lists, links, images, and embedded media.",
+      description: "The full writeup. Supports headings, lists, links, images, and embedded media.",
       type: "array",
       group: "content",
       of: [
@@ -192,7 +214,7 @@ export const articleType = defineType({
     defineField({
       name: "gallery",
       title: "Gallery",
-      description: "Additional images shown at the bottom of the article.",
+      description: "Additional images shown at the bottom of the project page.",
       type: "array",
       group: "content",
       of: [
@@ -212,33 +234,27 @@ export const articleType = defineType({
       ],
     }),
 
-    // ─── Related ─────────────────────────────────────────────────────────────
-    defineField({
-      name: "relatedProjects",
-      title: "Related Projects",
-      description: "Projects this article is about. Shown in the article sidebar.",
-      type: "array",
-      group: "related",
-      of: [{ type: "reference", to: [{ type: "project" }] }],
-    }),
   ],
   orderings: [
     {
-      title: "Publish Date, Newest First",
-      name: "publishDateDesc",
-      by: [{ field: "date", direction: "desc" }],
+      title: "Display Order",
+      name: "displayOrderAsc",
+      by: [
+        { field: "order", direction: "asc" },
+        { field: "startDate", direction: "desc" },
+      ],
+    },
+    {
+      title: "Start Date, Newest First",
+      name: "startDateDesc",
+      by: [{ field: "startDate", direction: "desc" }],
     },
   ],
   preview: {
-    select: { title: "title", media: "mainImage", subtitle: "date" },
+    select: { title: "title", media: "mainImage", subtitle: "status" },
     prepare({ title, media, subtitle }) {
-      return {
-        title,
-        media,
-        subtitle: subtitle
-          ? new Date(subtitle).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })
-          : "No date set",
-      };
+      const statusLabel = STATUS_OPTIONS.find((s) => s.value === subtitle)?.title ?? "—";
+      return { title, media, subtitle: statusLabel };
     },
   },
 });

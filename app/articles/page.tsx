@@ -3,6 +3,7 @@ import Link from "next/link";
 import { client } from "@/lib/sanity/client";
 import { getAllArticlesQuery, type ArticleSummary } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
+import ArticleList from "@/components/articles/article-list";
 
 export const revalidate = 3600;
 
@@ -36,90 +37,95 @@ export default async function ArticlesPage() {
     // Sanity not yet configured — show empty state
   }
 
+  const featured = articles[0];
+  const rest = articles.slice(1);
+  const featuredImageUrl = featured?.mainImage
+    ? urlFor(featured.mainImage).width(1600).height(900).fit("crop").url()
+    : null;
+
   return (
-    <main className="bg-bg-news text-bg min-h-screen pt-21 pb-16">
-      <div className="container-content max-w-280 mx-auto">
-        {/* Page header */}
-        <div className="flex items-baseline justify-between gap-4 pt-10.5">
-          <h1 className="text-[35px] font-normal leading-[125%] tracking-[-0.7px]">
-            News & Insights
-          </h1>
-        </div>
+    <div className="bg-bg-news text-bg min-h-screen">
+      {/* Featured / hero */}
+      {featured ? (
+        <section className="w-full">
+          <div className="container-content max-w-280 mx-auto w-full pt-40 pb-16">
+            <p className="font-medium text-[0.75rem] uppercase tracking-[0.03rem] leading-[105%] mb-4">
+              Newsroom
+            </p>
+            <h1 className="text-[70px] font-normal leading-[105%] tracking-[-1.4px]">
+              News &amp; Insights
+            </h1>
 
-        <div className="h-px bg-bg mt-4" />
+            <div className="mt-16 grid grid-cols-1 md:grid-cols-12 gap-12 sm:gap-16 lg:gap-20 items-stretch HighlightedArticle">
+              {/* Text: occupies first 5 columns according to grid-column: 1/6 */}
+              <div className="md:col-span-5 flex flex-col gap-12 relative z-10 highlightedContent">
+                <div className="flex flex-col gap-16">
+                  <div>
+                    <time
+                      dateTime={featured.date}
+                      className="block mb-4 font-medium text-[0.75rem] uppercase tracking-[0.03rem] leading-[105%] not-italic"
+                    >
+                      {formatDate(featured.date)}
+                    </time>
 
-        {articles.length === 0 ? (
-          <p className="text-[14.7px] tracking-[-0.126px] leading-[120%] py-16 opacity-50">
-            No articles published yet.
-          </p>
-        ) : (
-          <ul className="list-none m-0 p-0">
-            {articles.map((article, index) => {
-              const isFeatured = index === 0 && !!article.mainImage;
-              const imageUrl = article.mainImage
-                ? urlFor(article.mainImage).width(720).height(405).fit("crop").url()
-                : null;
+                    <h2 className="text-[35px] font-normal leading-[125%] tracking-[-0.7px] m-0">
+                      {featured.title}
+                    </h2>
+                  </div>
 
-              return (
-                <li key={article._id}>
-                  <article
-                    className={`py-10 grid gap-8 ${isFeatured ? "grid-cols-1 md:grid-cols-[1fr_auto]" : "grid-cols-1"}`}
-                  >
-                    {/* Text */}
-                    <div className="flex flex-col gap-3">
-                      <time
-                        dateTime={article.date}
-                        className="block font-medium text-[10.5px] uppercase tracking-[0.42px] opacity-60 leading-[105%]"
-                      >
-                        {formatDate(article.date)}
-                      </time>
-
-                      <h2
-                        className={
-                          isFeatured
-                            ? "text-[35px] font-normal leading-[125%] tracking-[-0.7px] m-0"
-                            : "text-[21px] font-bold leading-[115%] tracking-[-0.21px] m-0"
-                        }
-                      >
-                        {article.title}
-                      </h2>
-
-                      {isFeatured && (
-                        <p className="text-[14.7px] tracking-[-0.126px] leading-[120%] max-w-lg opacity-70">
-                          {article.description}
-                        </p>
-                      )}
-
-                      <Link
-                        href={`/articles/${article.slug.current}`}
-                        className="action-link mt-1 text-bg"
-                      >
-                        Read More <ArrowIcon />
-                      </Link>
-                    </div>
-
-                    {/* Featured image (first article only) */}
-                    {isFeatured && imageUrl && (
-                      <div className="relative w-full md:w-120 shrink-0 aspect-video">
-                        <Image
-                          src={imageUrl}
-                          alt={article.mainImage?.alt ?? article.title}
-                          fill
-                          className="object-cover"
-                          sizes="(max-width: 768px) 100vw, 480px"
-                          priority
-                        />
-                      </div>
+                    {featured.description && (
+                      <p className="text-[0.938rem] tracking-[-0.009rem] font-normal leading-[120%] w-[60%] opacity-80 not-italic">
+                        {featured.description}
+                      </p>
                     )}
-                  </article>
 
-                  <div className="h-px bg-bg" />
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </div>
-    </main>
+                  <Link
+                    href={`/articles/${featured.slug.current}`}
+                    className="action-link text-bg inline-flex w-fit items-center gap-1"
+                  >
+                    Read More <ArrowIcon />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Image: occupies remaining 7 columns */}
+              {featuredImageUrl && (
+                <div className="md:col-span-7">
+                  <Link href={`/articles/${featured.slug.current}`} className="block w-full h-full min-h-75">
+                    <div className="relative w-full aspect-video overflow-clip h-full">
+                      <Image
+                        src={featuredImageUrl}
+                        alt={featured.mainImage?.alt ?? featured.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 60vw"
+                        priority
+                      />
+                    </div>
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section className="min-h-screen flex items-start pt-40">
+          <div className="container-content max-w-280 mx-auto w-full">
+            <p className="font-medium text-[0.75rem] uppercase tracking-[0.03rem] leading-[105%] mb-4">
+              Newsroom
+            </p>
+            <h1 className="text-[70px] font-normal leading-[105%] tracking-[-1.4px]">
+              News &amp; Insights
+            </h1>
+            <p className="text-[14.7px] tracking-[-0.126px] leading-[120%] py-16 opacity-50">
+              No articles published yet.
+            </p>
+          </div>
+        </section>
+      )}
+
+      {/* All articles — search + list */}
+      {featured && <ArticleList articles={rest} />}
+    </div>
   );
 }

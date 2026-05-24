@@ -57,7 +57,9 @@ export function PartnersSection() {
                     alt={sponsor.name}
                     width={140}
                     height={48}
-                    className="object-contain opacity-40 group-hover:opacity-100 transition-opacity duration-300 ease-out max-h-12 w-auto"
+                    sizes="140px"
+                    style={{ width: "auto", height: "38px" }}
+                    className="object-contain opacity-40 group-hover:opacity-100 transition-opacity duration-300 ease-out"
                   />
                 </div>
               </SwiperSlide>
