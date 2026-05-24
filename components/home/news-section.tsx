@@ -19,11 +19,7 @@ function ArrowIcon() {
 }
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-US", {
-    day: "numeric",
-    month: "numeric",
-    year: "numeric",
-  });
+  return new Date(iso).toLocaleDateString("sv-SE").replace(/-/g, "/");
 }
 
 export async function NewsSection() {

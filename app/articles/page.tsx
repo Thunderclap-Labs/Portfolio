@@ -8,11 +8,7 @@ import ArticleList from "@/components/articles/article-list";
 export const revalidate = 3600;
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
+  return new Date(iso).toLocaleDateString("sv-SE").replace(/-/g, "/");
 }
 
 function ArrowIcon() {

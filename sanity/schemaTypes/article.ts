@@ -221,6 +221,14 @@ export const articleType = defineType({
       group: "related",
       of: [{ type: "reference", to: [{ type: "project" }] }],
     }),
+    defineField({
+      name: "relatedArticles",
+      title: "Related Articles",
+      description: "Other articles related to this one. The relationship is shown on both sides automatically.",
+      type: "array",
+      group: "related",
+      of: [{ type: "reference", to: [{ type: "article" }] }],
+    }),
   ],
   orderings: [
     {
@@ -236,7 +244,7 @@ export const articleType = defineType({
         title,
         media,
         subtitle: subtitle
-          ? new Date(subtitle).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })
+          ? new Date(subtitle).toLocaleDateString("sv-SE").replace(/-/g, "/")
           : "No date set",
       };
     },

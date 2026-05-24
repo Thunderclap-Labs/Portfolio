@@ -51,6 +51,7 @@ export interface Article extends ArticleSummary {
   body?: PortableTextBlock[];
   gallery?: SanityImage[];
   relatedProjects?: ProjectSummary[];
+  relatedArticles?: ArticleSummary[];
 }
 
 export const ARTICLE_SUMMARY_FIELDS = `
@@ -126,6 +127,12 @@ export const ARTICLE_FULL_FIELDS = `
   gallery[] { ..., asset-> },
   "relatedProjects": relatedProjects[]->{
     ${PROJECT_SUMMARY_FIELDS}
+  },
+  // Bidirectional related articles: forward references + back-references from other articles
+  "relatedArticles": coalesce(relatedArticles[]->{
+    ${ARTICLE_SUMMARY_FIELDS}
+  }, []) + *[_type == "article" && ^._id in relatedArticles[]._ref && _id != ^._id] | order(date desc) {
+    ${ARTICLE_SUMMARY_FIELDS}
   }
 `;
 

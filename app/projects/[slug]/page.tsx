@@ -300,11 +300,7 @@ export default async function ProjectPage({
                     href: `/articles/${a.slug.current}`,
                     title: a.title,
                     subtitle: a.date
-                      ? new Date(a.date).toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                        })
+                      ? new Date(a.date).toLocaleDateString("sv-SE").replace(/-/g, "/")
                       : undefined,
                     image: a.mainImage,
                   }))}

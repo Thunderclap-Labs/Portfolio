@@ -7,11 +7,7 @@ import type { ArticleSummary } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
+  return new Date(iso).toLocaleDateString("sv-SE").replace(/-/g, "/");
 }
 
 function ArrowIcon() {

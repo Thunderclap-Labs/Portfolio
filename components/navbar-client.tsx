@@ -92,6 +92,7 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
   const [headerHovered, setHeaderHovered] = useState(false);
   const [panelHeight, setPanelHeight] = useState(0);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [hoveredContactLink, setHoveredContactLink] = useState<string | null>(null);
   const measureRef = useRef<HTMLDivElement | null>(null);
 
   const closeAll = () => {
@@ -392,7 +393,7 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
                 </div>
 
                 {/* Middle section: Company Links */}
-                <div className="col-span-3 flex flex-col gap-4">
+                <div className="col-span-3 flex flex-col gap-4" onMouseLeave={() => setHoveredContactLink(null)}>
                   <div
                     style={{
                       fontSize: "10.5px",
@@ -410,22 +411,38 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
                     { label: "Projects", href: "/projects" },
                     { label: "Articles", href: "/articles" },
                     { label: "Contact Us", href: "/contact" },
-                  ].map((link) => (
+                  ].map((link) => {
+                    const isLinkHovered = hoveredContactLink === link.href;
+                    const isAnyLinkHovered = hoveredContactLink !== null;
+                    return (
                     <Link
                       key={link.href}
                       href={link.href}
                       onClick={closeAll}
+                      onMouseEnter={() => setHoveredContactLink(link.href)}
                       style={{
                         fontSize: "15.75px",
                         letterSpacing: "-0.154px",
                         color: "#fff",
                         textDecoration: "none",
+                        opacity: isAnyLinkHovered && !isLinkHovered ? 0.3 : 1,
+                        transition: "opacity 0.25s ease-out",
                       }}
-                      className="hover:opacity-70 transition-opacity flex items-center gap-3"
+                      className="flex items-center gap-3"
                     >
-                      <span className="opacity-50" style={{ fontSize: "14px" }}>+</span> {link.label}
+                      <span
+                        style={{
+                          fontSize: "14px",
+                          color: isLinkHovered ? "#DFF140" : "inherit",
+                          opacity: isLinkHovered ? 1 : 0.5,
+                          transition: "color 0.25s ease-out, opacity 0.25s ease-out",
+                        }}
+                      >
+                        +
+                      </span> {link.label}
                     </Link>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -487,6 +504,19 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
 
             {/* Right col — items */}
             <div className="col-span-8 flex flex-col gap-4" onMouseLeave={() => setHoveredItem(null)}>
+              <div
+                style={{
+                  fontSize: "10.5px",
+                  fontWeight: 500,
+                  letterSpacing: "0.42px",
+                  lineHeight: "105%",
+                  textTransform: "uppercase",
+                  color: "rgba(255,255,255,0.6)",
+                  marginBottom: "4px",
+                }}
+              >
+                <ScrambleText key={`featured-${scrambleKey}`} text="Featured" isActive duration={500} />
+              </div>
               {activeItems.map((item) => {
                 const isItemHovered = hoveredItem === item._id;
                 const isAnyHovered = hoveredItem !== null;

@@ -182,11 +182,7 @@ export default async function ArticlePage({
     ? urlFor(heroSource).width(2000).height(1000).fit("crop").url()
     : null;
 
-  const formattedDate = new Date(article.date).toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  const formattedDate = new Date(article.date).toLocaleDateString("sv-SE").replace(/-/g, "/");
 
   const categoryLabel = article.category ? CATEGORY_LABELS[article.category] : null;
 
@@ -403,6 +399,27 @@ export default async function ArticlePage({
                 />
               </SidebarBlock>
             )}
+
+            {(() => {
+              const seen = new Set<string>();
+              const deduped = (article.relatedArticles ?? []).filter((a) => {
+                if (seen.has(a._id)) return false;
+                seen.add(a._id);
+                return true;
+              });
+              return deduped.length > 0 ? (
+                <SidebarBlock label="Related Articles">
+                  <RelatedListLight
+                    items={deduped.map((a) => ({
+                      href: `/articles/${a.slug.current}`,
+                      title: a.title,
+                      subtitle: a.description,
+                      image: a.mainImage,
+                    }))}
+                  />
+                </SidebarBlock>
+              ) : null;
+            })()}
           </aside>
         </div>
       </div>
