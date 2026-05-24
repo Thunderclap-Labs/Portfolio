@@ -18,7 +18,7 @@ const CAPABILITIES = [
 export function RndCtaSection() {
   return (
     <section className="bg-bg text-white border-t border-white/10">
-      <div className="container-content max-w-280 mx-auto px-6">
+      <div className="container-content max-w-280 mx-auto">
         {/* Top: editorial split */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-b border-white/15">
           <div className="py-10.5 md:py-16 md:border-r border-white/15 flex flex-col justify-between gap-10 md:pr-8">

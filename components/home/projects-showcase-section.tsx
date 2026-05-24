@@ -152,7 +152,7 @@ function ProjectCard({ project }: { project: FeaturedProject }) {
 
 export function ProjectsShowcaseSection() {
   return (
-    <section style={{ background: "var(--color-bg)" }} className="px-4 sm:px-6 pb-6">
+    <section style={{ background: "var(--color-bg)" }} className="px-4 sm:px-6 sm:pt-0 pt-4 pb-6">
 
       {/* Cards grid */}
       <div

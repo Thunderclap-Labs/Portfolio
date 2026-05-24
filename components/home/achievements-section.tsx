@@ -47,7 +47,7 @@ const ACHIEVEMENTS = [
 
 export function AchievementsSection() {
   return (
-    <section className="bg-bg-inverse text-bg py-10.5">
+    <section className="bg-bg-news text-bg py-10.5">
       <div className="w-full">
         <div className="mb-10.5 px-4 sm:px-6 w-full">
           <span className="block font-medium text-[10.5px] uppercase tracking-[0.42px] opacity-60 mb-5.25 leading-[105%]">

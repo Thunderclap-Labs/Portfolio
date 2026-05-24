@@ -3,7 +3,7 @@ import { statsData } from "@/constants/home-page";
 export function ByTheNumbersSection() {
   return (
     <section className="bg-bg text-white py-10.5">
-      <div className="container-content max-w-280 mx-auto px-6">
+      <div className="container-content max-w-280 mx-auto">
         <div className="mb-10.5">
           <span className="block font-medium text-[10.5px] uppercase tracking-[0.42px] opacity-60 mb-5 leading-[105%]">
             By the Numbers

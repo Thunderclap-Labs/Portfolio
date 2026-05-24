@@ -1,7 +1,7 @@
 export function AboutSection() {
   return (
     <section className="bg-bg text-text border-b border-white/20">
-      <div className="container-content max-w-280 mx-auto px-6">
+      <div className="container-content max-w-280 mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 md:gap-8">
           
           {/* Left Column */}

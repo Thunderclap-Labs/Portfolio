@@ -34,7 +34,7 @@ export async function NewsSection() {
 
   return (
     <section className="bg-bg-news text-bg py-16">
-      <div className="container-content max-w-280 mx-auto px-6">
+      <div className="container-content max-w-280 mx-auto">
         {/* Section header */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
           <h2 className="text-[42px] md:text-[50px] font-normal leading-[100%] tracking-[-1px]">
