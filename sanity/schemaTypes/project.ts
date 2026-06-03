@@ -4,6 +4,7 @@ const STATUS_OPTIONS = [
   { title: "Active", value: "active" },
   { title: "In Development", value: "in-development" },
   { title: "Concept", value: "concept" },
+  { title: "Completed", value: "completed" },
   { title: "Archived", value: "archived" },
 ];
 
@@ -166,8 +167,7 @@ export const projectType = defineType({
       description: "Partners, institutions, or external contributors.",
       type: "array",
       group: "meta",
-      of: [{ type: "string" }],
-      options: { layout: "tags" },
+      of: [{ type: "reference", to: [{ type: "collaborator" }] }],
     }),
     defineField({
       name: "externalLinks",

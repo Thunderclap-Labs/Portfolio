@@ -21,6 +21,7 @@ const STATUS_LABELS: Record<ProjectStatus, string> = {
   active: "Active",
   "in-development": "In Development",
   concept: "Concept",
+  completed: "Completed",
   archived: "Archived",
 };
 
@@ -263,11 +264,14 @@ export default async function ProjectPage({
               <SidebarBlock label="Collaborators">
                 <ul className="list-none m-0 p-0 flex flex-col gap-1">
                   {project.collaborators.map((c) => (
-                    <li
-                      key={c}
-                      className="text-[14.7px] tracking-[-0.126px] text-white/80 leading-[140%]"
-                    >
-                      {c}
+                    <li key={c._id} className="text-[14.7px] tracking-[-0.126px] text-white/80 leading-[140%]">
+                      {c.url ? (
+                        <a href={c.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-white/80 hover:text-white transition-colors duration-200">
+                          {c.name} <ArrowIcon />
+                        </a>
+                      ) : (
+                        c.name
+                      )}
                     </li>
                   ))}
                 </ul>

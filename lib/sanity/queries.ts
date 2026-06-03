@@ -69,7 +69,13 @@ export const ARTICLE_SUMMARY_FIELDS = `
 
 // ─── Projects ─────────────────────────────────────────────────────────────────
 
-export type ProjectStatus = "active" | "in-development" | "concept" | "archived";
+export type ProjectStatus = "active" | "in-development" | "concept" | "completed" | "archived";
+
+export interface Collaborator {
+  _id: string;
+  name: string;
+  url?: string;
+}
 
 export interface ProjectSummary {
   _id: string;
@@ -89,7 +95,7 @@ export interface ProjectSummary {
 export interface Project extends ProjectSummary {
   heroImage?: SanityImage;
   keyTech?: string[];
-  collaborators?: string[];
+  collaborators?: Collaborator[];
   externalLinks?: CmsLink[];
   body?: PortableTextBlock[];
   gallery?: SanityImage[];
@@ -167,7 +173,7 @@ export const PROJECT_FULL_FIELDS = `
   ${PROJECT_SUMMARY_FIELDS},
   heroImage { ..., asset-> },
   keyTech,
-  collaborators,
+  collaborators[]->{ _id, name, url },
   externalLinks[] { label, href },
   body[] {
     ...,

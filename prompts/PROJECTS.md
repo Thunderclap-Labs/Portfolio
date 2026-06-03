@@ -21,8 +21,9 @@ Projects appear:
 
 ```text
 sanity/schemaTypes/
-  index.ts                             Schema registry (exports both article + project types)
+  index.ts                             Schema registry (exports article, collaborator + project types)
   project.ts                           Project document type definition
+  collaborator.ts                      Collaborator document type (reusable; name + optional url)
 
 lib/sanity/
   queries.ts                           GROQ queries + TypeScript types
@@ -62,14 +63,14 @@ Defined in `sanity/schemaTypes/project.ts`. Fields are grouped into three tabs i
 
 | Field | Type | Notes |
 | --- | --- | --- |
-| `status` | `string` (radio) | `active` \| `in-development` \| `concept` \| `archived`. Default: `active` |
+| `status` | `string` (radio) | `active` \| `in-development` \| `concept` \| `completed` \| `archived`. Default: `active` |
 | `categories` | `string[]` (checklist) | At least one required. See values below |
 | `featured` | `boolean` | Show in homepage showcase grid. Default: `false` |
 | `order` | `number` | Manual display order (lower = earlier). Blank = sort by date |
 | `startDate` | `datetime` | Optional |
 | `endDate` | `datetime` | Optional — leave empty for ongoing |
 | `keyTech` | `string[]` (tags) | Short technology tags shown on detail page |
-| `collaborators` | `string[]` (tags) | Partner institutions / external contributors |
+| `collaborators` | `reference[]` → `collaborator` | Partner institutions / external contributors. Reusable across projects; each has `name` + optional `url` |
 | `externalLinks` | `{ label, href }[]` | Press, papers, demos, repos |
 
 **Category values:** `aerospace`, `atmospheric`, `defense`, `ai`, `hardware`, `chemistry`, `research`, `software`, `satellites`
@@ -107,7 +108,13 @@ Explicit `order` field wins; unordered projects fall back to `startDate` desc.
 ### Key TypeScript types
 
 ```ts
-type ProjectStatus = "active" | "in-development" | "concept" | "archived";
+export type ProjectStatus = "active" | "in-development" | "concept" | "completed" | "archived";
+
+interface Collaborator {
+  _id: string;
+  name: string;
+  url?: string;
+}
 
 interface ProjectSummary {
   _id: string;
@@ -127,7 +134,7 @@ interface ProjectSummary {
 interface Project extends ProjectSummary {
   heroImage?: SanityImage;
   keyTech?: string[];
-  collaborators?: string[];
+  collaborators?: Collaborator[];
   externalLinks?: CmsLink[];
   body?: PortableTextBlock[];
   gallery?: SanityImage[];
@@ -137,6 +144,7 @@ interface Project extends ProjectSummary {
 
 `SanityImage` is `SanityImageSource & { alt?: string; caption?: string }`.
 `CmsLink` is `{ label: string; href: string }`.
+`Collaborator` documents are managed in the Studio under **Collaborator** and referenced from projects. Collaborators with a `url` render as `action-link` anchors in the sidebar; those without render as plain text.
 
 ---
 

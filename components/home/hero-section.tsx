@@ -1,6 +1,21 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 
 export function HeroSection() {
+  const [hasHoveredOff, setHasHoveredOff] = useState(false);
+
+  // Before first hover-off: content is always visible.
+  // After first hover-off: hidden by default, shown on hover (original behaviour).
+  const overlayClass = hasHoveredOff
+    ? "absolute inset-0 bg-[rgba(1,1,1,0.26)] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500"
+    : "absolute inset-0 bg-[rgba(1,1,1,0.26)] opacity-100 pointer-events-none transition-opacity duration-500";
+
+  const contentClass = hasHoveredOff
+    ? "relative z-10 flex flex-col items-center gap-6 text-center px-8 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-500"
+    : "relative z-10 flex flex-col items-center gap-6 text-center px-8 opacity-100 pointer-events-auto transition-opacity duration-500";
+
   return (
     <section className="relative w-full h-[calc(100svh-40px)] min-h-120 overflow-hidden p-4 sm:p-6 pb-0">
       <div className="relative w-full h-full overflow-hidden">
@@ -16,12 +31,15 @@ export function HeroSection() {
         />
 
         {/* Hover zone — covers the full video area; triggers overlay + content */}
-        <div className="group absolute inset-0 flex items-center justify-center">
-          {/* Dark overlay — instant on hover */}
-          <div className="absolute inset-0 bg-[rgba(1,1,1,0.58)] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500" />
+        <div
+          className="group absolute inset-0 flex items-center justify-center"
+          onMouseLeave={() => setHasHoveredOff(true)}
+        >
+          {/* Dark overlay */}
+          <div className={overlayClass} />
 
-          {/* Content — instant on hover, centered */}
-          <div className="relative z-10 flex flex-col items-center gap-6 text-center px-8 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-500">
+          {/* Content */}
+          <div className={contentClass}>
             <h1 className="text-white m-0 font-bold leading-[105%] tracking-[-1.4px] uppercase text-[clamp(42px,7vw,70px)]">
               Engineering
               <br />

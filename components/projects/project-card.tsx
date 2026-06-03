@@ -11,10 +11,11 @@ const STATUS_LABELS: Record<ProjectStatus, string> = {
   active: "Active",
   "in-development": "In Development",
   concept: "Concept",
+  completed: "Completed",
   archived: "Archived",
 };
 
-export function ProjectCard({ project }: { project: ProjectSummary }) {
+export function ProjectCard({ project, showHeader = true }: { project: ProjectSummary; showHeader?: boolean }) {
   const [hovered, setHovered] = useState(false);
 
   const imageUrl = project.mainImage
@@ -56,46 +57,48 @@ export function ProjectCard({ project }: { project: ProjectSummary }) {
       />
 
       {/* Top-left: status + categories */}
-      <div className="absolute top-0 left-0 right-0 p-6 flex items-start justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-2">
-          <span
-            className="font-medium uppercase leading-none"
-            style={{
-              fontSize: "10.5px",
-              letterSpacing: "0.42px",
-              padding: "5px 8px",
-              border: "1px solid rgba(255,255,255,0.5)",
-              color: "#ffffff",
-              background: project.status === "active" ? "rgba(223,241,64,0.18)" : "transparent",
-              borderColor:
-                project.status === "active"
-                  ? "var(--color-accent)"
-                  : "rgba(255,255,255,0.45)",
-            }}
-          >
-            {statusLabel}
-          </span>
-        </div>
-
-        <div className="flex flex-wrap items-center justify-end gap-1.5 max-w-[60%]">
-          {project.categories.slice(0, 3).map((cat) => (
+      {showHeader && (
+        <div className="absolute top-0 left-0 right-0 p-6 flex items-start justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-2">
             <span
-              key={cat}
               className="font-medium uppercase leading-none"
               style={{
                 fontSize: "10.5px",
                 letterSpacing: "0.42px",
                 padding: "5px 8px",
-                color: "rgba(255,255,255,0.85)",
-                background: "rgba(1,1,1,0.35)",
-                border: "1px solid rgba(255,255,255,0.18)",
+                border: "1px solid rgba(255,255,255,0.5)",
+                color: "#ffffff",
+                background: project.status === "active" ? "rgba(223,241,64,0.18)" : "transparent",
+                borderColor:
+                  project.status === "active"
+                    ? "var(--color-accent)"
+                    : "rgba(255,255,255,0.45)",
               }}
             >
-              {cat}
+              {statusLabel}
             </span>
-          ))}
+          </div>
+
+          <div className="flex flex-wrap items-center justify-end gap-1.5 max-w-[60%]">
+            {project.categories.slice(0, 3).map((cat) => (
+              <span
+                key={cat}
+                className="font-medium uppercase leading-none"
+                style={{
+                  fontSize: "10.5px",
+                  letterSpacing: "0.42px",
+                  padding: "5px 8px",
+                  color: "rgba(255,255,255,0.85)",
+                  background: "rgba(1,1,1,0.35)",
+                  border: "1px solid rgba(255,255,255,0.18)",
+                }}
+              >
+                {cat}
+              </span>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Bottom content */}
       <div className="absolute bottom-0 left-0 right-0 p-6">
