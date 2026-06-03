@@ -117,22 +117,6 @@ export const projectType = defineType({
       validation: (r) => r.required().min(1),
     }),
     defineField({
-      name: "featured",
-      title: "Featured on Homepage",
-      description: "Show this project in the homepage showcase grid.",
-      type: "boolean",
-      group: "meta",
-      initialValue: false,
-    }),
-    defineField({
-      name: "showInNavbar",
-      title: "Show in Navbar",
-      description: "Show this project in the site navbar dropdown (max 4 shown).",
-      type: "boolean",
-      group: "meta",
-      initialValue: false,
-    }),
-    defineField({
       name: "order",
       title: "Display Order",
       description: "Lower numbers appear first. Leave blank to sort by date.",

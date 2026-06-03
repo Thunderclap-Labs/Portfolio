@@ -38,7 +38,6 @@ export interface ArticleSummary {
   mainImage?: SanityImage;
   category?: ArticleCategory;
   tags?: Tag[];
-  featured?: boolean;
   readingTime?: number;
 }
 
@@ -62,7 +61,6 @@ export const ARTICLE_SUMMARY_FIELDS = `
   mainImage { ..., asset-> },
   category,
   tags[]->{ _id, name, slug },
-  featured,
   readingTime
 `;
 
@@ -97,7 +95,6 @@ export interface ProjectSummary {
   mainImage?: SanityImage;
   status: ProjectStatus;
   categories: string[];
-  featured?: boolean;
   order?: number;
   startDate?: string;
   endDate?: string;
@@ -122,7 +119,6 @@ export const PROJECT_SUMMARY_FIELDS = `
   mainImage { ..., asset-> },
   status,
   categories,
-  featured,
   order,
   startDate,
   endDate
@@ -152,8 +148,7 @@ export const ARTICLE_FULL_FIELDS = `
   }
 `;
 
-// Sort: featured first, then newest publish date.
-const ARTICLE_ORDER = `order(coalesce(featured, false) desc, date desc)`;
+const ARTICLE_ORDER = `order(date desc)`;
 
 export const getAllArticlesQuery = `
   *[_type == "article"] | ${ARTICLE_ORDER} {
@@ -218,9 +213,12 @@ export const getAllProjectsQuery = `
 `;
 
 export const getFeaturedProjectsQuery = `
-  *[_type == "project" && featured == true] | ${PROJECT_ORDER} [0...$limit] {
-    ${PROJECT_SUMMARY_FIELDS}
-  }
+  coalesce(
+    *[_type == "siteSettings"][0].featuredProjects[]->{
+      ${PROJECT_SUMMARY_FIELDS}
+    },
+    []
+  )
 `;
 
 export const getProjectBySlugQuery = `
@@ -233,6 +231,46 @@ export const getAllProjectSlugsQuery = `
   *[_type == "project"] { "slug": slug.current }
 `;
 
+// ─── Site Settings (singleton) ────────────────────────────────────────────────
+
+export interface Achievement {
+  _key: string;
+  type: string;
+  year: string;
+  title: string;
+  prize: string;
+  relatedArticle?: { slug: { current: string } };
+}
+
+export interface SiteSettings {
+  featuredArticles?: ArticleSummary[];
+  navbarArticles?: NavbarItem[];
+  achievements?: Achievement[];
+}
+
+export const getSiteSettingsQuery = `
+  *[_type == "siteSettings"][0] {
+    "featuredArticles": featuredArticles[]->{ ${ARTICLE_SUMMARY_FIELDS} },
+    "navbarArticles": navbarArticles[]->{
+      _id,
+      title,
+      slug,
+      "subtitle": description
+    }
+  }
+`;
+
+export const getAchievementsQuery = `
+  *[_type == "siteSettings"][0].achievements[] {
+    _key,
+    type,
+    year,
+    title,
+    prize,
+    "relatedArticle": relatedArticle->{ "slug": slug.current }
+  }
+`;
+
 // ─── Navbar dropdown queries ──────────────────────────────────────────────────
 
 export interface NavbarItem {
@@ -243,19 +281,25 @@ export interface NavbarItem {
 }
 
 export const getNavbarProjectsQuery = `
-  *[_type == "project" && showInNavbar == true] | ${PROJECT_ORDER} [0...4] {
-    _id,
-    title,
-    slug,
-    "subtitle": tagline
-  }
+  coalesce(
+    *[_type == "siteSettings"][0].navbarProjects[]->{
+      _id,
+      title,
+      slug,
+      "subtitle": tagline
+    },
+    []
+  )
 `;
 
 export const getNavbarArticlesQuery = `
-  *[_type == "article" && showInNavbar == true] | ${ARTICLE_ORDER} [0...4] {
-    _id,
-    title,
-    slug,
-    "subtitle": description
-  }
+  coalesce(
+    *[_type == "siteSettings"][0].navbarArticles[]->{
+      _id,
+      title,
+      slug,
+      "subtitle": description
+    },
+    []
+  )
 `;

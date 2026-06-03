@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { client } from "@/lib/sanity/client";
-import { getAllArticlesQuery, type ArticleSummary } from "@/lib/sanity/queries";
+import { getAllArticlesQuery, getSiteSettingsQuery, type ArticleSummary, type SiteSettings } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
 import ArticleList from "@/components/articles/article-list";
 
@@ -27,14 +27,18 @@ function ArrowIcon() {
 
 export default async function ArticlesPage() {
   let articles: ArticleSummary[] = [];
+  let settings: SiteSettings | null = null;
   try {
-    articles = await client.fetch<ArticleSummary[]>(getAllArticlesQuery);
+    [articles, settings] = await Promise.all([
+      client.fetch<ArticleSummary[]>(getAllArticlesQuery),
+      client.fetch<SiteSettings>(getSiteSettingsQuery),
+    ]);
   } catch {
     // Sanity not yet configured — show empty state
   }
 
-  const featured = articles[0];
-  const rest = articles.slice(1);
+  const featured = settings?.featuredArticles?.[0] ?? articles[0];
+  const rest = articles.filter((a) => a._id !== featured?._id);
   const featuredImageUrl = featured?.mainImage
     ? urlFor(featured.mainImage).width(1600).height(900).fit("crop").url()
     : null;

@@ -218,8 +218,8 @@ export default async function ArticlePage({
                       fontSize: "10.5px",
                       letterSpacing: "0.42px",
                       padding: "5px 8px",
-                      border: `1px solid ${article.featured ? "var(--color-accent)" : "rgba(255,255,255,0.45)"}`,
-                      background: article.featured ? "rgba(223,241,64,0.18)" : "transparent",
+                      border: "1px solid rgba(255,255,255,0.45)",
+                      background: "transparent",
                       color: "#ffffff",
                     }}
                   >

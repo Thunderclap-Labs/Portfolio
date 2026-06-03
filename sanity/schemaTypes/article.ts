@@ -118,22 +118,6 @@ export const articleType = defineType({
       validation: (r) => r.min(1).max(120).integer(),
     }),
     defineField({
-      name: "featured",
-      title: "Featured",
-      description: "Pin to the top of the listing and News section.",
-      type: "boolean",
-      group: "meta",
-      initialValue: false,
-    }),
-    defineField({
-      name: "showInNavbar",
-      title: "Show in Navbar",
-      description: "Show this article in the site navbar dropdown (max 4 shown).",
-      type: "boolean",
-      group: "meta",
-      initialValue: false,
-    }),
-    defineField({
       name: "keyTakeaways",
       title: "Key Takeaways",
       description: "Short bullet points highlighted in the sidebar.",

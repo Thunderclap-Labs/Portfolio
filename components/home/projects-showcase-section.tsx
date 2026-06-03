@@ -6,7 +6,7 @@ import { ProjectCard } from "@/components/projects/project-card";
 export async function ProjectsShowcaseSection() {
   let projects: ProjectSummary[] = [];
   try {
-    projects = await client.fetch<ProjectSummary[]>(getFeaturedProjectsQuery, { limit: 3 });
+    projects = await client.fetch<ProjectSummary[]>(getFeaturedProjectsQuery);
   } catch {
     // Sanity not configured — render nothing
   }
