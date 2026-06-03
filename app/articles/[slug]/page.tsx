@@ -227,7 +227,7 @@ export default async function ArticlePage({
                   </span>
                   {article.tags?.slice(0, 4).map((tag) => (
                     <span
-                      key={tag}
+                      key={tag._id}
                       className="font-medium uppercase leading-none"
                       style={{
                         fontSize: "10.5px",
@@ -238,7 +238,7 @@ export default async function ArticlePage({
                         border: "1px solid rgba(255,255,255,0.18)",
                       }}
                     >
-                      {tag}
+                      {tag.name}
                     </span>
                   ))}
                 </div>
@@ -315,10 +315,10 @@ export default async function ArticlePage({
 
             {article.author && (
               <SidebarBlock label="Author">
-                <div className="text-bg">{article.author}</div>
-                {article.authorRole && (
+                <div className="text-bg">{article.author.name}</div>
+                {article.author.role && (
                   <div className="text-bg/50 text-[12px] tracking-[-0.05px] mt-1">
-                    {article.authorRole}
+                    {article.author.role}
                   </div>
                 )}
               </SidebarBlock>
@@ -334,7 +334,7 @@ export default async function ArticlePage({
               <SidebarBlock label="Tags">
                 <ul className="flex flex-wrap gap-1.5 list-none m-0 p-0">
                   {article.tags.map((tag) => (
-                    <li key={tag}>
+                    <li key={tag._id}>
                       <span
                         className="inline-block"
                         style={{
@@ -345,7 +345,7 @@ export default async function ArticlePage({
                           border: "1px solid rgba(1,1,1,0.2)",
                         }}
                       >
-                        {tag}
+                        {tag.name}
                       </span>
                     </li>
                   ))}

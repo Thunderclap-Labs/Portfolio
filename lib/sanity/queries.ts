@@ -37,15 +37,14 @@ export interface ArticleSummary {
   description: string;
   mainImage?: SanityImage;
   category?: ArticleCategory;
-  tags?: string[];
+  tags?: Tag[];
   featured?: boolean;
   readingTime?: number;
 }
 
 export interface Article extends ArticleSummary {
   heroImage?: SanityImage;
-  author?: string;
-  authorRole?: string;
+  author?: Author;
   keyTakeaways?: string[];
   links?: CmsLink[];
   body?: PortableTextBlock[];
@@ -62,7 +61,7 @@ export const ARTICLE_SUMMARY_FIELDS = `
   description,
   mainImage { ..., asset-> },
   category,
-  tags,
+  tags[]->{ _id, name, slug },
   featured,
   readingTime
 `;
@@ -71,10 +70,22 @@ export const ARTICLE_SUMMARY_FIELDS = `
 
 export type ProjectStatus = "active" | "in-development" | "concept" | "completed" | "archived";
 
+export interface Author {
+  _id: string;
+  name: string;
+  role?: string;
+}
+
 export interface Collaborator {
   _id: string;
   name: string;
   url?: string;
+}
+
+export interface Tag {
+  _id: string;
+  name: string;
+  slug: { current: string };
 }
 
 export interface ProjectSummary {
@@ -122,8 +133,7 @@ export const PROJECT_SUMMARY_FIELDS = `
 export const ARTICLE_FULL_FIELDS = `
   ${ARTICLE_SUMMARY_FIELDS},
   heroImage { ..., asset-> },
-  author,
-  authorRole,
+  author->{ _id, name, role },
   keyTakeaways,
   links[] { label, href },
   body[] {
@@ -165,6 +175,18 @@ export const getArticleBySlugQuery = `
 
 export const getAllArticleSlugsQuery = `
   *[_type == "article"] { "slug": slug.current }
+`;
+
+// All tags, alphabetically — for building a tag filter UI.
+export const getAllTagsQuery = `
+  *[_type == "tag"] | order(name asc) { _id, name, slug }
+`;
+
+// Articles filtered to a single tag slug — pass { tagSlug: string }.
+export const getArticlesByTagQuery = `
+  *[_type == "article" && $tagSlug in tags[]->slug.current] | ${ARTICLE_ORDER} {
+    ${ARTICLE_SUMMARY_FIELDS}
+  }
 `;
 
 // ─── Project full / queries ───────────────────────────────────────────────────
