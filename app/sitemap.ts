@@ -3,7 +3,7 @@ import { client } from "@/lib/sanity/client";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://thunderclaplabs.com";
 
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [

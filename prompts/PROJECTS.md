@@ -295,7 +295,7 @@ inline styles only for values that cannot be expressed as static Tailwind classe
 
 ## Revalidation
 
-Both the listing and detail pages use `export const revalidate = 3600` (1-hour ISR).
+Both the listing and detail pages use `export const revalidate = 86400`.
 
 ---
 

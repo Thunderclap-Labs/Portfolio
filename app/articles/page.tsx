@@ -6,7 +6,7 @@ import { getAllArticlesQuery, getSiteSettingsQuery, type ArticleSummary, type Si
 import { urlFor } from "@/lib/sanity/image";
 import ArticleList from "@/components/articles/article-list";
 
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 export const metadata: Metadata = {
   title: "News & Insights | Thunderclap Labs",

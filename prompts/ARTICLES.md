@@ -128,7 +128,7 @@ Always use `next/image` (not `<img>`) with Sanity image URLs for optimisation.
 
 ## Revalidation
 
-Both the listing and detail pages use `export const revalidate = 3600` (1-hour ISR).
+Both the listing and detail pages use `export const revalidate = 86400`.
 Content updates in Sanity Studio become live within one hour without a redeploy.
 
 For instant updates, a Sanity webhook → Next.js `revalidate` API route can be added later

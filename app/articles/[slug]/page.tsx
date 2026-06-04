@@ -14,7 +14,7 @@ import { urlFor } from "@/lib/sanity/image";
 import { MediaGallery } from "@/components/common/media-gallery";
 import { RelatedList } from "@/components/common/related-list";
 
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://thunderclaplabs.com";
 

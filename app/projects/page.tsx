@@ -3,7 +3,7 @@ import { client } from "@/lib/sanity/client";
 import { getAllProjectsQuery, type ProjectSummary } from "@/lib/sanity/queries";
 import { ProjectCard } from "@/components/projects/project-card";
 
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 export const metadata: Metadata = {
   title: "Projects | Thunderclap Labs",
