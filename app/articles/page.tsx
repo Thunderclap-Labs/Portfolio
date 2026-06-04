@@ -1,11 +1,24 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { client } from "@/lib/sanity/client";
 import { getAllArticlesQuery, getSiteSettingsQuery, type ArticleSummary, type SiteSettings } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
 import ArticleList from "@/components/articles/article-list";
 
 export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  title: "News & Insights | Thunderclap Labs",
+  description:
+    "Latest news, insights, and press releases from Thunderclap Labs — covering aerospace, atmospheric engineering, propulsion, and defense technology.",
+  openGraph: {
+    title: "News & Insights | Thunderclap Labs",
+    description:
+      "Latest news and insights from Thunderclap Labs — aerospace, atmospheric engineering, and defense technology.",
+    type: "website",
+  },
+};
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("sv-SE").replace(/-/g, "/");

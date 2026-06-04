@@ -16,6 +16,8 @@ import { RelatedList } from "@/components/common/related-list";
 
 export const revalidate = 3600;
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://thunderclaplabs.com";
+
 const CATEGORY_LABELS: Record<ArticleCategory, string> = {
   news: "News",
   insight: "Insight",
@@ -47,9 +49,26 @@ export async function generateMetadata({
   try {
     const article = await client.fetch<Article>(getArticleBySlugQuery, { slug });
     if (!article) return {};
+
+    const ogImageUrl = article.mainImage
+      ? urlFor(article.mainImage).width(1200).height(630).fit("crop").auto("format").url()
+      : undefined;
+
     return {
       title: `${article.title} | Thunderclap Labs`,
       description: article.description,
+      alternates: { canonical: `${SITE_URL}/articles/${slug}` },
+      openGraph: {
+        title: article.title,
+        description: article.description,
+        type: "article",
+        publishedTime: article.date,
+        url: `${SITE_URL}/articles/${slug}`,
+        siteName: "Thunderclap Labs",
+        images: ogImageUrl
+          ? [{ url: ogImageUrl, width: 1200, height: 630, alt: article.title }]
+          : undefined,
+      },
     };
   } catch {
     return {};
@@ -179,7 +198,7 @@ export default async function ArticlePage({
 
   const heroSource = article.heroImage ?? article.mainImage;
   const heroImageUrl = heroSource
-    ? urlFor(heroSource).width(2000).height(1000).fit("crop").url()
+    ? urlFor(heroSource).width(2000).fit("max").auto("format").url()
     : null;
 
   const formattedDate = new Date(article.date).toLocaleDateString("sv-SE").replace(/-/g, "/");
@@ -189,15 +208,16 @@ export default async function ArticlePage({
   return (
     <main className="bg-bg-news text-bg min-h-screen">
       {/* Hero — text stays white since it overlays the image */}
-      <div className="pt-21 relative">
+      <div className="pt-18 md:pt-21 relative">
         {heroImageUrl && (
-          <div className="relative w-full h-[70vh] min-h-120">
+          <div className="relative w-full h-[45vh] md:h-[70vh] min-h-64 md:min-h-120">
             <Image
               src={heroImageUrl}
               alt={heroSource?.alt ?? article.title}
               fill
               className="object-cover"
               sizes="100vw"
+              quality={90}
               priority
             />
             <div
@@ -207,6 +227,13 @@ export default async function ArticlePage({
                   "linear-gradient(to top, rgba(1,1,1,0.92) 0%, rgba(1,1,1,0.30) 60%, rgba(1,1,1,0.10) 100%)",
               }}
             />
+
+            {/* Top-left back link */}
+            <div className="absolute top-0 left-0 container-content max-w-280 w-full pt-4">
+              <Link href="/articles" className="action-link text-white" style={{ opacity: 0.75 }}>
+                ← All Articles
+              </Link>
+            </div>
 
             {/* Hero overlay content */}
             <div className="absolute inset-x-0 bottom-0">
@@ -244,9 +271,8 @@ export default async function ArticlePage({
                 </div>
 
                 <h1
-                  className="m-0 max-w-3xl text-white"
+                  className="m-0 max-w-3xl text-white text-[32px] md:text-[50px] lg:text-[70px]"
                   style={{
-                    fontSize: "70px",
                     fontWeight: 700,
                     lineHeight: "105%",
                     letterSpacing: "-1.4px",
@@ -254,31 +280,26 @@ export default async function ArticlePage({
                 >
                   {article.title}
                 </h1>
-
-                <p
-                  className="mt-4 max-w-2xl"
-                  style={{
-                    fontSize: "21px",
-                    fontWeight: 400,
-                    lineHeight: "125%",
-                    letterSpacing: "-0.21px",
-                    color: "rgba(255,255,255,0.75)",
-                  }}
-                >
-                  {article.description}
-                </p>
               </div>
             </div>
           </div>
         )}
       </div>
 
-      {/* Back link */}
-      <div className="container-content max-w-280 mx-auto pt-10">
-        <Link href="/articles" className="action-link text-bg">
-          ← All Articles
-        </Link>
-      </div>
+      {/* No-hero header — ensures h1 is always in the DOM */}
+      {!heroImageUrl && (
+        <div className="container-content max-w-280 mx-auto pt-18 md:pt-21 pb-8">
+          <Link href="/articles" className="action-link text-bg" style={{ opacity: 0.75 }}>
+            ← All Articles
+          </Link>
+          <h1
+            className="mt-6 max-w-3xl text-bg text-[32px] md:text-[50px] lg:text-[70px]"
+            style={{ fontWeight: 700, lineHeight: "105%", letterSpacing: "-1.4px" }}
+          >
+            {article.title}
+          </h1>
+        </div>
+      )}
 
       {/* Body + sidebar */}
       <div className="container-content max-w-280 mx-auto py-12">
@@ -305,6 +326,10 @@ export default async function ArticlePage({
                 <PortableText value={article.body} components={portableTextComponents} />
               )}
             </div>
+
+            <Link href="/articles" className="action-link text-bg mt-10 block">
+              ← All Articles
+            </Link>
           </article>
 
           {/* Sidebar */}
@@ -432,6 +457,29 @@ export default async function ArticlePage({
           <MediaGallery images={article.gallery} title={article.title} />
         </section>
       )}
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "NewsArticle",
+            headline: article.title,
+            description: article.description,
+            datePublished: article.date,
+            url: `${SITE_URL}/articles/${article.slug.current}`,
+            ...(heroImageUrl && { image: heroImageUrl }),
+            publisher: {
+              "@type": "Organization",
+              name: "Thunderclap Labs",
+              url: SITE_URL,
+            },
+            author: article.author
+              ? { "@type": "Person", name: article.author.name }
+              : { "@type": "Organization", name: "Thunderclap Labs" },
+          }),
+        }}
+      />
     </main>
   );
 }

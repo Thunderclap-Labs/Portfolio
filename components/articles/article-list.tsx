@@ -91,8 +91,9 @@ export default function ArticleList({ articles }: ArticleListProps) {
         {filtered.length === 0 ? (
           <p className="text-[0.918rem] opacity-50 py-12">No articles found.</p>
         ) : (
+          <>
           <ul className="flex flex-col m-0 p-0 list-none">
-            {filtered.map((article, index) => {
+            {filtered.map((article) => {
               const imageUrl = article.mainImage
                 ? urlFor(article.mainImage).width(400).height(225).fit("crop").url()
                 : null;
@@ -138,11 +139,12 @@ export default function ArticleList({ articles }: ArticleListProps) {
                       </Link>
                     )}
                   </article>
-                  <div className="h-px bg-bg" />
                 </li>
               );
             })}
           </ul>
+          <div className="h-px bg-bg" />
+          </>
         )}
       </div>
     </div>

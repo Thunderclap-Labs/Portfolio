@@ -99,6 +99,7 @@ When you need content (team bios, project descriptions, stats) — pull from `we
 ## Pages to Build
 
 1. **Home** — full-bleed video/dark hero, focus areas, propulsion section, manufacturing, projects showcase, team swiper, sponsors, R&D CTA
+   - **Mobile:** The hero video must always remain fully visible on mobile — never apply the fade-out/scroll-based opacity effect on small screens.
 2. **Projects** — grid of all projects with category badges and status tags
 3. **Team** — team grid, R&D services section
 4. **Cloud Seeding** — project detail page

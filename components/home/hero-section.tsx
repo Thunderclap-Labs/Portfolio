@@ -8,12 +8,14 @@ export function HeroSection() {
 
   // Before first hover-off: content is always visible.
   // After first hover-off: hidden by default, shown on hover (original behaviour).
+  // On mobile (<sm): always visible regardless of hover state.
+  // On desktop (sm+): hide after first hover-off, reveal on hover.
   const overlayClass = hasHoveredOff
-    ? "absolute inset-0 bg-[rgba(1,1,1,0.26)] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500"
+    ? "absolute inset-0 bg-[rgba(1,1,1,0.26)] opacity-100 sm:opacity-0 sm:group-hover:opacity-100 pointer-events-none transition-opacity duration-500"
     : "absolute inset-0 bg-[rgba(1,1,1,0.26)] opacity-100 pointer-events-none transition-opacity duration-500";
 
   const contentClass = hasHoveredOff
-    ? "relative z-10 flex flex-col items-center gap-6 text-center px-8 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-500"
+    ? "relative z-10 flex flex-col items-center gap-6 text-center px-8 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 pointer-events-auto sm:pointer-events-none sm:group-hover:pointer-events-auto transition-opacity duration-500"
     : "relative z-10 flex flex-col items-center gap-6 text-center px-8 opacity-100 pointer-events-auto transition-opacity duration-500";
 
   return (

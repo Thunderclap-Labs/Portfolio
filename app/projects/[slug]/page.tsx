@@ -17,6 +17,8 @@ import { RelatedList } from "@/components/common/related-list";
 
 export const revalidate = 3600;
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://thunderclaplabs.com";
+
 const STATUS_LABELS: Record<ProjectStatus, string> = {
   active: "Active",
   "in-development": "In Development",
@@ -47,9 +49,25 @@ export async function generateMetadata({
   try {
     const project = await client.fetch<Project>(getProjectBySlugQuery, { slug });
     if (!project) return {};
+
+    const ogImageUrl = project.mainImage
+      ? urlFor(project.mainImage).width(1200).height(630).fit("crop").auto("format").url()
+      : undefined;
+
     return {
       title: `${project.title} | Thunderclap Labs`,
       description: project.summary,
+      alternates: { canonical: `${SITE_URL}/projects/${slug}` },
+      openGraph: {
+        title: project.title,
+        description: project.summary,
+        type: "website",
+        url: `${SITE_URL}/projects/${slug}`,
+        siteName: "Thunderclap Labs",
+        images: ogImageUrl
+          ? [{ url: ogImageUrl, width: 1200, height: 630, alt: project.title }]
+          : undefined,
+      },
     };
   } catch {
     return {};
@@ -204,6 +222,24 @@ export default async function ProjectPage({
         </Link>
       </div>
 
+      {/* No-hero header — ensures h1 is always in the DOM */}
+      {!heroImageUrl && (
+        <div className="container-content max-w-280 mx-auto pt-8 pb-4">
+          <h1
+            className="m-0 max-w-3xl text-white"
+            style={{ fontSize: "70px", fontWeight: 700, lineHeight: "105%", letterSpacing: "-1.4px" }}
+          >
+            {project.title}
+          </h1>
+          <p
+            className="mt-4 max-w-2xl"
+            style={{ fontSize: "21px", lineHeight: "125%", letterSpacing: "-0.21px", color: "rgba(255,255,255,0.75)" }}
+          >
+            {project.tagline}
+          </p>
+        </div>
+      )}
+
       {/* Body + sidebar */}
       <div className="container-content max-w-280 mx-auto py-12">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-12">
@@ -239,21 +275,10 @@ export default async function ProjectPage({
 
             {project.keyTech && project.keyTech.length > 0 && (
               <SidebarBlock label="Key Technologies">
-                <ul className="flex flex-wrap gap-1.5 list-none m-0 p-0">
+                <ul className="list-disc list-outside pl-5 m-0 flex flex-col gap-1.5">
                   {project.keyTech.map((tech) => (
-                    <li key={tech}>
-                      <span
-                        className="inline-block"
-                        style={{
-                          fontSize: "12px",
-                          letterSpacing: "-0.05px",
-                          padding: "4px 8px",
-                          color: "rgba(255,255,255,0.85)",
-                          border: "1px solid rgba(255,255,255,0.2)",
-                        }}
-                      >
-                        {tech}
-                      </span>
+                    <li key={tech} className="text-[13.5px] tracking-[-0.05px] text-white/80 leading-[145%]">
+                      {tech}
                     </li>
                   ))}
                 </ul>
