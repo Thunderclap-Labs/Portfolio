@@ -131,9 +131,9 @@ export default async function ProjectPage({
   return (
     <main className="bg-bg text-white min-h-screen">
       {/* Hero */}
-      <div className="pt-21 relative">
+      <div className="pt-18 md:pt-21 relative">
         {heroImageUrl && (
-          <div className="relative w-full h-[70vh] min-h-120">
+          <div className="relative w-full h-[45vh] md:h-[70vh] min-h-64 md:min-h-120">
             <Image
               src={heroImageUrl}
               alt={heroSource?.alt ?? project.title}
@@ -149,6 +149,23 @@ export default async function ProjectPage({
                   "linear-gradient(to top, rgba(1,1,1,0.95) 0%, rgba(1,1,1,0.35) 60%, rgba(1,1,1,0.15) 100%)",
               }}
             />
+
+            {/* Top-left back link */}
+            <div className="absolute top-0 left-0 container-content max-w-280 w-full pt-4">
+              <Link
+                href="/projects"
+                className="inline-flex items-center gap-1.5 text-bg no-underline transition-opacity duration-300 hover:opacity-70"
+                style={{
+                  background: "#ffffff",
+                  padding: "6px 12px",
+                  fontSize: "12.25px",
+                  letterSpacing: "-0.009rem",
+                  fontWeight: 500,
+                }}
+              >
+                ← All Projects
+              </Link>
+            </div>
 
             {/* Hero overlay content */}
             <div className="absolute inset-x-0 bottom-0">
@@ -186,9 +203,8 @@ export default async function ProjectPage({
                 </div>
 
                 <h1
-                  className="m-0 max-w-3xl"
+                  className="m-0 max-w-3xl text-white text-[32px] md:text-[50px] lg:text-[70px]"
                   style={{
-                    fontSize: "70px",
                     fontWeight: 700,
                     lineHeight: "105%",
                     letterSpacing: "-1.4px",
@@ -215,19 +231,15 @@ export default async function ProjectPage({
         )}
       </div>
 
-      {/* Back link */}
-      <div className="container-content max-w-280 mx-auto pt-10">
-        <Link href="/projects" className="action-link text-white">
-          ← All Projects
-        </Link>
-      </div>
-
       {/* No-hero header — ensures h1 is always in the DOM */}
       {!heroImageUrl && (
         <div className="container-content max-w-280 mx-auto pt-8 pb-4">
+          <Link href="/projects" className="action-link text-white block mb-6">
+            ← All Projects
+          </Link>
           <h1
-            className="m-0 max-w-3xl text-white"
-            style={{ fontSize: "70px", fontWeight: 700, lineHeight: "105%", letterSpacing: "-1.4px" }}
+            className="m-0 max-w-3xl text-white text-[32px] md:text-[50px] lg:text-[70px]"
+            style={{ fontWeight: 700, lineHeight: "105%", letterSpacing: "-1.4px" }}
           >
             {project.title}
           </h1>

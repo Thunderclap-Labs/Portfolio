@@ -230,7 +230,17 @@ export default async function ArticlePage({
 
             {/* Top-left back link */}
             <div className="absolute top-0 left-0 container-content max-w-280 w-full pt-4">
-              <Link href="/articles" className="action-link text-white" style={{ opacity: 0.75 }}>
+              <Link
+                href="/articles"
+                className="inline-flex items-center gap-1.5 text-bg no-underline transition-opacity duration-300 hover:opacity-70"
+                style={{
+                  background: "#ffffff",
+                  padding: "6px 12px",
+                  fontSize: "12.25px",
+                  letterSpacing: "-0.009rem",
+                  fontWeight: 500,
+                }}
+              >
                 ← All Articles
               </Link>
             </div>

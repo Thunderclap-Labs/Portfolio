@@ -65,7 +65,7 @@ export default async function ArticlesPage() {
             <p className="font-medium text-[0.75rem] uppercase tracking-[0.03rem] leading-[105%] mb-4">
               Newsroom
             </p>
-            <h1 className="text-[70px] font-normal leading-[105%] tracking-[-1.4px]">
+            <h1 className="text-[50px] lg:text-[70px] font-normal leading-[105%] tracking-[-1.4px]">
               News &amp; Insights
             </h1>
 
@@ -127,7 +127,7 @@ export default async function ArticlesPage() {
             <p className="font-medium text-[0.75rem] uppercase tracking-[0.03rem] leading-[105%] mb-4">
               Newsroom
             </p>
-            <h1 className="text-[70px] font-normal leading-[105%] tracking-[-1.4px]">
+            <h1 className="text-[50px] lg:text-[70px] font-normal leading-[105%] tracking-[-1.4px]">
               News &amp; Insights
             </h1>
             <p className="text-[14.7px] tracking-[-0.126px] leading-[120%] py-16 opacity-50">

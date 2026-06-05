@@ -6,6 +6,7 @@ import Link from "next/link";
 import { urlFor } from "@/lib/sanity/image";
 import type { ProjectSummary, ProjectStatus } from "@/lib/sanity/queries";
 import { ScrambleText } from "@/components/common/scramble-text";
+import { GifProgressiveImage } from "@/components/projects/gif-progressive-image";
 
 const STATUS_LABELS: Record<ProjectStatus, string> = {
   active: "Active",
@@ -18,8 +19,12 @@ const STATUS_LABELS: Record<ProjectStatus, string> = {
 export function ProjectCard({ project, showHeader = true }: { project: ProjectSummary; showHeader?: boolean }) {
   const [hovered, setHovered] = useState(false);
 
+  const isGif = (project.mainImage as any)?.asset?.mimeType === "image/gif";
+  const gifUrl: string | null = isGif ? ((project.mainImage as any)?.asset?.url ?? null) : null;
   const imageUrl = project.mainImage
-    ? urlFor(project.mainImage).width(900).height(900).fit("crop").url()
+    ? isGif
+      ? urlFor(project.mainImage).width(900).height(900).fit("crop").format("jpg").url()
+      : urlFor(project.mainImage).width(900).height(900).fit("crop").url()
     : null;
   const altText = project.mainImage?.alt ?? project.title;
   const statusLabel = STATUS_LABELS[project.status] ?? project.status;
@@ -32,17 +37,29 @@ export function ProjectCard({ project, showHeader = true }: { project: ProjectSu
       className="block absolute inset-0 no-underline"
     >
       {imageUrl && (
-        <Image
-          src={imageUrl}
-          alt={altText}
-          fill
-          className="object-cover"
-          style={{
-            transition: "transform 0.7s ease-out",
-            transform: hovered ? "scale(1.05)" : "scale(1)",
-          }}
-          sizes="(max-width: 768px) 100vw, (max-width: 1120px) 50vw, 33vw"
-        />
+        isGif && gifUrl ? (
+          <GifProgressiveImage
+            staticSrc={imageUrl}
+            gifSrc={gifUrl}
+            alt={altText}
+            fill
+            className="object-cover"
+            hovered={hovered}
+            sizes="(max-width: 768px) 100vw, (max-width: 1120px) 50vw, 33vw"
+          />
+        ) : (
+          <Image
+            src={imageUrl}
+            alt={altText}
+            fill
+            className="object-cover"
+            style={{
+              transition: "transform 0.7s ease-out",
+              transform: hovered ? "scale(1.05)" : "scale(1)",
+            }}
+            sizes="(max-width: 768px) 100vw, (max-width: 1120px) 50vw, 33vw"
+          />
+        )
       )}
 
       {/* Base gradient */}

@@ -26,7 +26,7 @@ export default async function ProjectsPage() {
         <p className="font-medium text-[0.75rem] uppercase tracking-[0.03rem] leading-[105%] mb-4">
           Projects
         </p>
-        <h1 className="text-[70px] font-normal leading-[105%] tracking-[-1.4px] m-0">
+        <h1 className="text-[50px] lg:text-[70px] font-normal leading-[105%] tracking-[-1.4px] m-0">
           Critical Technologies, Built In-House.
         </h1>
         <p className="mt-16 max-w-2xl text-[0.938rem] tracking-[-0.009rem] font-normal leading-[120%]">

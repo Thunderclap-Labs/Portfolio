@@ -53,6 +53,7 @@ export interface NavbarClientProps {
 export function NavbarClient({ dropdowns }: NavbarClientProps) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<PanelKey | null>(null);
   // `renderedDropdown` keeps the last panel content mounted during the close animation
   const [renderedDropdown, setRenderedDropdown] = useState<PanelKey | null>(null);
@@ -121,6 +122,15 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
     return () => clearTimeout(swapTimer);
   }, [openDropdown, renderedDropdown]);
 
+  // Track whether the page is scrolled, so the mobile bar can sit transparent
+  // over the full-screen homepage hero at the top and turn solid on scroll.
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const navStyles: React.CSSProperties = {
     letterSpacing: "-0.009rem",
     alignItems: "center",
@@ -139,6 +149,9 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
   const activeCopy = (renderedDropdown && renderedDropdown !== "contact") ? DROPDOWN_COPY[renderedDropdown as DropdownKey] : null;
   const panelOpen = openDropdown !== null && (openDropdown === "contact" || (dropdowns[openDropdown as DropdownKey]?.length ?? 0) > 0);
   const overlayActive = (headerHovered || panelOpen) && !menuOpen;
+  // Only the mobile bar goes transparent — over the homepage hero, at the top,
+  // with nothing open. Desktop keeps its own solid background (set on <nav>).
+  const transparentTop = pathname === "/" && !scrolled && !menuOpen && !panelOpen;
 
   // easeOutCubic — matches anduril.com
   const PANEL_EASE = "cubic-bezier(0.215, 0.61, 0.355, 1)";
@@ -187,14 +200,17 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
       />
       <header
         className="fixed top-0 left-0 right-0 z-50"
-        style={{ background: menuOpen || panelOpen ? "#010101" : "rgba(1,1,1,1)" }}
+        style={{
+          background: transparentTop ? "transparent" : "#010101",
+          transition: "background-color 0.4s ease-out",
+        }}
         onMouseEnter={() => setHeaderHovered(true)}
         onMouseLeave={handleHeaderLeave}
       >
       {/* Desktop top-nav */}
       <nav
         className="hidden md:flex items-center justify-between relative"
-        style={{ zIndex: 100, padding: "1.5rem 2rem", margin: 0 }}
+        style={{ zIndex: 100, padding: "1.5rem 2rem", margin: 0, backgroundColor: "#010101" }}
       >
         {/* Left wrapper — logo */}
         <div style={navStyles}>
@@ -539,13 +555,20 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
 
       {/* Mobile top-nav */}
       <div
-        className="md:hidden flex items-center justify-between"
+        className="md:hidden relative flex items-center justify-between"
         style={{ padding: "1.25rem 1.5rem" }}
       >
+        {/* Legibility scrim — only visible while the bar is transparent over
+            the hero video; fades out once the bar turns solid. */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-[180%] bg-linear-to-b from-[rgba(1,1,1,0.55)] to-transparent"
+          style={{ opacity: transparentTop ? 1 : 0, transition: "opacity 0.4s ease-out" }}
+        />
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center text-white no-underline"
+          className="relative z-1 flex items-center text-white no-underline"
           onClick={() => setMenuOpen(false)}
         >
           <img
@@ -557,7 +580,7 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
 
         {/* Mobile hamburger */}
         <button
-          className="flex flex-col justify-center items-center gap-1.5 w-8 h-8 cursor-pointer bg-transparent border-0 p-0"
+          className="relative z-1 flex flex-col justify-center items-center gap-1.5 w-8 h-8 cursor-pointer bg-transparent border-0 p-0"
           onClick={() => setMenuOpen((v) => !v)}
           aria-label={menuOpen ? "Close menu" : "Open menu"}
         >
@@ -588,10 +611,13 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
           overflow: "hidden",
           transition: `height 0.4s ${PANEL_EASE}, border-color 0.3s ease-out`,
           background: "#010101",
+          // Clip the fill to the padding box so the 1px transparent top border
+          // never reveals the dark background as a line over the hero video.
+          backgroundClip: "padding-box",
           borderTop: menuOpen ? "1px solid rgba(255,255,255,0.1)" : "1px solid transparent",
         }}
       >
-        <div 
+        <div
           ref={mobileMeasureRef}
           className="flex flex-col px-6 pb-8 pt-4 gap-6" 
           style={{ pointerEvents: menuOpen ? "auto" : "none" }}
