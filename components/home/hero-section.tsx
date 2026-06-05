@@ -9,6 +9,33 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 const DOCK_THRESHOLD = 8; // px of scroll before the mobile video docks
 const DOCK_INSET = 16; // docked card inset on mobile (matches the old p-4 box)
 
+// Defined at module level so its identity is stable across re-renders — if it
+// were defined inside HeroSection, every scroll-triggered state change would
+// produce a new component type and cause React to unmount/remount the motion
+// spans, replaying the entrance animation.
+function HeadlineLine({
+  children,
+  delay,
+  reduceMotion,
+}: {
+  children: string;
+  delay: number;
+  reduceMotion: boolean | null;
+}) {
+  return (
+    <span className="block overflow-hidden">
+      <motion.span
+        className="block"
+        initial={reduceMotion ? false : { y: "115%" }}
+        animate={{ y: "0%" }}
+        transition={{ duration: 0.95, ease: EASE, delay }}
+      >
+        {children}
+      </motion.span>
+    </span>
+  );
+}
+
 export function HeroSection() {
   const reduceMotion = useReducedMotion();
 
@@ -61,20 +88,6 @@ export function HeroSection() {
     ? "relative z-10 flex flex-col items-center gap-6 text-center px-8 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 pointer-events-auto sm:pointer-events-none sm:group-hover:pointer-events-auto transition-opacity duration-500"
     : "relative z-10 flex flex-col items-center gap-6 text-center px-8 opacity-100 pointer-events-auto transition-opacity duration-500";
 
-  // Masked, staggered line-reveal for the mobile headline.
-  const HeadlineLine = ({ children, delay }: { children: string; delay: number }) => (
-    <span className="block overflow-hidden">
-      <motion.span
-        className="block"
-        initial={reduceMotion ? false : { y: "115%" }}
-        animate={{ y: "0%" }}
-        transition={{ duration: 0.95, ease: EASE, delay }}
-      >
-        {children}
-      </motion.span>
-    </span>
-  );
-
   return (
     <section className="relative w-full h-[100svh] sm:h-[calc(100svh-40px)] sm:min-h-120 overflow-hidden">
       <div
@@ -118,8 +131,8 @@ export function HeroSection() {
 
               {/* Headline */}
               <h1 className="text-white m-0 font-extrabold uppercase leading-[0.9] tracking-[-1.5px] text-[clamp(38px,12vw,54px)]">
-                <HeadlineLine delay={0.15}>Engineering</HeadlineLine>
-                <HeadlineLine delay={0.27}>The Future</HeadlineLine>
+                <HeadlineLine delay={0.15} reduceMotion={reduceMotion}>Engineering</HeadlineLine>
+                <HeadlineLine delay={0.27} reduceMotion={reduceMotion}>The Future</HeadlineLine>
               </h1>
 
               {/* CTAs */}
