@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { Footer } from "@/components/footer";
+import { PageTransition } from "@/components/transition/page-transition";
 
 export function SiteChrome({
   children,
@@ -16,10 +17,10 @@ export function SiteChrome({
   if (isStudio) return <>{children}</>;
 
   return (
-    <>
+    <PageTransition>
       {navbar}
       <main className="flex-1 overflow-hidden">{children}</main>
       <Footer />
-    </>
+    </PageTransition>
   );
 }
