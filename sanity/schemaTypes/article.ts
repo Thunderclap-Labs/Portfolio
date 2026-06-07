@@ -2,11 +2,9 @@ import { defineField, defineType } from "sanity";
 
 const CATEGORY_OPTIONS = [
   { title: "News", value: "news" },
-  { title: "Insight", value: "insight" },
-  { title: "Press", value: "press" },
-  { title: "Case Study", value: "case-study" },
-  { title: "Technical", value: "technical" },
   { title: "Announcement", value: "announcement" },
+  { title: "Technical", value: "technical" },
+  { title: "Progress Update", value: "progress-update" },
 ];
 
 export const articleType = defineType({

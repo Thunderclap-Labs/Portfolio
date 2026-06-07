@@ -196,7 +196,29 @@ Schema types are in `sanity/schemaTypes/`.
 
 - **No draft preview** — articles are only visible after publishing. A preview mode with
   `SANITY_API_READ_TOKEN` and a Next.js `/api/draft-mode` route can be added later.
-- **No pagination** — the listing page shows all articles. Add pagination if the volume grows.
-- **No tags / categories** — can be added as a `reference` field in the schema.
 - **Revalidation webhook** — for instant publish-to-live, add a Sanity webhook that calls
   Next.js `revalidatePath('/articles')`.
+
+### Listing controls (`components/articles/`)
+
+The `/articles` listing toolbar is fully client-side and lives in two files:
+
+- `article-list.tsx` — orchestrates search, filtering, sorting and pagination over the
+  articles passed from the server component. State is local React state (not URL params),
+  consistent with the rest of the site.
+- `filter-dropdown.tsx` — reusable dark popover primitive (outside-click + `Escape` close,
+  kept `inert` while closed) used for the Category, Tags and Sort controls.
+
+Behaviour:
+
+- **Search** matches title, description, category label and tag names.
+- **Category / Tags filters** are multi-select, derived from the articles actually present,
+  and start with everything selected. A filter only narrows results once it is *not* fully
+  selected (so uncategorised articles still show by default). Each shows a count badge when active.
+- **Sort By** — `Newest` (default), `Oldest`, `Title A–Z`, `Title Z–A`.
+- **Pagination** — client-side, `PAGE_SIZE = 6`, with windowed page numbers; changing any
+  filter resets to page 1 and paging scrolls back to the top of the list.
+
+To change the page size or sort options, edit the `PAGE_SIZE` / `SORT_OPTIONS` constants at the
+top of `article-list.tsx`. Category display labels live in `CATEGORY_LABELS` there (kept in
+sync with `CATEGORY_OPTIONS` in `sanity/schemaTypes/article.ts`).
