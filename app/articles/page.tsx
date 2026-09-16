@@ -11,11 +11,11 @@ export const revalidate = 86400;
 export const metadata: Metadata = {
   title: "News & Insights | Thunderclap Labs",
   description:
-    "Latest news, insights, and press releases from Thunderclap Labs — covering aerospace, atmospheric engineering, propulsion, and defense technology.",
+    "Notes from the Thunderclap Labs team — web performance, 3D on the web, CMS architecture, and what we learned shipping each build.",
   openGraph: {
     title: "News & Insights | Thunderclap Labs",
     description:
-      "Latest news and insights from Thunderclap Labs — aerospace, atmospheric engineering, and defense technology.",
+      "Notes from the Thunderclap Labs team on building for the web.",
     type: "website",
   },
 };

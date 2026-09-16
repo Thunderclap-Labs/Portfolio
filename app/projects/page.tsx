@@ -8,7 +8,7 @@ export const revalidate = 86400;
 export const metadata: Metadata = {
   title: "Projects | Thunderclap Labs",
   description:
-    "Critical technologies engineered by Thunderclap Labs — atmospheric modification, propulsion, defense, and satellite systems.",
+    "Client work from Thunderclap Labs — websites, storefronts, web apps and 3D product experiences, designed and built end-to-end.",
 };
 
 export default async function ProjectsPage() {
@@ -27,11 +27,11 @@ export default async function ProjectsPage() {
           Projects
         </p>
         <h1 className="text-[50px] lg:text-[70px] font-normal leading-[105%] tracking-[-1.4px] m-0">
-          Critical Technologies, Built In-House.
+          Built In-House, Start To Finish.
         </h1>
         <p className="mt-16 max-w-2xl text-[0.938rem] tracking-[-0.009rem] font-normal leading-[120%]">
-          From atmospheric modification to propulsion, defense, and satellite systems — every
-          program below is engineered end-to-end by our team in Kaunas.
+          Websites, storefronts, web apps and 3D product experiences — design, build,
+          integrations and deployment, every one of them by our team in Kaunas.
         </p>
       </header>
 

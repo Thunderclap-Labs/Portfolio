@@ -11,17 +11,18 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Thunderclap Labs | Aerospace & Engineering",
+  title: "Thunderclap Labs | Web Design & Development",
   description:
-    "Pioneering next-generation aerospace and atmospheric technologies. We specialize in advanced propulsion, weather modification, satellite systems, and active defense tech.",
+    "We design and build websites and web apps from Kaunas, Lithuania — 3D product pages, configurators, storefronts, dashboards and internal tools, engineered end-to-end.",
   keywords: [
-    "aerospace",
-    "defense",
-    "propulsion",
-    "cloud seeding",
-    "atmospheric technology",
-    "satellite systems",
-    "thunder eye",
+    "web design",
+    "web development",
+    "Next.js",
+    "3D web",
+    "WebGL",
+    "ecommerce",
+    "web apps",
+    "Kaunas",
     "Lithuania",
   ],
   icons: {
@@ -35,9 +36,9 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
   appleWebApp: { title: "Thunderclap Labs" },
   openGraph: {
-    title: "Thunderclap Labs | Aerospace & Engineering",
+    title: "Thunderclap Labs | Web Design & Development",
     description:
-      "Engineering the future of aerospace and atmospheric technologies from Kaunas, Lithuania.",
+      "Websites and web apps built end-to-end from Kaunas, Lithuania.",
     type: "website",
   },
 };
