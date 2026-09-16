@@ -510,7 +510,8 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
               </Link>
             </div>
 
-            {/* Right col — items */}
+            {/* Right col — items. Past six the list splits into two columns
+                instead of running down the panel or being truncated. */}
             <div className="col-span-8 flex flex-col gap-4" onMouseLeave={() => setHoveredItem(null)}>
               <div
                 style={{
@@ -523,8 +524,20 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
                   marginBottom: "4px",
                 }}
               >
-                <ScrambleText key={`featured-${scrambleKey}`} text="Featured" isActive duration={500} />
+                <ScrambleText
+                  key={`featured-${scrambleKey}`}
+                  text={activeItems.length > 6 ? "All of them" : "Featured"}
+                  isActive
+                  duration={500}
+                />
               </div>
+              <div
+                className={
+                  activeItems.length > 6
+                    ? "grid grid-cols-2 gap-x-10 gap-y-4"
+                    : "flex flex-col gap-4"
+                }
+              >
               {activeItems.map((item) => {
                 const isItemHovered = hoveredItem === item._id;
                 const isAnyHovered = hoveredItem !== null;
@@ -557,6 +570,7 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
                 </Link>
                 );
               })}
+              </div>
             </div>
           </div>
         )}

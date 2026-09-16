@@ -1092,3 +1092,10 @@ body.is-locked {
     animation: none;
   }
 }
+
+/* Selection keyed to this site's own accent, so highlighting text does not
+   drop the browser's blue into the palette. */
+::selection {
+  background: #FF4D6D;
+  color: #F6F1E4;
+}

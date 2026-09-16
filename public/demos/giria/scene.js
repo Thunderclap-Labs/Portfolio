@@ -564,7 +564,7 @@ window.GiriaScene = (function () {
       var glow = new THREE.Sprite(
         new THREE.SpriteMaterial({
           map: glowTex,
-          color: 0xffc27a,
+          color: 0xffa24a,
           transparent: true,
           opacity: 0.7,
           depthWrite: false,
@@ -579,7 +579,7 @@ window.GiriaScene = (function () {
       var bulbLight = null;
 
       if (b % 3 === 1) {
-        bulbLight = new THREE.PointLight(0xffc98a, 1.6, 16, 2);
+        bulbLight = new THREE.PointLight(0xffa64d, 1.8, 16, 2);
         bulbLight.position.copy(bulb.position);
         stage.add(bulbLight);
       }
@@ -594,22 +594,24 @@ window.GiriaScene = (function () {
 
     /* Key light over the deck, plus a low warm bounce so the front edge and
        the faces of anyone standing on it are not left in silhouette. */
-    var stageLight = new THREE.PointLight(0xffcf9a, 9, 34, 2);
+    var stageLight = new THREE.PointLight(0xff9a3c, 10, 34, 2);
 
     stageLight.position.set(0, 6, 2);
     stage.add(stageLight);
 
-    var deckFill = new THREE.PointLight(0xffb673, 3.4, 20, 2);
+    var deckFill = new THREE.PointLight(0xff8a2e, 3.8, 20, 2);
 
     deckFill.position.set(0, 1.1, 4.2);
     stage.add(deckFill);
 
-    // A backdrop catches the light and stops the stage reading as a hole in
-    // the trees.
+    /* Backdrop. Kept near black with a green cast rather than lit timber: the
+       closing quote sits over this band, and pale text needs something dark
+       behind it. It also throws the amber festoon forward instead of
+       competing with it. */
     var backdrop = new THREE.Mesh(
       new THREE.PlaneGeometry(16, 7),
       new THREE.MeshStandardMaterial({
-        color: 0x4a3524,
+        color: 0x0a1410,
         roughness: 1,
         metalness: 0,
         side: THREE.DoubleSide,
@@ -625,7 +627,7 @@ window.GiriaScene = (function () {
       new THREE.CircleGeometry(13, 40),
       new THREE.MeshBasicMaterial({
         map: glowTex,
-        color: 0xffa757,
+        color: 0xff8c30,
         transparent: true,
         opacity: 0.26,
         depthWrite: false,

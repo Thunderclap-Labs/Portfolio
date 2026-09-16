@@ -949,10 +949,11 @@ h1 {
   margin-top: 26px;
 }
 
-/* The button carries a 6px drop shadow, so the visual gap is always 6px less
-   than the margin. 38px here reads as roughly 32px on screen. */
+/* The button carries a 6px drop shadow and lifts 2px on hover, so the visual
+   gap is always ~8px less than the margin. 68px reads as about 60px at rest
+   and never closes up under the button. */
 .buy__note {
-  margin: 38px 0 0;
+  margin: 68px 0 0;
   max-width: 34ch;
   line-height: 1.65;
   font-size: 12.5px;
@@ -1766,4 +1767,11 @@ body.is-tinting .logo__o {
 
 .ticks li::before {
   background: var(--mint);
+}
+
+/* Selection keyed to this site's own accent, so highlighting text does not
+   drop the browser's blue into the palette. */
+::selection {
+  background: #8B7FE8;
+  color: #F7F4FF;
 }

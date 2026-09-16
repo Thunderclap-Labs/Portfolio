@@ -1092,3 +1092,10 @@ h1 {
     animation: none;
   }
 }
+
+/* Selection keyed to this site's own accent, so highlighting text does not
+   drop the browser's blue into the palette. */
+::selection {
+  background: #3FD0A5;
+  color: #0B0D0C;
+}

@@ -90,7 +90,9 @@
               <g class="dwg__line">
                 <path d="M170 24 L170 82" />
                 <circle cx="170" cy="90" r="9" />
-                <path d="M170 99 L170 118" />
+                <!-- Down to the crown of the shade. The dome apex is at y=153,
+                     so stopping at 118 left the rod hanging in mid air. -->
+                <path d="M170 99 L170 154" />
                 <path d="M62 214 Q170 92 278 214" />
                 <path d="M62 214 L278 214" />
                 <!-- Perforation bands. A quadratic only reaches halfway to its
@@ -102,9 +104,11 @@
                 <path d="M104 178 L236 178" class="dwg__thin" />
                 <path d="M131 162 L209 162" class="dwg__thin" />
               </g>
+              <!-- Bulb hangs clear below the rim. Centred on y=232 it straddled
+                   the rim line at 214 and notched a bite out of it. -->
               <g class="dwg__bulb">
-                <circle cx="170" cy="232" r="22" />
-                <path d="M160 240 Q170 214 180 240" class="dwg__fil" />
+                <circle cx="170" cy="240" r="22" />
+                <path d="M160 248 Q170 222 180 248" class="dwg__fil" />
               </g>
               <g class="dwg__chain">
                 <path d="M262 216 L262 314" />
@@ -149,7 +153,8 @@
                 <g class="dwg__line">
                   <path d="M130 20 L130 74" />
                   <circle cx="130" cy="82" r="7" />
-                  <path d="M130 89 L130 106" />
+                  <!-- Reaches the crown, which is at y=135 on this dome. -->
+                  <path d="M130 89 L130 136" />
                   <path d="M42 186 Q130 84 218 186" />
                   <path d="M42 186 L218 186" />
                   <!-- Same curve correction as the hero: this dome peaks at
@@ -159,8 +164,8 @@
                   <path d="M94 145 L166 145" class="dwg__thin" />
                 </g>
                 <g class="dwg__bulb">
-                  <circle cx="130" cy="200" r="18" />
-                  <path d="M122 208 Q130 186 138 208" class="dwg__fil" />
+                  <circle cx="130" cy="206" r="18" />
+                  <path d="M122 214 Q130 192 138 214" class="dwg__fil" />
                 </g>
               </svg>
             </div>

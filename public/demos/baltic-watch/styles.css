@@ -1019,3 +1019,10 @@ section {
     scroll-behavior: auto;
   }
 }
+
+/* Selection keyed to this site's own accent, so highlighting text does not
+   drop the browser's blue into the palette. */
+::selection {
+  background: #0A6ED1;
+  color: #F2F5F8;
+}

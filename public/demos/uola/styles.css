@@ -1067,3 +1067,10 @@ section {
     scroll-behavior: auto;
   }
 }
+
+/* Selection keyed to this site's own accent, so highlighting text does not
+   drop the browser's blue into the palette. */
+::selection {
+  background: #FFD400;
+  color: #14140F;
+}

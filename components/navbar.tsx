@@ -17,8 +17,9 @@ async function fetchNavbarItems(query: string): Promise<NavbarItem[]> {
 
 /** The demos are a fixed set in the repo rather than Sanity documents, so the
  *  panel is built here instead of being fetched. Shaped like the Sanity items
- *  so the dropdown renders them through the same branch. */
-const demoNavItems: NavbarItem[] = demos.slice(0, 6).map((demo) => ({
+ *  so the dropdown renders them through the same branch. All ten go in: the
+ *  panel splits into two columns rather than truncating the list. */
+const demoNavItems: NavbarItem[] = demos.map((demo) => ({
   _id: demo.slug,
   title: demo.name,
   slug: { current: demo.slug },

@@ -106,11 +106,11 @@ var UolaHold = (function () {
 
   /* the counterbore, in units of the hold. The floor is wider than the bolt
      head so there is a visible shoulder around it */
-  var FLOOR_R = 0.26;
-  var FLOOR_D = 0.16;
+  var FLOOR_R = 0.17;
+  var FLOOR_D = 0.11;
   var WALL = 10;
-  var BOLT_R = 0.19;
-  var BOLT_H = 0.16;
+  var BOLT_R = 0.115;
+  var BOLT_H = 0.11;
 
   var boltPoint = null;
   var boltAxis = null;
@@ -311,7 +311,7 @@ var UolaHold = (function () {
 
     // the T nut it bolts into
     var tnut = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.2, 0.2, 0.08, 20),
+      new THREE.CylinderGeometry(0.13, 0.13, 0.08, 20),
       new THREE.MeshStandardMaterial({
         color: 0x8a8a80,
         metalness: 0.9,
