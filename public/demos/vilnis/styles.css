@@ -841,3 +841,167 @@ h1 {
     gap: 8px;
   }
 }
+
+/* ======================================================================= */
+/* PAPER + SCRAPBOOK                                                       */
+/* The page was pure white and perfectly square, which for a foundry reads  */
+/* as a spec sheet. It is now a sheet of paper you could have cut up.       */
+/* ======================================================================= */
+
+body {
+  /* Warm the ground very slightly. Still reads as white against the red, but
+     no longer #fff, so the taped slips have something to sit on. */
+  background-color: #faf8f3;
+  background-image:
+    /* laid lines, the way a sheet is made */
+    repeating-linear-gradient(
+      to bottom,
+      rgba(16, 16, 16, 0.016) 0 1px,
+      transparent 1px 4px
+    ),
+    /* two washes so the fibre is not a regular grid */
+    radial-gradient(
+      circle at 18% 12%,
+      rgba(180, 160, 120, 0.06),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 82% 78%,
+      rgba(140, 150, 170, 0.05),
+      transparent 60%
+    );
+}
+
+/* --------------------------------------------------------- drawn letters -- */
+
+.city {
+  border-top: 1px solid var(--ink);
+  padding: 34px 24px 60px;
+}
+
+.city__head {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.city__head h2 {
+  margin: 0 0 12px;
+  font-size: clamp(26px, 3.4vw, 44px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+}
+
+.city__lede {
+  margin: 0;
+  max-width: 68ch;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--grey);
+}
+
+.city__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 30px 22px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A taped slip. Each one sits at its own angle, because a scrapbook is not
+   a grid and the whole point is that these were cut out and stuck down. */
+.scrap {
+  position: relative;
+  padding: 22px 16px 16px;
+  background: #fffdf8;
+  box-shadow:
+    0 1px 0 rgba(16, 16, 16, 0.1),
+    0 10px 18px -12px rgba(16, 16, 16, 0.35);
+  transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.scrap--a { transform: rotate(-1.4deg); }
+.scrap--b { transform: rotate(0.9deg); }
+.scrap--c { transform: rotate(-0.6deg); }
+.scrap--d { transform: rotate(1.6deg); }
+.scrap--e { transform: rotate(-1.1deg); }
+.scrap--f { transform: rotate(0.5deg); }
+
+.scrap:hover {
+  transform: rotate(0deg) translateY(-4px);
+  z-index: 2;
+}
+
+/* Masking tape. Slightly translucent, slightly off-square. */
+.tape {
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  width: 74px;
+  height: 22px;
+  transform: translateX(-50%) rotate(-2.2deg);
+  background: rgba(226, 214, 186, 0.78);
+  border-left: 1px solid rgba(255, 255, 255, 0.5);
+  border-right: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 1px 2px rgba(16, 16, 16, 0.12);
+}
+
+.city__ltr {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* The clip path and the outline are the same live text, at the same size. */
+.city__glyph {
+  font-family: var(--grotesk);
+  font-size: 146px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.city__outline {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.1;
+}
+
+.scrap__cap {
+  margin: 14px 0 3px;
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+
+.scrap__cap b {
+  display: inline-block;
+  min-width: 15px;
+  font-weight: 800;
+}
+
+.scrap__note {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.4;
+  color: var(--grey);
+}
+
+.city__foot {
+  margin: 40px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--grey);
+}
+
+@media (max-width: 720px) {
+  .city__head {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
