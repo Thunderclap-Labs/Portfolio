@@ -96,6 +96,167 @@ window.GiriaScene = (function () {
     return tex;
   }
 
+  /* Forest floor. Layered the way the real thing reads from standing height:
+     a dark moss base, drifts of pine needle litter, worn earth showing
+     through, then a scatter of twigs and fallen cones on top. */
+  function floorTexture() {
+    var c = document.createElement("canvas");
+
+    c.width = 512;
+    c.height = 512;
+    var g = c.getContext("2d");
+
+    g.fillStyle = "#16241c";
+    g.fillRect(0, 0, 512, 512);
+
+    // moss and earth drifts
+    var drifts = [
+      ["rgba(28,48,34,0.85)", 70],
+      ["rgba(46,38,26,0.7)", 55],
+      ["rgba(18,30,22,0.9)", 80],
+      ["rgba(58,46,30,0.45)", 40],
+    ];
+
+    for (var d = 0; d < 150; d++) {
+      var pick = drifts[(Math.random() * drifts.length) | 0];
+
+      g.fillStyle = pick[0];
+      g.beginPath();
+      g.ellipse(
+        Math.random() * 512,
+        Math.random() * 512,
+        pick[1] * (0.4 + Math.random()),
+        pick[1] * (0.3 + Math.random() * 0.7),
+        Math.random() * Math.PI,
+        0,
+        Math.PI * 2,
+      );
+      g.fill();
+    }
+
+    // needle litter
+    for (var n = 0; n < 2600; n++) {
+      var nx = Math.random() * 512;
+      var ny = Math.random() * 512;
+      var na = Math.random() * Math.PI;
+      var nl = 3 + Math.random() * 7;
+
+      g.strokeStyle =
+        Math.random() > 0.45
+          ? "rgba(96,78,48,0.5)"
+          : "rgba(60,72,46,0.45)";
+      g.lineWidth = 0.8;
+      g.beginPath();
+      g.moveTo(nx, ny);
+      g.lineTo(nx + Math.cos(na) * nl, ny + Math.sin(na) * nl);
+      g.stroke();
+    }
+
+    // twigs and cones
+    for (var t = 0; t < 90; t++) {
+      g.strokeStyle = "rgba(38,30,20,0.6)";
+      g.lineWidth = 1 + Math.random() * 1.6;
+      var tx = Math.random() * 512;
+      var ty = Math.random() * 512;
+
+      g.beginPath();
+      g.moveTo(tx, ty);
+      g.quadraticCurveTo(
+        tx + (Math.random() - 0.5) * 22,
+        ty + (Math.random() - 0.5) * 22,
+        tx + (Math.random() - 0.5) * 34,
+        ty + (Math.random() - 0.5) * 34,
+      );
+      g.stroke();
+    }
+
+    var tex = new THREE.CanvasTexture(c);
+
+    tex.encoding = THREE.sRGBEncoding;
+
+    return tex;
+  }
+
+  /* Ferns and grass tufts. Built as crossed billboards from one alpha sheet so
+     the whole lot costs two draw calls rather than two hundred. */
+  function frondTexture() {
+    var c = document.createElement("canvas");
+
+    c.width = 128;
+    c.height = 128;
+    var g = c.getContext("2d");
+
+    g.clearRect(0, 0, 128, 128);
+
+    for (var b = 0; b < 9; b++) {
+      var baseX = 20 + b * 11 + (Math.random() - 0.5) * 6;
+      var tipX = baseX + (b - 4) * 7 + (Math.random() - 0.5) * 10;
+      var topY = 12 + Math.random() * 40;
+
+      g.strokeStyle = "rgba(74,104,62," + (0.55 + Math.random() * 0.4) + ")";
+      g.lineWidth = 2.5 + Math.random() * 2;
+      g.lineCap = "round";
+      g.beginPath();
+      g.moveTo(baseX, 128);
+      g.quadraticCurveTo(baseX + (tipX - baseX) * 0.3, 70, tipX, topY);
+      g.stroke();
+    }
+
+    var tex = new THREE.CanvasTexture(c);
+
+    tex.encoding = THREE.sRGBEncoding;
+
+    return tex;
+  }
+
+  function addUndergrowth(sc) {
+    var tex = frondTexture();
+    var mat = new THREE.MeshStandardMaterial({
+      map: tex,
+      transparent: true,
+      alphaTest: 0.35,
+      roughness: 1,
+      metalness: 0,
+      side: THREE.DoubleSide,
+      // Muted well down. At full green the tufts read as stage grass under a
+      // scene lit almost entirely by lanterns.
+      color: 0x4c6642,
+    });
+    var geo = new THREE.PlaneGeometry(1.5, 1.2);
+    var count = 260;
+    var mesh = new THREE.InstancedMesh(geo, mat, count * 2);
+    var m = new THREE.Matrix4();
+    var q = new THREE.Quaternion();
+    var e = new THREE.Euler();
+    var pos = new THREE.Vector3();
+    var scl = new THREE.Vector3();
+    var idx = 0;
+
+    for (var i = 0; i < count; i++) {
+      // keep the walking line clear, cluster just off the path
+      var side = Math.random() > 0.5 ? 1 : -1;
+      var x = side * (3.2 + Math.random() * 16);
+      var z = 24 - Math.random() * 150;
+      var s = 0.7 + Math.random() * 0.9;
+
+      pos.set(x, -0.56 + s * 0.42, z);
+      scl.set(s, s, s);
+
+      // crossed pair, so the tuft has volume from any angle
+      for (var k = 0; k < 2; k++) {
+        e.set(0, Math.random() * Math.PI + (k * Math.PI) / 2, 0);
+        q.setFromEuler(e);
+        m.compose(pos, q, scl);
+        mesh.setMatrixAt(idx++, m);
+      }
+    }
+
+    mesh.instanceMatrix.needsUpdate = true;
+    sc.add(mesh);
+
+    return mesh;
+  }
+
   /* --------------------------------------------------------------- init -- */
 
   api.init = function (el) {
@@ -142,12 +303,41 @@ window.GiriaScene = (function () {
     scene.add(sky);
     api._sky = sky;
 
-    /* ground */
+    /* ground: a forest floor rather than a flat plane. The canvas texture
+       carries moss, needle litter and worn earth along the walking line, and
+       the geometry is displaced so it reads as uneven under raking light. */
+    var floorTex = floorTexture();
+
+    floorTex.wrapS = floorTex.wrapT = THREE.RepeatWrapping;
+    floorTex.repeat.set(26, 26);
+
+    var groundGeo = new THREE.PlaneGeometry(400, 400, 96, 96);
+    var gp = groundGeo.attributes.position;
+
+    for (var gi = 0; gi < gp.count; gi++) {
+      var gx = gp.getX(gi);
+      var gy = gp.getY(gi);
+      // Keep the middle of the path flat so the camera walk stays smooth.
+      var pathFade = Math.min(1, Math.abs(gx) / 7);
+
+      // Kept shallow on purpose: the trunks sit at a fixed height, so a deep
+      // dip under one opens a gap between the trunk and the ground.
+      gp.setZ(
+        gi,
+        (Math.sin(gx * 0.21) * Math.cos(gy * 0.17) * 0.16 +
+          Math.sin(gx * 0.07 + gy * 0.09) * 0.22) *
+          pathFade,
+      );
+    }
+
+    groundGeo.computeVertexNormals();
+
     var ground = new THREE.Mesh(
-      new THREE.PlaneGeometry(400, 400, 1, 1),
+      groundGeo,
       new THREE.MeshStandardMaterial({
-        color: C.moss,
-        roughness: 1,
+        color: 0xffffff,
+        map: floorTex,
+        roughness: 0.97,
         metalness: 0,
       }),
     );
@@ -155,6 +345,10 @@ window.GiriaScene = (function () {
     ground.rotation.x = -Math.PI / 2;
     ground.position.y = -0.6;
     scene.add(ground);
+
+    /* undergrowth: ferns and grass tufts either side of the path, so the
+       floor has something growing out of it near the camera */
+    addUndergrowth(scene);
 
     /* trunks: scattered either side of a walking line down the middle */
     var bark = barkTexture();
@@ -344,21 +538,111 @@ window.GiriaScene = (function () {
     beam.position.y = 6.9;
     stage.add(beam);
 
-    for (var b = 0; b < 7; b++) {
+    /* Festoon run. Each bulb carries its own glow sprite so the string reads
+       as lit rather than as white dots, and every third one holds a small
+       point light, which is enough to wash the deck without paying for
+       thirteen lights. */
+    var bulbs = [];
+    var glowTex = dotTexture(
+      "rgba(255,236,196,0.95)",
+      "rgba(255,178,102,0.5)",
+    );
+
+    for (var b = 0; b < 13; b++) {
+      var bx = -6.6 + b * 1.1;
+      // the wire sags between the posts
+      var sag = Math.cos((bx / 7.4) * (Math.PI / 2)) * 0.45;
+
       var bulb = new THREE.Mesh(
-        new THREE.SphereGeometry(0.16, 10, 8),
+        new THREE.SphereGeometry(0.17, 12, 10),
         new THREE.MeshBasicMaterial({ color: 0xffe2ac }),
       );
 
-      bulb.position.set(-6 + b * 2, 6.55, 0);
+      bulb.position.set(bx, 6.5 - 0.45 + sag, 0);
       stage.add(bulb);
+
+      var glow = new THREE.Sprite(
+        new THREE.SpriteMaterial({
+          map: glowTex,
+          color: 0xffc27a,
+          transparent: true,
+          opacity: 0.7,
+          depthWrite: false,
+          blending: THREE.AdditiveBlending,
+        }),
+      );
+
+      glow.scale.set(1.9, 1.9, 1);
+      glow.position.copy(bulb.position);
+      stage.add(glow);
+
+      var bulbLight = null;
+
+      if (b % 3 === 1) {
+        bulbLight = new THREE.PointLight(0xffc98a, 1.6, 16, 2);
+        bulbLight.position.copy(bulb.position);
+        stage.add(bulbLight);
+      }
+
+      bulbs.push({
+        mesh: bulb,
+        glow: glow,
+        light: bulbLight,
+        seed: Math.random() * 10,
+      });
     }
 
-    var stageLight = new THREE.PointLight(0xffcf9a, 6, 30, 2);
+    /* Key light over the deck, plus a low warm bounce so the front edge and
+       the faces of anyone standing on it are not left in silhouette. */
+    var stageLight = new THREE.PointLight(0xffcf9a, 9, 34, 2);
 
     stageLight.position.set(0, 6, 2);
     stage.add(stageLight);
-    stage.userData = { light: stageLight };
+
+    var deckFill = new THREE.PointLight(0xffb673, 3.4, 20, 2);
+
+    deckFill.position.set(0, 1.1, 4.2);
+    stage.add(deckFill);
+
+    // A backdrop catches the light and stops the stage reading as a hole in
+    // the trees.
+    var backdrop = new THREE.Mesh(
+      new THREE.PlaneGeometry(16, 7),
+      new THREE.MeshStandardMaterial({
+        color: 0x4a3524,
+        roughness: 1,
+        metalness: 0,
+        side: THREE.DoubleSide,
+      }),
+    );
+
+    backdrop.position.set(0, 3.4, -3.6);
+    stage.add(backdrop);
+
+    // Warm pool on the ground in front, so the stage looks approached rather
+    // than parked.
+    var pool = new THREE.Mesh(
+      new THREE.CircleGeometry(13, 40),
+      new THREE.MeshBasicMaterial({
+        map: glowTex,
+        color: 0xffa757,
+        transparent: true,
+        opacity: 0.26,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+      }),
+    );
+
+    pool.rotation.x = -Math.PI / 2;
+    pool.position.set(0, -0.53, 5);
+    stage.add(pool);
+
+    stage.userData = {
+      light: stageLight,
+      fill: deckFill,
+      bulbs: bulbs,
+      pool: pool,
+    };
     scene.add(stage);
     api._stage = stage;
 
@@ -453,8 +737,27 @@ window.GiriaScene = (function () {
     });
 
     if (api._stage) {
-      api._stage.userData.light.intensity =
-        6 * (0.4 + nightEased * 0.9 + flare * 0.6);
+      var sd = api._stage.userData;
+      // The stage keeps a warm floor of its own in daylight and climbs as the
+      // wood goes dark, so it always reads as the lit place to walk toward.
+      var stageLit = 0.72 + nightEased * 0.75 + flare * 0.5;
+
+      sd.light.intensity = 9 * stageLit;
+      sd.fill.intensity = 3.4 * stageLit;
+      sd.pool.material.opacity = 0.26 * (0.5 + nightEased * 0.9 + flare * 0.4);
+
+      sd.bulbs.forEach(function (b) {
+        // Each bulb drifts on its own two sine waves, so the run never pulses
+        // in unison the way a single shared flicker would.
+        var f =
+          0.86 +
+          Math.sin(t * 3.4 + b.seed) * 0.07 +
+          Math.sin(t * 8.7 + b.seed * 1.7) * 0.05;
+
+        b.glow.material.opacity = 0.7 * f * Math.min(1.35, stageLit);
+        b.mesh.material.color.setHSL(0.1, 0.62, 0.74 * f);
+        if (b.light) b.light.intensity = 1.6 * f * stageLit;
+      });
     }
 
     // fireflies wake as it gets dark and drift toward the pointer
