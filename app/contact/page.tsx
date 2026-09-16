@@ -6,11 +6,11 @@ import { RndCtaSection } from "@/components/home/rnd-cta-section";
 export const metadata: Metadata = {
   title: "Contact — Thunderclap Labs",
   description:
-    "Reach Thunderclap Labs in Kaunas, Lithuania. Partnerships, press, careers, and technical inquiries — direct lines to the engineering team.",
+    "Reach Thunderclap Labs in Kaunas, Lithuania. New projects, quotes, press and careers — direct lines to the people who build the sites.",
   openGraph: {
     title: "Contact — Thunderclap Labs",
     description:
-      "Reach Thunderclap Labs in Kaunas, Lithuania. Partnerships, press, careers, and technical inquiries.",
+      "Reach Thunderclap Labs in Kaunas, Lithuania. New projects, quotes, press and careers.",
     type: "website",
   },
 };

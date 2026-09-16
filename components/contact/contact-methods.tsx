@@ -21,7 +21,7 @@ const METHODS: Method[] = [
     eyebrow: "Direct",
     title: "Email the team",
     description:
-      "For partnerships, press, careers, or anything technical. We read every message.",
+      "For new projects, quotes, press or careers. We read every message.",
     value: CONTACT_EMAIL,
     href: `mailto:${CONTACT_EMAIL}`,
     accent: true,
@@ -40,7 +40,7 @@ const METHODS: Method[] = [
     eyebrow: "In person",
     title: "Visit us in Kaunas",
     description:
-      "Drop by the workshop. Coordinate ahead — we'd hate to be out in the field when you arrive.",
+      "Drop by the studio. Coordinate ahead — we'd hate to be heads-down on a deadline when you arrive.",
     value: `${CONTACT_ADDRESS.street}, ${CONTACT_ADDRESS.city}`,
     href: CONTACT_ADDRESS.mapsUrl,
     external: true,
