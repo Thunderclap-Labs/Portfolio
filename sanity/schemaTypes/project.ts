@@ -8,15 +8,26 @@ const STATUS_OPTIONS = [
   { title: "Archived", value: "archived" },
 ];
 
+// Web-first taxonomy. The legacy hardware categories are kept at the bottom so
+// existing project documents tagged with them stay valid in the Studio; prune
+// them once nothing references them.
 const CATEGORY_OPTIONS = [
+  { title: "Web Design", value: "web-design" },
+  { title: "Web Development", value: "web-development" },
+  { title: "E-commerce", value: "ecommerce" },
+  { title: "3D & Interactive", value: "3d" },
+  { title: "Web App", value: "web-app" },
+  { title: "CMS", value: "cms" },
+  { title: "Branding", value: "branding" },
+  { title: "AI", value: "ai" },
+  { title: "Software", value: "software" },
+  { title: "Research", value: "research" },
+  // Legacy
   { title: "Aerospace", value: "aerospace" },
   { title: "Atmospheric", value: "atmospheric" },
   { title: "Defense", value: "defense" },
-  { title: "AI", value: "ai" },
   { title: "Hardware", value: "hardware" },
   { title: "Chemistry", value: "chemistry" },
-  { title: "Research", value: "research" },
-  { title: "Software", value: "software" },
   { title: "Satellites", value: "satellites" },
 ];
 
