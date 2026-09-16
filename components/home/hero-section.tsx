@@ -125,14 +125,14 @@ export function HeroSection() {
                   transition={{ duration: 0.8, ease: EASE, delay: 0.1 }}
                 />
                 <span className="eyebrow text-white !opacity-80">
-                  Aerospace · Atmospheric · Defense
+                  Web Design · Development · 3D
                 </span>
               </div>
 
               {/* Headline */}
               <h1 className="text-white m-0 font-extrabold uppercase leading-[0.9] tracking-[-1.5px] text-[clamp(38px,12vw,54px)]">
-                <HeadlineLine delay={0.15} reduceMotion={reduceMotion}>Engineering</HeadlineLine>
-                <HeadlineLine delay={0.27} reduceMotion={reduceMotion}>The Future</HeadlineLine>
+                <HeadlineLine delay={0.15} reduceMotion={reduceMotion}>Websites</HeadlineLine>
+                <HeadlineLine delay={0.27} reduceMotion={reduceMotion}>Built Properly</HeadlineLine>
               </h1>
 
               {/* CTAs */}
@@ -142,8 +142,8 @@ export function HeroSection() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, ease: EASE, delay: 0.52 }}
               >
-                <Link href="/projects" className="btn-border-light w-full justify-between">
-                  Explore Projects
+                <Link href="/demos" className="btn-border-light w-full justify-between">
+                  See the work
                   <svg width="11" height="11" viewBox="0 0 10 10" fill="none" aria-hidden="true">
                     <path
                       d="M1 9L9 1M9 1H3M9 1V7"
@@ -155,7 +155,7 @@ export function HeroSection() {
                   </svg>
                 </Link>
                 <Link href="/contact" className="btn-border-light w-full justify-between opacity-65">
-                  Partner with us
+                  Start a project
                   <svg width="11" height="11" viewBox="0 0 10 10" fill="none" aria-hidden="true">
                     <path
                       d="M1 9L9 1M9 1H3M9 1V7"
@@ -197,22 +197,22 @@ export function HeroSection() {
 
           <div className={contentClass}>
             <h1 className="text-white m-0 font-bold leading-[105%] tracking-[-1.4px] uppercase text-[clamp(42px,7vw,70px)]">
-              Engineering
+              Websites
               <br />
-              The Future
+              Built Properly
             </h1>
 
             <div className="flex flex-wrap items-center justify-center gap-4">
-              <span className="eyebrow text-white opacity-80">Aerospace</span>
+              <span className="eyebrow text-white opacity-80">Web Design</span>
               <span className="w-px h-3 bg-white opacity-40" aria-hidden="true" />
-              <span className="eyebrow text-white opacity-80">Atmospheric Tech</span>
+              <span className="eyebrow text-white opacity-80">Development</span>
               <span className="w-px h-3 bg-white opacity-40" aria-hidden="true" />
-              <span className="eyebrow text-white opacity-80">Defense Systems</span>
+              <span className="eyebrow text-white opacity-80">3D &amp; Interaction</span>
             </div>
 
             <div className="flex flex-wrap justify-center gap-4 mt-2">
-              <Link href="/projects" className="btn-border-light">
-                Explore Projects
+              <Link href="/demos" className="btn-border-light">
+                See the work
                 <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
                   <path
                     d="M1 9L9 1M9 1H3M9 1V7"
@@ -224,7 +224,7 @@ export function HeroSection() {
                 </svg>
               </Link>
               <Link href="/contact" className="btn-border-light opacity-[0.65]">
-                Partner Up
+                Start a project
                 <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
                   <path
                     d="M1 9L9 1M9 1H3M9 1V7"
