@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { demos, getDemo, previewUrl } from "@/constants/demos";
+import { demos, getDemo, previewUrl, visibleDemos } from "@/constants/demos";
 
 import { DemoDetail } from "./demo-detail";
 
@@ -42,15 +42,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function DemoPage({ params }: PageProps) {
   const { slug } = await params;
-  const index = demos.findIndex((d) => d.slug === slug);
+  // Looked up against the full set, so a hidden demo still answers on its own
+  // URL while it is being worked on.
+  const demo = getDemo(slug);
 
-  if (index === -1) notFound();
+  if (!demo) notFound();
 
-  return (
-    <DemoDetail
-      demo={demos[index]}
-      next={demos[(index + 1) % demos.length]}
-      previous={demos[(index - 1 + demos.length) % demos.length]}
-    />
-  );
+  /* Previous and next walk the listed demos only, so neither ever points at a
+     hidden page. On a hidden page there is no position in that list, so the
+     links wrap to the ends of it. */
+  const at = visibleDemos.findIndex((d) => d.slug === slug);
+  const n = visibleDemos.length;
+  const previous =
+    at === -1 ? visibleDemos[n - 1] : visibleDemos[(at - 1 + n) % n];
+  const next = at === -1 ? visibleDemos[0] : visibleDemos[(at + 1) % n];
+
+  return <DemoDetail demo={demo} next={next} previous={previous} />;
 }

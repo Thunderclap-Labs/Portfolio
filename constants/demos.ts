@@ -42,6 +42,9 @@ export interface Demo {
   build?: string;
   features: string[];
   accent: string;
+  /** Kept out of the index, the nav and the sitemap while it is being worked
+   *  on. The page itself still resolves, so the URL can be checked directly. */
+  hidden?: boolean;
 }
 
 export const demos: Demo[] = [
@@ -107,6 +110,8 @@ export const demos: Demo[] = [
   {
     slug: "vakaris",
     name: "Vakaris",
+    // Being reworked; hidden from the listings for now.
+    hidden: true,
     tagline: "Lamps for the dark half of the year",
     sector: "Maker workshop",
     brief:
@@ -199,6 +204,8 @@ export const demos: Demo[] = [
   {
     slug: "vilnis",
     name: "Vilnis Type",
+    // Being reworked; hidden from the listings for now.
+    hidden: true,
     tagline: "A grotesk for the Baltic",
     sector: "Type foundry",
     brief:
@@ -337,6 +344,11 @@ export const demos: Demo[] = [
 ];
 
 export const getDemo = (slug: string) => demos.find((d) => d.slug === slug);
+
+/** Everything listed publicly. Use this for the index, the nav, the sitemap
+ *  and the home montage; use `demos` where the full set is needed, such as
+ *  generating the routes so a hidden page still answers on its own URL. */
+export const visibleDemos = demos.filter((d) => !d.hidden);
 
 /** Next.js serves `public/` verbatim and does not resolve directory indexes,
  *  so the filename has to be explicit. */

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { client } from "@/lib/sanity/client";
-import { demos } from "@/constants/demos";
+import { visibleDemos } from "@/constants/demos";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://thunderclaplabs.com";
 
@@ -10,7 +10,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: SITE_URL, lastModified: new Date(), changeFrequency: "weekly", priority: 1.0 },
     { url: `${SITE_URL}/demos`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.9 },
-    ...demos.map((demo) => ({
+    ...visibleDemos.map((demo) => ({
       url: `${SITE_URL}/demos/${demo.slug}`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,

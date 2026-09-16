@@ -4,10 +4,10 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useReducedMotion } from "motion/react";
 
-import { demos, previewUrl } from "@/constants/demos";
+import { visibleDemos, previewUrl } from "@/constants/demos";
 
 /* The hero used to run aerospace R&D footage, which said nothing about
-   building websites. This shows the work instead: the ten concept sites,
+   building websites. This shows the work instead: the listed concept sites,
    crossfading, each drifting slowly so a still screenshot does not sit dead
    on the page.
 
@@ -31,7 +31,7 @@ export function HeroMontage() {
 
   useEffect(() => {
     const id = setInterval(
-      () => setActive((i) => (i + 1) % demos.length),
+      () => setActive((i) => (i + 1) % visibleDemos.length),
       HOLD_MS,
     );
 
@@ -40,7 +40,7 @@ export function HeroMontage() {
 
   return (
     <div className="absolute inset-0 overflow-hidden bg-bg" aria-hidden="true">
-      {demos.map((demo, i) => {
+      {visibleDemos.map((demo, i) => {
         const on = i === active;
 
         return (
@@ -92,7 +92,7 @@ export function HeroMontage() {
         className="hidden sm:block absolute bottom-5 right-8 eyebrow text-white !opacity-70"
         style={{ letterSpacing: "0.42px" }}
       >
-        {demos[active].name} &middot; {demos[active].sector}
+        {visibleDemos[active].name} &middot; {visibleDemos[active].sector}
       </span>
     </div>
   );

@@ -10,6 +10,7 @@ import {
   type Capability,
   demoUrl,
   demos,
+  visibleDemos,
   previewUrl,
 } from "@/constants/demos";
 
@@ -176,7 +177,9 @@ export function DemosIndex() {
   const [filter, setFilter] = useState<Capability | "All">("All");
 
   const visible =
-    filter === "All" ? demos : demos.filter((d) => d.capabilities.includes(filter));
+    filter === "All"
+      ? visibleDemos
+      : visibleDemos.filter((d) => d.capabilities.includes(filter));
 
   return (
     <main className="bg-bg text-white min-h-screen pb-24">
@@ -185,7 +188,7 @@ export function DemosIndex() {
           Demos
         </p>
         <h1 className="text-[50px] lg:text-[70px] font-normal leading-[105%] tracking-[-1.4px] m-0">
-          Ten Sites, Ten Briefs, Built From Scratch.
+          Every Site Here Started From A Brief.
         </h1>
         <p className="mt-16 max-w-2xl text-[0.938rem] tracking-[-0.009rem] font-normal leading-[120%]">
           This is where we test ideas before they reach client work. Each one is a
@@ -200,10 +203,12 @@ export function DemosIndex() {
       <div className="container-content max-w-280 mx-auto pb-10">
         <div className="flex flex-wrap items-center gap-1.5">
           <button type="button" className={chipClass(filter === "All")} onClick={() => setFilter("All")}>
-            All ({demos.length})
+            All ({visibleDemos.length})
           </button>
           {CAPABILITIES.map((cap) => {
-            const count = demos.filter((d) => d.capabilities.includes(cap)).length;
+            const count = visibleDemos.filter((d) =>
+              d.capabilities.includes(cap),
+            ).length;
             if (count === 0) return null;
             return (
               <button
