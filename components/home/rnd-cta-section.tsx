@@ -27,7 +27,7 @@ export function RndCtaSection() {
                 Rapid R&amp;D
               </span>
               <h2 className="text-[35px] font-normal leading-[125%] tracking-[-0.7px] text-white">
-                Bring Us The Hard Part.
+                The Unknowns Go First.
               </h2>
             </div>
 

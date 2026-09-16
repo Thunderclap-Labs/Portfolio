@@ -125,14 +125,14 @@ export function HeroSection() {
                   transition={{ duration: 0.8, ease: EASE, delay: 0.1 }}
                 />
                 <span className="eyebrow text-white !opacity-80">
-                  Research · Design · Build
+                  Websites · Web Apps · 3D
                 </span>
               </div>
 
               {/* Headline */}
               <h1 className="text-white m-0 font-extrabold uppercase leading-[0.9] tracking-[-1.5px] text-[clamp(38px,12vw,54px)]">
-                <HeadlineLine delay={0.15} reduceMotion={reduceMotion}>Websites</HeadlineLine>
-                <HeadlineLine delay={0.27} reduceMotion={reduceMotion}>Built Properly</HeadlineLine>
+                <HeadlineLine delay={0.15} reduceMotion={reduceMotion}>We Build</HeadlineLine>
+                <HeadlineLine delay={0.27} reduceMotion={reduceMotion}>The Hard Part</HeadlineLine>
               </h1>
 
               {/* CTAs */}
@@ -197,17 +197,24 @@ export function HeroSection() {
 
           <div className={contentClass}>
             <h1 className="text-white m-0 font-bold leading-[105%] tracking-[-1.4px] uppercase text-[clamp(42px,7vw,70px)]">
-              Websites
+              We Build
               <br />
-              Built Properly
+              The Hard Part
             </h1>
 
-            <div className="flex flex-wrap items-center justify-center gap-4">
-              <span className="eyebrow text-white opacity-80">Research</span>
+            {/* The headline no longer says what is being built, so the eyebrow
+                has to. It also used to repeat "Build". Because it is now
+                load-bearing it gets a shadow: at 10.5px over a moving video
+                frame, a light patch behind it was enough to lose a word. */}
+            <div
+              className="flex flex-wrap items-center justify-center gap-4"
+              style={{ textShadow: "0 1px 6px rgba(1,1,1,0.85)" }}
+            >
+              <span className="eyebrow text-white opacity-80">Websites</span>
               <span className="w-px h-3 bg-white opacity-40" aria-hidden="true" />
-              <span className="eyebrow text-white opacity-80">Design</span>
+              <span className="eyebrow text-white opacity-80">Web Apps</span>
               <span className="w-px h-3 bg-white opacity-40" aria-hidden="true" />
-              <span className="eyebrow text-white opacity-80">Build</span>
+              <span className="eyebrow text-white opacity-80">3D</span>
             </div>
 
             <div className="flex flex-wrap justify-center gap-4 mt-2">
