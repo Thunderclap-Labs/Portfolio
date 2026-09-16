@@ -14,7 +14,7 @@ export const focusAreas: FocusArea[] = [
   {
     title: "Marketing Sites & Storefronts",
     description:
-      "The public face of the business — fast, searchable, editable by the people who own the copy, and built to sell.",
+      "The public face of the business. Fast, searchable, editable by the people who own the copy, and built to sell.",
     image: "/images/dronewireframe.png",
   },
   {
@@ -39,9 +39,9 @@ export const focusAreas: FocusArea[] = [
 
 export const statsData: StatData[] = [
   {
-    value: "10",
-    title: "Concept Sites Shipped",
-    description: "Ten complete builds you can open and use right now.",
+    value: "12",
+    title: "Awards Won",
+    description: "Across AI, space, defence, startup and business categories.",
   },
   {
     value: "7",
@@ -50,7 +50,7 @@ export const statsData: StatData[] = [
   },
   {
     value: "∞",
-    title: "Infinite Passion",
-    description: "Fueled by a relentless drive for the hard problems.",
+    title: "Curiosity",
+    description: "We keep taking things apart to find out how they work.",
   },
 ];

@@ -9,7 +9,7 @@ export function ByTheNumbersSection() {
             By the Numbers
           </span>
           <h2 className="text-[35px] font-normal leading-[125%] tracking-[-0.7px]">
-            What Drives Us
+            Where We Stand
           </h2>
         </div>
 
