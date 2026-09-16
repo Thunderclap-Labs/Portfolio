@@ -309,14 +309,19 @@
           <p class="tag">The lamps <span class="rule"></span> 02</p>
           <h2 class="h2">Five models, all of them a little strange.</h2>
           <p class="sec__lede">
-            Turn the shelf by dragging it. Click a lamp to switch that one on,
-            or use the list. Nothing here is a render of a photograph, it is the
-            same geometry we cut from.
+            Scroll and the view moves from one room to the next. Each lamp is
+            where it would actually live, so the same brass reads differently
+            against plaster, stone and a workshop bench. Click a lamp to switch
+            it on. Nothing here is a render of a photograph, it is the same
+            geometry we cut from.
           </p>
         </div>
 
         <div class="lamps__tabs" id="tabs"></div>
 
+        <!-- Tall track, sticky window. Scrolling moves from room to room. -->
+        <div class="rooms-track" id="roomsTrack">
+        <div class="rooms-sticky">
         <div class="lamps__body">
           <div class="stage" id="stage">
             <canvas id="lampCanvas"></canvas>
@@ -350,6 +355,12 @@
               </button>
             </div>
           </aside>
+        </div>
+
+        <div class="rooms-prog" id="roomsProg" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        </div>
         </div>
 
         <ul class="shelf" id="shelf"></ul>

@@ -9,6 +9,7 @@ var VakarisShelf = (function () {
 
   var renderer, scene, camera, clock, raycaster, pmrem;
   var shelf, wall, plinth;
+  var rooms = [];
   var lamps = [];
   var live = false;
   var pickHandler = null;
@@ -17,15 +18,17 @@ var VakarisShelf = (function () {
   var focusIdx = -1;
   var lastT = 0;
 
-  var spin = { y: 0, x: 0.06, ty: 0, tx: 0.06 };
+  // The rooms no longer turn; spin stays at rest.
+  var spin = { y: 0, x: 0, ty: 0, tx: 0 };
   var cam = {
-    pos: new THREE.Vector3(0, 2.9, 13.6),
-    look: new THREE.Vector3(0, 1.55, 0),
-    tPos: new THREE.Vector3(0, 2.9, 13.6),
-    tLook: new THREE.Vector3(0, 1.55, 0),
+    pos: new THREE.Vector3(-18.8, 2.1, 11),
+    look: new THREE.Vector3(-18.8, 1.9, -1),
+    tPos: new THREE.Vector3(-18.8, 2.1, 11),
+    tLook: new THREE.Vector3(-18.8, 1.9, -1),
   };
 
-  var X = [-6.6, -3.3, 0, 3.3, 6.6];
+  // Rooms sit clear of one another, so each frames on its own.
+  var X = [-18.8, -9.4, 0, 9.4, 18.8];
 
   /* -------------------------------------------------------------- textures */
 
@@ -242,6 +245,197 @@ var VakarisShelf = (function () {
       roughness: 0.5,
       metalness: 0,
     });
+  }
+
+  /* ----------------------------------------------------------------- rooms */
+
+  /* Where each lamp actually lives. Wall and floor colours are the point: a
+     lamp is only as good as the surface it throws light at, and five different
+     surfaces give five different readings of the same metal. */
+  var ROOMS = [
+    {
+      wall: 0xd8cdb8,
+      floor: 0x6a4f33,
+      trim: 0x2c2620,
+      // Sietas hangs over a table, so the room is a dining corner.
+      furniture: "table",
+      fill: 0xffe6bd,
+      fillPos: [-2.6, 3.4, 1.6],
+    },
+    {
+      wall: 0x9aa79c,
+      floor: 0x4a4a46,
+      trim: 0x24262a,
+      // Vabalas is a desk lamp: a workshop bench under a cold window.
+      furniture: "bench",
+      fill: 0xcfe0ff,
+      fillPos: [2.8, 3, 1.4],
+    },
+    {
+      wall: 0xbdb2a2,
+      floor: 0x55514a,
+      trim: 0x2a2724,
+      // Stulpas is a floor lamp, standing on stone in a bare hall.
+      furniture: "none",
+      fill: 0xffdcae,
+      fillPos: [-2.2, 4.2, 2],
+    },
+    {
+      wall: 0xe4dccd,
+      floor: 0x7a6549,
+      trim: 0x30291f,
+      // Vetra is the hallway ring, on a narrow console.
+      furniture: "console",
+      fill: 0xfff0d6,
+      fillPos: [2.4, 3.6, 1.8],
+    },
+    {
+      wall: 0x8f9aa4,
+      floor: 0x3f4247,
+      trim: 0x1f2226,
+      // Meduza hangs in a stairwell, so the room is taller and cooler.
+      furniture: "none",
+      fill: 0xd9e8ff,
+      fillPos: [0, 5, 2.2],
+    },
+  ];
+
+  var ROOM_W = 7.2;
+  var ROOM_H = 5.2;
+  var ROOM_D = 5;
+
+  function buildRoom(i) {
+    var spec = ROOMS[i];
+    var g = new THREE.Group();
+
+    g.position.x = X[i];
+
+    var wallMat = new THREE.MeshStandardMaterial({
+      color: spec.wall,
+      roughness: 0.95,
+      metalness: 0,
+      /* The environment is a studio built for brass, and pale plaster taking
+         it at full strength is most of why the rooms went white. Plaster
+         barely reflects; 0.2 is closer to the truth and keeps the lamp as the
+         brightest thing in the frame. */
+      envMapIntensity: 0.2,
+    });
+    var floorMat = new THREE.MeshStandardMaterial({
+      color: spec.floor,
+      roughness: 0.82,
+      metalness: 0,
+      envMapIntensity: 0.25,
+    });
+
+    // back wall
+    var back = new THREE.Mesh(new THREE.PlaneGeometry(ROOM_W, ROOM_H), wallMat);
+
+    back.position.set(0, ROOM_H / 2 - 0.6, -ROOM_D / 2);
+    back.receiveShadow = true;
+    g.add(back);
+
+    // side walls, angled in very slightly so both catch a little light
+    [-1, 1].forEach(function (s) {
+      var side = new THREE.Mesh(
+        new THREE.PlaneGeometry(ROOM_D, ROOM_H),
+        wallMat,
+      );
+
+      side.position.set((s * ROOM_W) / 2, ROOM_H / 2 - 0.6, 0);
+      side.rotation.y = s * -Math.PI / 2;
+      side.receiveShadow = true;
+      g.add(side);
+    });
+
+    // floor and ceiling
+    var floor = new THREE.Mesh(
+      new THREE.PlaneGeometry(ROOM_W, ROOM_D),
+      floorMat,
+    );
+
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.set(0, -0.6, 0);
+    floor.receiveShadow = true;
+    g.add(floor);
+
+    var ceil = new THREE.Mesh(new THREE.PlaneGeometry(ROOM_W, ROOM_D), wallMat);
+
+    ceil.rotation.x = Math.PI / 2;
+    ceil.position.set(0, ROOM_H - 0.6, 0);
+    g.add(ceil);
+
+    /* Furniture and legs share the trim colour. The room used to carry its own
+       four bar window frame as well, but the facade in front now does the
+       framing and the two together read as a frame inside a frame. */
+    var trimMat = new THREE.MeshStandardMaterial({
+      color: spec.trim,
+      roughness: 0.6,
+      metalness: 0.1,
+    });
+
+    // Whatever the lamp stands on or hangs over.
+    if (spec.furniture === "table" || spec.furniture === "console") {
+      var w = spec.furniture === "table" ? 5.4 : 3.6;
+      var top = new THREE.Mesh(
+        new THREE.BoxGeometry(w, 0.16, 2.2),
+        new THREE.MeshStandardMaterial({
+          color: 0x8a6a42,
+          roughness: 0.68,
+          metalness: 0,
+        }),
+      );
+
+      top.position.set(0, -0.08, 0.2);
+      top.castShadow = true;
+      top.receiveShadow = true;
+      g.add(top);
+
+      [-1, 1].forEach(function (s) {
+        var leg = new THREE.Mesh(
+          new THREE.BoxGeometry(0.14, 1.9, 0.14),
+          trimMat,
+        );
+
+        leg.position.set((s * w) / 2 - s * 0.3, -1.1, 0.2);
+        leg.castShadow = true;
+        g.add(leg);
+      });
+    }
+
+    if (spec.furniture === "bench") {
+      var benchTop = new THREE.Mesh(
+        new THREE.BoxGeometry(6, 0.22, 2.6),
+        new THREE.MeshStandardMaterial({
+          color: 0x6d6459,
+          roughness: 0.9,
+          metalness: 0,
+        }),
+      );
+
+      benchTop.position.set(0, -0.11, 0.1);
+      benchTop.castShadow = true;
+      benchTop.receiveShadow = true;
+      g.add(benchTop);
+    }
+
+    /* Per room fill. Weak on purpose: the lamp itself has to stay the
+       brightest thing in its own room once it is switched on. */
+    var fill = new THREE.PointLight(spec.fill, 0.9, 12, 2);
+
+    fill.position.set(spec.fillPos[0], spec.fillPos[1], spec.fillPos[2]);
+    g.add(fill);
+
+    g.userData.fill = fill;
+
+    /* Everything in the room so far is shell: walls, floor, ceiling, frame and
+       furniture. Tagged here, before the lamp goes in, so the shadow pass can
+       let it receive without casting. A ceiling that casts puts the whole
+       interior in its own shadow and the room goes black. */
+    g.traverse(function (o) {
+      if (o.isMesh) o.userData.shell = true;
+    });
+
+    return g;
   }
 
   /* ----------------------------------------------------------------- lamps */
@@ -645,7 +839,7 @@ var VakarisShelf = (function () {
 
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.05;
+    renderer.toneMappingExposure = 0.82;
     renderer.outputEncoding = THREE.sRGBEncoding;
     // Without shadows the lamps sit on the shelf with no contact at all, which
     // is most of why the shading read as flat.
@@ -666,19 +860,19 @@ var VakarisShelf = (function () {
     scene.environment = env;
     materials(env);
 
-    scene.add(new THREE.HemisphereLight(0xfff3e2, 0x8a7a63, 0.7));
+    scene.add(new THREE.HemisphereLight(0xfff3e2, 0x8a7a63, 0.26));
 
-    var key = new THREE.DirectionalLight(0xfff1dd, 1.1);
+    var key = new THREE.DirectionalLight(0xfff1dd, 0.75);
 
     key.position.set(-6, 9, 8);
     key.castShadow = true;
     key.shadow.mapSize.set(2048, 2048);
-    key.shadow.camera.left = -14;
-    key.shadow.camera.right = 14;
+    key.shadow.camera.left = -20;
+    key.shadow.camera.right = 20;
     key.shadow.camera.top = 12;
     key.shadow.camera.bottom = -6;
     key.shadow.camera.near = 1;
-    key.shadow.camera.far = 40;
+    key.shadow.camera.far = 56;
     // Tight bias range: the shades are thin, so a heavier bias detaches the
     // shadow from the object and a lighter one stipples the curved surfaces.
     key.shadow.bias = -0.0009;
@@ -686,14 +880,14 @@ var VakarisShelf = (function () {
     key.shadow.radius = 3;
     scene.add(key);
 
-    var fill = new THREE.DirectionalLight(0xdfe6f0, 0.35);
+    var fill = new THREE.DirectionalLight(0xdfe6f0, 0.18);
 
     fill.position.set(7, 4, 6);
     scene.add(fill);
 
     // Rim from behind, so brass separates from the wall instead of merging
     // into it at the silhouette.
-    var rim = new THREE.DirectionalLight(0xffe9c8, 0.5);
+    var rim = new THREE.DirectionalLight(0xffe9c8, 0.22);
 
     rim.position.set(2, 5, -8);
     scene.add(rim);
@@ -703,19 +897,65 @@ var VakarisShelf = (function () {
     shelf = new THREE.Group();
     scene.add(shelf);
 
-    wall = new THREE.Mesh(new THREE.PlaneGeometry(60, 30), M.wall);
-    wall.position.set(0, 6, -9);
-    scene.add(wall);
+    /* The building front, with a window cut for each room. Built as one shape
+       with five holes rather than five separate frames: it occludes the gaps
+       between rooms, so pulling back reads as a terrace of lit windows instead
+       of five stage sets with daylight between them. */
+    var facade = new THREE.Shape();
+    var fx = 34;
 
-    plinth = new THREE.Mesh(new THREE.BoxGeometry(17.4, 0.6, 4.2), M.plinth);
-    plinth.position.y = -0.3;
-    shelf.add(plinth);
+    facade.moveTo(X[0] - fx, -0.6);
+    facade.lineTo(X[4] + fx, -0.6);
+    facade.lineTo(X[4] + fx, ROOM_H + 9);
+    facade.lineTo(X[0] - fx, ROOM_H + 9);
+    facade.lineTo(X[0] - fx, -0.6);
 
+    X.forEach(function (x) {
+      var hole = new THREE.Path();
+      var hw = ROOM_W / 2;
+
+      hole.moveTo(x - hw, -0.6);
+      hole.lineTo(x + hw, -0.6);
+      hole.lineTo(x + hw, ROOM_H - 0.6);
+      hole.lineTo(x - hw, ROOM_H - 0.6);
+      hole.lineTo(x - hw, -0.6);
+      facade.holes.push(hole);
+    });
+
+    var front = new THREE.Mesh(
+      new THREE.ShapeGeometry(facade),
+      new THREE.MeshStandardMaterial({
+        color: 0x241f1a,
+        roughness: 0.95,
+        metalness: 0,
+        envMapIntensity: 0.15,
+      }),
+    );
+
+    front.position.z = ROOM_D / 2 + 0.28;
+    front.receiveShadow = true;
+    // In the same group as the rooms, so nothing can slide out of register
+    // with the openings it is supposed to frame.
+    shelf.add(front);
+
+    /* One room per lamp behind it. The five used to stand side by side on a
+       single plinth against one flat wall, which lit them all identically and
+       told you nothing about where any of them belongs. Each room now carries
+       its own wall, floor, furniture and light, so the same brass reads
+       differently in a hallway and a workshop. */
     [buildSietas, buildVabalas, buildStulpas, buildVetra, buildMeduza].forEach(
       function (fn, i) {
+        var room = buildRoom(i);
+
+        shelf.add(room);
+        rooms.push(room);
+
         var lamp = fn(i);
 
-        shelf.add(lamp);
+        // Lamps are built at the origin and placed by X; inside a room they
+        // stand at the room's own centre instead.
+        lamp.position.x = 0;
+        room.add(lamp);
         lamps.push(lamp);
       },
     );
@@ -729,13 +969,12 @@ var VakarisShelf = (function () {
       var emissive = m && m.emissive && m.emissive.getHex() !== 0x000000;
 
       if (m && (m.isSpriteMaterial || m.transparent === true)) return;
-      o.castShadow = !emissive;
+      o.castShadow = !emissive && !o.userData.shell;
       o.receiveShadow = true;
     });
 
-    plinth.castShadow = true;
-    plinth.receiveShadow = true;
-    wall.receiveShadow = true;
+    // The room surfaces set their own flags as they are built; the single
+    // plinth and backdrop they replaced are gone.
 
     clock = new THREE.Clock();
     raycaster = new THREE.Raycaster();
@@ -782,11 +1021,14 @@ var VakarisShelf = (function () {
       var dx = e.clientX - last.x;
       var dy = e.clientY - last.y;
 
+      /* Drag no longer turns anything. It used to spin the whole shelf, which
+         made sense when the five lamps stood on one plinth. Now they are five
+         rooms behind a building front, and swinging that on a drag reads as
+         the building tipping over. Movement is still measured, because a click
+         is a drag that went nowhere. */
       moved += Math.abs(dx) + Math.abs(dy);
       last.x = e.clientX;
       last.y = e.clientY;
-      spin.ty += dx * 0.006;
-      spin.tx = Math.max(-0.24, Math.min(0.45, spin.tx + dy * 0.003));
     });
 
     function release(e) {
@@ -928,27 +1170,31 @@ var VakarisShelf = (function () {
     l[0].intensity = night ? 0.1 : 0.7;
     l[1].intensity = night ? 0.12 : 1.1;
     l[2].intensity = night ? 0.05 : 0.35;
-    renderer.toneMappingExposure = night ? 0.95 : 1.05;
+    renderer.toneMappingExposure = night ? 0.72 : 0.82;
   }
 
   function focus(i) {
     focusIdx = i;
 
     if (i < 0 || !lamps[i]) {
-      cam.tPos.set(0, 2.9, 13.6);
-      cam.tLook.set(0, 1.55, 0);
+      // Stood back far enough to see the row of windows at once.
+      cam.tPos.set(0, 3, 42);
+      cam.tLook.set(0, 2, 0);
       spin.ty = 0;
-      spin.tx = 0.06;
+      spin.tx = 0.02;
 
       return;
     }
 
+    /* Square on to the one room, close enough that its frame fills the view.
+       Looking in at a slight angle would show the side wall of the next room
+       through the gap, so the camera sits dead centre on the opening. */
     var x = X[i];
 
-    cam.tPos.set(x * 0.78, 2.4, 8.4);
-    cam.tLook.set(x, 1.6, 0);
+    cam.tPos.set(x, 2.1, 11);
+    cam.tLook.set(x, 1.9, -1);
     spin.ty = 0;
-    spin.tx = 0.02;
+    spin.tx = 0;
   }
 
   function onPick(fn) {

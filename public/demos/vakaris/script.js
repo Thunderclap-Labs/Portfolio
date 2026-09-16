@@ -452,3 +452,65 @@
     if (s) io.observe(s);
   });
 })();
+
+/* -------------------------------------------------------- walking the rooms --
+   The five lamps each sit in their own room behind a window. Scrolling the
+   track moves from one to the next; the window itself stays put. Only runs
+   where the track is actually tall, so the mobile layout (which lays the
+   rooms out normally) is left alone. */
+(function () {
+  var track = document.getElementById("roomsTrack");
+  var prog = document.getElementById("roomsProg");
+
+  if (!track || !window.VakarisShelf || !VakarisShelf.focus) return;
+
+  var COUNT = 5;
+  var current = -1;
+  var queued = false;
+
+  function apply() {
+    queued = false;
+
+    var r = track.getBoundingClientRect();
+    var span = r.height - window.innerHeight;
+
+    // Static track: nothing to walk through.
+    if (span < 40) {
+      if (current !== -1) {
+        current = -1;
+      }
+      return;
+    }
+
+    var p = Math.min(1, Math.max(0, -r.top / span));
+    var i = Math.min(COUNT - 1, Math.floor(p * COUNT));
+
+    if (i === current) return;
+    current = i;
+
+    VakarisShelf.focus(i);
+
+    if (prog) {
+      var bars = prog.children;
+
+      for (var k = 0; k < bars.length; k++) {
+        bars[k].classList.toggle("is-here", k === i);
+      }
+    }
+
+    // Keep the side panel naming whatever room you are standing at.
+    var tab = document.querySelector('#tabs .tab[data-i="' + i + '"]');
+
+    if (tab) tab.click();
+  }
+
+  function onScroll() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(apply);
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+  apply();
+})();

@@ -1288,3 +1288,49 @@ section {
   background: #F0A33A;
   color: #1C1814;
 }
+
+/* --------------------------------------------------- scrolling the rooms -- */
+
+/* Five rooms, one per screen of scroll, with the window held still while you
+   move between them. The track carries the height; the body sticks inside it. */
+.lamps--track {
+  padding-bottom: 0;
+}
+
+.rooms-track {
+  position: relative;
+  /* one viewport per room, plus one to settle on the last */
+  height: 480vh;
+}
+
+.rooms-sticky {
+  position: sticky;
+  top: 84px;
+}
+
+.rooms-prog {
+  display: flex;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.rooms-prog span {
+  flex: 1;
+  height: 2px;
+  background: var(--ink-16);
+  transition: background 0.4s ease;
+}
+
+.rooms-prog span.is-here {
+  background: var(--brass);
+}
+
+@media (max-width: 900px) {
+  .rooms-track {
+    height: auto;
+  }
+
+  .rooms-sticky {
+    position: static;
+  }
+}
