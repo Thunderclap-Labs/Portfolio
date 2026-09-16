@@ -3,15 +3,15 @@ import Link from "next/link";
 const CAPABILITIES = [
   {
     title: "Rapid Prototyping",
-    desc: "A clickable, running version of the idea in days, not a slide deck in a month. You judge the real thing before we commit to it.",
+    desc: "A running version of the risky idea within days. You judge the real thing early, while it is still cheap to change your mind.",
   },
   {
     title: "Systems Engineering",
-    desc: "Front-end, back-end, CMS, integrations and deployment designed as one system, so the seams don't become your problem later.",
+    desc: "Front-end, back-end, CMS, integrations and deployment are designed as one system, so the seams never become your problem.",
   },
   {
     title: "Testing & Validation",
-    desc: "Performance budgets, accessibility, cross-browser and load testing — measured on real devices before anything goes live.",
+    desc: "Performance budgets, accessibility and cross-browser checks, measured on real devices rather than assumed on ours.",
   },
 ];
 
@@ -80,14 +80,16 @@ export function RndCtaSection() {
           <div className="py-10.5 md:py-16 flex flex-col justify-end md:pl-8">
             <div className="flex flex-col gap-6 max-w-xl">
               <p className="text-[14.7px] leading-[120%] tracking-[-0.126px] text-white/80">
-                Most of this work is the part other studios quote around: a
-                product you have to see in 3D, a configurator with real rules
-                behind it, live data that has to stay readable, a checkout that
-                cannot drop an order.
+                Research is not a side offering here. It is the reason the
+                finished site holds up under a product you have to see in 3D, a
+                configurator with real rules behind it, live data that stays
+                readable at load, or a checkout that cannot afford to drop an
+                order.
               </p>
               <p className="text-[14.7px] leading-[120%] tracking-[-0.126px] text-white/40">
-                From first prototype to the site that goes live — bring us the
-                problem, leave with the solution.
+                We prove the difficult part first, then build everything else
+                around what we learned. Bring us the problem and leave with the
+                site.
               </p>
             </div>
           </div>
