@@ -4,8 +4,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 
-import { HeroMontage } from "@/components/home/hero-montage";
-
 // easeOutQuint — matches the rest of the site's motion (page transition, etc.)
 const EASE = [0.22, 1, 0.36, 1] as const;
 const DOCK_THRESHOLD = 8; // px of scroll before the mobile video docks
@@ -96,9 +94,16 @@ export function HeroSection() {
         className="absolute inset-0 sm:inset-6 overflow-hidden rounded-none sm:rounded-xs"
         style={cardStyle}
       >
-        {/* The work itself, crossfading. Replaces the old R&D reel, which was
-            aerospace footage under a headline about building websites. */}
-        <HeroMontage />
+        {/* Video — always full opacity, always fully visible */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          src="/rnd-bg.mp4"
+          aria-hidden="true"
+        />
 
         {/* ----------------------------- MOBILE ----------------------------- */}
         <div className="sm:hidden absolute inset-0">
