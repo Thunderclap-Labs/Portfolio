@@ -36,13 +36,13 @@ const navLinks: NavLink[] = [
 const DROPDOWN_COPY: Record<DropdownKey, { eyebrow: string; description: string; viewAllHref: string; viewAllLabel: string }> = {
   projects: {
     eyebrow: "Projects",
-    description: "Selected work across atmospheric engineering, aerospace propulsion, and defense systems.",
+    description: "Selected client work — websites, storefronts, web apps and 3D product experiences.",
     viewAllHref: "/projects",
     viewAllLabel: "View all projects",
   },
   articles: {
     eyebrow: "Articles",
-    description: "News, technical writeups, and dispatches from the lab.",
+    description: "News, technical writeups, and notes from the studio.",
     viewAllHref: "/articles",
     viewAllLabel: "View all articles",
   },
@@ -333,7 +333,7 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
                         maxWidth: "50ch",
                       }}
                     >
-                      Thunderclap Labs is an aerospace & atmospheric engineering startup building critical technologies across atmospheric modification, aerospace propulsion, and active defense systems.
+                      Thunderclap Labs is a web design and development studio in Kaunas, building websites, storefronts, web apps and 3D product experiences end-to-end.
                     </p>
                   </div>
                   
