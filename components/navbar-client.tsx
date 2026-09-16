@@ -36,7 +36,7 @@ const navLinks: NavLink[] = [
 const DROPDOWN_COPY: Record<DropdownKey, { eyebrow: string; description: string; viewAllHref: string; viewAllLabel: string }> = {
   projects: {
     eyebrow: "Projects",
-    description: "Selected client work — websites, storefronts, web apps and 3D product experiences.",
+    description: "Selected client work. Websites, storefronts, web apps and 3D product experiences.",
     viewAllHref: "/projects",
     viewAllLabel: "View all projects",
   },
@@ -49,7 +49,7 @@ const DROPDOWN_COPY: Record<DropdownKey, { eyebrow: string; description: string;
   demos: {
     eyebrow: "Demos",
     description:
-      "Concept sites built here from the brief up — 3D product pages, configurators, checkouts and live data. Every one runs in your browser.",
+      "Concept sites built here from the brief up. 3D product pages, configurators, checkouts and live data, all running in your browser.",
     viewAllHref: "/demos",
     viewAllLabel: "View all demos",
   },
@@ -333,7 +333,7 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
                         maxWidth: "50ch",
                       }}
                     >
-                      Thunderclap Labs is a web design and development studio in Kaunas, building websites, storefronts, web apps and 3D product experiences end-to-end.
+                      Thunderclap Labs is a web studio in Kaunas. We research the hard parts and build the whole thing: websites, storefronts, web apps and 3D product experiences.
                     </p>
                   </div>
                   
