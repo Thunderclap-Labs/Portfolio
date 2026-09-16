@@ -11,9 +11,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Thunderclap Labs | Web Design & Development",
+  title: "Thunderclap Labs | Web Design and Development",
   description:
-    "We design and build websites and web apps from Kaunas, Lithuania — 3D product pages, configurators, storefronts, dashboards and internal tools, engineered end-to-end.",
+    "A web studio in Kaunas, Lithuania. We research the hard parts and build the whole thing: 3D product pages, configurators, storefronts, dashboards and internal tools.",
   keywords: [
     "web design",
     "web development",
@@ -36,9 +36,9 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
   appleWebApp: { title: "Thunderclap Labs" },
   openGraph: {
-    title: "Thunderclap Labs | Web Design & Development",
+    title: "Thunderclap Labs | Web Design and Development",
     description:
-      "Websites and web apps built end-to-end from Kaunas, Lithuania.",
+      "Websites and web apps built start to finish in Kaunas, Lithuania.",
     type: "website",
   },
 };

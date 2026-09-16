@@ -11,7 +11,7 @@ export const revalidate = 86400;
 export const metadata: Metadata = {
   title: "News & Insights | Thunderclap Labs",
   description:
-    "Notes from the Thunderclap Labs team — web performance, 3D on the web, CMS architecture, and what we learned shipping each build.",
+    "Notes from the Thunderclap Labs team on web performance, 3D in the browser, CMS architecture, and what each build taught us.",
   openGraph: {
     title: "News & Insights | Thunderclap Labs",
     description:

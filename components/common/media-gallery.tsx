@@ -25,7 +25,7 @@ export function MediaGallery({ images, title }: MediaGalleryProps) {
 
   const slides = images.map((img, i) => ({
     src: urlFor(img).width(FULL_WIDTH).fit("max").auto("format").url(),
-    alt: img.alt ?? `${title} — image ${i + 1}`,
+    alt: img.alt ?? `${title}, image ${i + 1}`,
     description: img.caption,
   }));
 
@@ -39,7 +39,7 @@ export function MediaGallery({ images, title }: MediaGalleryProps) {
             .fit("crop")
             .auto("format")
             .url();
-          const altText = img.alt ?? `${title} — image ${i + 1}`;
+          const altText = img.alt ?? `${title}, image ${i + 1}`;
 
           return (
             <figure key={i} className="m-0">
