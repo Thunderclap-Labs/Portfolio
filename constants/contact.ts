@@ -11,8 +11,8 @@ export const CONTACT_ADDRESS = {
 } as const;
 
 export const OFFICE_HOURS = {
-  days: "Mon — Fri",
-  hours: "09:00 — 18:00",
+  days: "Mon to Fri",
+  hours: "09:00 to 18:00",
   timezone: "EET",
 } as const;
 

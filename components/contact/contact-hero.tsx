@@ -38,9 +38,10 @@ export function ContactHero() {
         <div className="mt-16 grid grid-cols-1 lg:grid-cols-12 gap-10">
           <div className="lg:col-span-7 xl:col-span-7 flex flex-col justify-between">
             <p className="max-w-2xl text-[0.938rem] tracking-[-0.009rem] font-normal leading-[120%] m-0 text-white/60">
-              A new site, a rebuild of one that has stopped keeping up, or a
-              tool your team needs internally — tell us what it has to do.
-              Reach us directly through any channel below.
+              A new site, a rebuild of one that stopped keeping up, or an
+              internal tool your team has been working around. Tell us what it
+              has to do and we will tell you how we would approach it. Any of
+              the channels below reaches us directly.
             </p>
           </div>
           

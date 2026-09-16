@@ -31,7 +31,7 @@ const METHODS: Method[] = [
     eyebrow: "Voice",
     title: "Call the studio",
     description:
-      "Prefer to talk it through? Reach us during office hours, Mon — Fri.",
+      "Easier to explain out loud? Reach us during office hours, Monday to Friday.",
     value: CONTACT_PHONE,
     href: `tel:${CONTACT_PHONE_HREF}`,
     cta: "Place a call",
@@ -40,7 +40,7 @@ const METHODS: Method[] = [
     eyebrow: "In person",
     title: "Visit us in Kaunas",
     description:
-      "Drop by the studio. Coordinate ahead — we'd hate to be heads-down on a deadline when you arrive.",
+      "Drop by the studio. Arrange it ahead of time, since we are often heads-down on a deadline.",
     value: `${CONTACT_ADDRESS.street}, ${CONTACT_ADDRESS.city}`,
     href: CONTACT_ADDRESS.mapsUrl,
     external: true,
@@ -83,7 +83,7 @@ export function ContactMethods() {
             </h2>
           </div>
           <p className="text-[14.7px] tracking-[-0.126px] text-white/50 max-w-sm">
-            Pick whichever fits. All routes land with the same small team.
+            Pick whichever suits you. They all land with the same small team.
           </p>
         </div>
       </div>
@@ -141,7 +141,7 @@ export function ContactMethods() {
                   href={method.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`${method.title} — opens Google Maps in a new tab`}
+                  aria-label={`${method.title}, opens Google Maps in a new tab`}
                   className={commonClass}
                 >
                   <address className="not-italic contents">{Inner}</address>
