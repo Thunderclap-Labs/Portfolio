@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Orbit / A hub you can take apart</title>
+    <meta
+      name="description"
+      content="A modular smart home hub in five parts. Replace the one that breaks, keep the rest."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="field" id="field" aria-hidden="true">
+      <i class="field__b field__b--1"></i>
+      <i class="field__b field__b--2"></i>
+      <i class="field__b field__b--3"></i>
+      <i class="field__b field__b--4"></i>
+      <i class="field__b field__b--5"></i>
+    </div>
+    <div class="dots" aria-hidden="true"></div>
+
+    <header class="bar">
+      <a class="logo" href="#top">
+        <span class="logo__o" aria-hidden="true"></span>
+        Orbit
+      </a>
+      <nav class="bar__nav" id="nav">
+        <a href="#parts">Parts</a>
+        <a href="#how">Rules</a>
+        <a href="#finish">Finishes</a>
+        <a href="#guides">Guides</a>
+      </nav>
+      <button class="btn btn--dark" type="button" id="basketBtn">
+        Basket
+        <span class="btn__count" id="basketCount">0</span>
+      </button>
+    </header>
+
+    <main id="top">
+      <!-- HERO -->
+      <section class="hero">
+        <div class="hero__text">
+          <span class="chip"><i></i> Made in Kaunas since 2021</span>
+          <h1>
+            A hub you are<br />
+            <span class="hl">allowed</span> to<br />
+            take apart.
+          </h1>
+          <p>
+            Orbit runs your lights, locks and sensors from a box that comes
+            apart on the kitchen table. When the battery tires in year six, you
+            replace the battery. Not the hub, not the ecosystem, not your
+            evening.
+          </p>
+          <div class="hero__btns">
+            <button class="btn btn--dark btn--lg" type="button" id="buyKit">
+              Buy the complete hub, 189 &euro;
+            </button>
+            <a class="btn btn--plain btn--lg" href="#parts">
+              See the parts
+              <span class="btn__chev" aria-hidden="true"></span>
+            </a>
+          </div>
+          <ul class="ticks">
+            <li>Works offline</li>
+            <li>No subscription</li>
+            <li>Ten year parts promise</li>
+          </ul>
+        </div>
+
+        <!-- Three.js renders into this element -->
+        <div class="iso-wrap">
+          <div class="iso" id="iso" aria-label="Orbit hub, drag to rotate">
+            <div class="iso__loading" id="isoLoading">Assembling</div>
+          </div>
+          <div class="iso__ui">
+            <button class="toggle" id="explode" type="button" aria-pressed="true">
+              <span></span> Exploded view
+            </button>
+            <p class="iso-hint">Drag to rotate, click a module to pull it out</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- PARTS -->
+      <section class="parts" id="parts">
+        <div class="parts__head">
+          <span class="kick">Five parts</span>
+          <h2>Each one has its own part number.</h2>
+          <p>
+            Every module is sold on its own, ships in two days, and comes with
+            the drawing you need to fit it. Hover a row to find it in the stack.
+          </p>
+        </div>
+
+        <ol class="partlist" id="partlist">
+          <li class="part" data-part="cap" data-price="24" data-sku="ORB-CAP-2" data-name="Light ring and microphone">
+            <span class="part__no">05</span>
+            <span class="part__sw sw--cap"></span>
+            <span class="part__body">
+              <strong>Light ring and microphone</strong>
+              <em>ORB-CAP-2</em>
+              <span
+                >A 24 segment ring you can actually see in daylight, and a
+                microphone with a switch that physically breaks the circuit.</span
+              >
+            </span>
+            <span class="part__price">24 &euro;</span>
+            <span class="part__buy">
+              <button class="qty" data-d="-1" type="button" aria-label="One fewer">&minus;</button>
+              <output class="qtyv">0</output>
+              <button class="qty" data-d="1" type="button" aria-label="One more">+</button>
+            </span>
+          </li>
+          <li class="part" data-part="speaker" data-price="31" data-sku="ORB-SPK-1" data-name="Speaker">
+            <span class="part__no">04</span>
+            <span class="part__sw sw--speaker"></span>
+            <span class="part__body">
+              <strong>Speaker</strong>
+              <em>ORB-SPK-1</em>
+              <span
+                >A 48&nbsp;mm full range driver in a sealed chamber. Loud enough
+                for a doorbell, quiet enough for a bedroom.</span
+              >
+            </span>
+            <span class="part__price">31 &euro;</span>
+            <span class="part__buy">
+              <button class="qty" data-d="-1" type="button" aria-label="One fewer">&minus;</button>
+              <output class="qtyv">0</output>
+              <button class="qty" data-d="1" type="button" aria-label="One more">+</button>
+            </span>
+          </li>
+          <li class="part" data-part="board" data-price="89" data-sku="ORB-MB-3" data-name="Mainboard">
+            <span class="part__no">03</span>
+            <span class="part__sw sw--board"></span>
+            <span class="part__body">
+              <strong>Mainboard</strong>
+              <em>ORB-MB-3</em>
+              <span
+                >Thread, Zigbee, Wi&#8209;Fi and a local rules engine. Runs the
+                house with the internet unplugged.</span
+              >
+            </span>
+            <span class="part__price">89 &euro;</span>
+            <span class="part__buy">
+              <button class="qty" data-d="-1" type="button" aria-label="One fewer">&minus;</button>
+              <output class="qtyv">0</output>
+              <button class="qty" data-d="1" type="button" aria-label="One more">+</button>
+            </span>
+          </li>
+          <li class="part" data-part="battery" data-price="28" data-sku="ORB-BAT-1" data-name="Battery">
+            <span class="part__no">02</span>
+            <span class="part__sw sw--battery"></span>
+            <span class="part__body">
+              <strong>Battery</strong>
+              <em>ORB-BAT-1</em>
+              <span
+                >Three 18650 cells, not glued. Twelve hours of backup and a
+                published cycle count.</span
+              >
+            </span>
+            <span class="part__price">28 &euro;</span>
+            <span class="part__buy">
+              <button class="qty" data-d="-1" type="button" aria-label="One fewer">&minus;</button>
+              <output class="qtyv">0</output>
+              <button class="qty" data-d="1" type="button" aria-label="One more">+</button>
+            </span>
+          </li>
+          <li class="part" data-part="base" data-price="22" data-sku="ORB-BSE-1" data-name="Base and ports">
+            <span class="part__no">01</span>
+            <span class="part__sw sw--base"></span>
+            <span class="part__body">
+              <strong>Base and ports</strong>
+              <em>ORB-BSE-1</em>
+              <span
+                >Ethernet, USB&#8209;C and a screw mount that fits a standard
+                wall box.</span
+              >
+            </span>
+            <span class="part__price">22 &euro;</span>
+            <span class="part__buy">
+              <button class="qty" data-d="-1" type="button" aria-label="One fewer">&minus;</button>
+              <output class="qtyv">0</output>
+              <button class="qty" data-d="1" type="button" aria-label="One more">+</button>
+            </span>
+          </li>
+        </ol>
+      </section>
+
+      <!-- RULES -->
+      <section class="how" id="how">
+        <span class="kick kick--center">Rules</span>
+        <h2 class="how__title">Every rule is a sentence.</h2>
+        <p class="how__sub">
+          Build one here. It runs on the hub, not in a datacentre, so it keeps
+          working when the internet does not.
+        </p>
+
+        <div class="builder">
+          <div class="builder__row">
+            <span class="builder__w">If the</span>
+            <select id="rWhere" aria-label="Where">
+              <option>hallway</option>
+              <option>kitchen</option>
+              <option>front door</option>
+              <option>bedroom</option>
+              <option>garage</option>
+            </select>
+            <select id="rWhat" aria-label="Condition">
+              <option data-kind="sensor">sees nobody for 20 minutes</option>
+              <option data-kind="sensor">sees somebody</option>
+              <option data-kind="door">is opened</option>
+              <option data-kind="door">stays unlocked for 10 minutes</option>
+              <option data-kind="light">drops below 40 lux</option>
+            </select>
+            <span class="builder__w">then</span>
+            <select id="rDo" aria-label="Action">
+              <option>turn the lights off</option>
+              <option>turn the lights on at 30 %</option>
+              <option>lock the door</option>
+              <option>play the doorbell</option>
+              <option>send a notification</option>
+            </select>
+            <button class="btn btn--pop" id="addRule" type="button">Add rule</button>
+          </div>
+          <p class="builder__out" id="rulePreview"></p>
+        </div>
+
+        <ul class="rules" id="rules"></ul>
+        <p class="rules__meta" id="rulesMeta">No rules yet. The hub ships empty on purpose.</p>
+
+        <div class="steps">
+          <article class="step">
+            <span class="step__num">1</span>
+            <h3>Plug it in</h3>
+            <p>
+              Orbit finds every Thread and Zigbee device in the flat and lists
+              them by room. There is no app store, no hub pairing dance and no
+              email address required.
+            </p>
+          </article>
+          <article class="step">
+            <span class="step__num">2</span>
+            <h3>Write a rule</h3>
+            <p>
+              Read it out loud. If it sounds like a sentence a person would say,
+              it will do what you expect. That is the whole design rule for the
+              rules engine.
+            </p>
+          </article>
+          <article class="step">
+            <span class="step__num">3</span>
+            <h3>Forget about it</h3>
+            <p>
+              Everything runs on the box. Router down, provider gone, our
+              company gone: the lights still come on. That is the point.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- FINISH -->
+      <section class="finish" id="finish">
+        <div class="finish__inner">
+          <div class="finish__copy">
+            <span class="kick">Finishes</span>
+            <h2>Four colours,<br />all of them quiet.</h2>
+            <p>
+              The shell is a single dyed polymer, not a coating, so a scratch is
+              the same colour as the rest of it. The choice changes the cap in
+              the model above and on your order.
+            </p>
+            <div class="finish__swatches" role="group" aria-label="Finish">
+              <button class="fsw is-active" data-a="#ffd86b" data-b="#f2c04d" data-name="Butter" type="button">
+                <span style="background: #ffd86b"></span>Butter
+              </button>
+              <button class="fsw" data-a="#5fd3b2" data-b="#41b795" data-name="Mint" type="button">
+                <span style="background: #5fd3b2"></span>Mint
+              </button>
+              <button class="fsw" data-a="#ff9e7d" data-b="#e8805d" data-name="Clay" type="button">
+                <span style="background: #ff9e7d"></span>Clay
+              </button>
+              <button class="fsw" data-a="#8fa7ff" data-b="#6c86ea" data-name="Periwinkle" type="button">
+                <span style="background: #8fa7ff"></span>Periwinkle
+              </button>
+            </div>
+          </div>
+
+          <div class="finish__preview">
+            <div class="puck"><span class="puck__ring"></span></div>
+            <p class="finish__label" id="finishLabel">Butter</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- GUIDES -->
+      <section class="guides" id="guides">
+        <span class="kick">Repair guides</span>
+        <h2 class="guides__title">Four screws, in this order.</h2>
+        <p class="guides__sub">
+          Every guide is on this page rather than behind a login, because a
+          repair guide you cannot find is not a repair guide.
+        </p>
+
+        <div class="acc" id="acc">
+          <details class="acc__item" open>
+            <summary>Replace the battery <span>8 minutes</span></summary>
+            <ol>
+              <li>Unplug the hub and wait thirty seconds for the ring to fade.</li>
+              <li>Loosen the four M3 screws in the base. They are captive, so they will not fall out.</li>
+              <li>Lift the cap, speaker and mainboard off as one stack. Set it face up.</li>
+              <li>Squeeze the two clips on the battery tray and lift it clear.</li>
+              <li>Drop in the new tray, refit the stack, and tighten to 0.4 Nm.</li>
+            </ol>
+          </details>
+          <details class="acc__item">
+            <summary>Replace the speaker <span>6 minutes</span></summary>
+            <ol>
+              <li>Unplug the hub. Loosen the four base screws.</li>
+              <li>Lift the cap off. The speaker is the clay coloured layer underneath.</li>
+              <li>Unclip the two pin connector at the rear left. Pull the plug, not the wire.</li>
+              <li>Fit the new module, reconnect, refit the cap.</li>
+            </ol>
+          </details>
+          <details class="acc__item">
+            <summary>Replace the mainboard <span>12 minutes</span></summary>
+            <ol>
+              <li>Export your rules first: hold the ring for five seconds and it writes them to the USB port.</li>
+              <li>Unplug and open as above, removing cap, speaker and battery tray.</li>
+              <li>Release the four board standoffs by hand. No tool is needed.</li>
+              <li>Fit the new board, reassemble, then restore rules from the same USB stick.</li>
+            </ol>
+          </details>
+          <details class="acc__item">
+            <summary>Clean the microphone grille <span>2 minutes</span></summary>
+            <ol>
+              <li>Leave the hub assembled. Switch the microphone off at the side.</li>
+              <li>Brush the grille with a dry toothbrush, away from the ring.</li>
+              <li>Do not use compressed air. It pushes dust into the acoustic mesh.</li>
+            </ol>
+          </details>
+        </div>
+      </section>
+
+      <!-- BUY -->
+      <section class="buy" id="buy">
+        <div class="buy__card">
+          <div>
+            <span class="kick">One box</span>
+            <h2>Orbit, complete.</h2>
+            <p>
+              All five modules, a screwdriver that fits, and the drawings for
+              every part. Two year warranty, ten year parts.
+            </p>
+            <ul class="ticks ticks--light">
+              <li>Ships in 2 days</li>
+              <li>30 day returns</li>
+              <li>No subscription, ever</li>
+            </ul>
+          </div>
+          <div class="buy__price">
+            <span class="buy__num">189</span>
+            <span class="buy__cur">EUR</span>
+            <button class="btn btn--pop btn--lg" type="button" id="buyKit2">
+              Add the complete hub
+            </button>
+            <p class="buy__note">
+              Free shipping inside the EU. Buying the parts separately comes to
+              194 EUR, so the box saves you five.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="foot__row">
+        <a class="logo" href="#top">
+          <span class="logo__o" aria-hidden="true"></span>
+          Orbit
+        </a>
+        <div class="foot__links">
+          <a href="#parts">Parts</a>
+          <a href="#how">Rules</a>
+          <a href="#finish">Finishes</a>
+          <a href="#guides">Repair guides</a>
+          <a href="#buy">Buy</a>
+        </div>
+      </div>
+      <p class="foot__fine">
+        Concept site. Orbit is a fictional product created to demonstrate 3D
+        product presentation and interaction design in the browser.
+      </p>
+    </footer>
+
+    <!-- BASKET -->
+    <aside class="basket" id="basket" hidden>
+      <div class="basket__scrim" data-close></div>
+      <div class="basket__panel" role="dialog" aria-modal="true" aria-label="Basket">
+        <div class="basket__head">
+          <h3>Basket</h3>
+          <button class="basket__x" type="button" data-close aria-label="Close">&times;</button>
+        </div>
+        <ul class="basket__list" id="basketList"></ul>
+        <p class="basket__empty" id="basketEmpty">Nothing in here yet.</p>
+        <div class="basket__foot">
+          <div class="basket__line">
+            <span>Finish</span><strong id="basketFinish">Butter</strong>
+          </div>
+          <div class="basket__line">
+            <span>Shipping</span><strong>Free inside the EU</strong>
+          </div>
+          <div class="basket__total">
+            <span>Total</span><strong id="basketTotal">0 &euro;</strong>
+          </div>
+          <button class="btn btn--pop btn--lg btn--block" type="button" id="checkout">
+            Checkout
+          </button>
+          <p class="basket__fine">
+            Concept site. No payment is taken and no order is placed.
+          </p>
+        </div>
+        <div class="basket__done" id="basketDone" hidden>
+          <div class="basket__mark" aria-hidden="true"></div>
+          <h4>Order placed.</h4>
+          <p id="basketDoneText"></p>
+          <button class="btn btn--plain" type="button" data-close>Close</button>
+        </div>
+      </div>
+    </aside>
+
+    <script src="vendor/three.min.js"></script>
+    <script src="scene.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

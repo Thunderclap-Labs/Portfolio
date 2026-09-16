@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vakaris / Lamps for the dark half of the year</title>
+    <meta
+      name="description"
+      content="A lamp workshop under a railway bridge in Kaunas. Brass, blown glass and stone, fifty lamps a year, every switch made to be found in the dark."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="paper" aria-hidden="true"></div>
+    <div class="dusk" aria-hidden="true"></div>
+
+    <header class="head">
+      <a class="logo" href="#top">Vakaris<span>lamp workshop</span></a>
+
+      <nav id="nav">
+        <a href="#drawings">Drawings</a>
+        <a href="#lamps">Lamps</a>
+        <a href="#workshop">Workshop</a>
+        <a href="#order">Order</a>
+      </nav>
+
+      <button
+        class="master"
+        id="master"
+        type="button"
+        aria-pressed="false"
+        aria-label="Switch the whole page to dusk and light every lamp"
+      >
+        <span class="master__lab">Daylight</span>
+        <span class="master__sw" aria-hidden="true"><i></i></span>
+        <span class="master__lab master__lab--n">Dusk</span>
+      </button>
+    </header>
+
+    <main id="top">
+      <!-- OPENING -->
+      <section class="opening">
+        <div class="opening__text">
+          <p class="tag">Est. 2014 <span class="rule"></span> Kaunas</p>
+
+          <h1 class="lead">
+            <span class="l">Light for the</span>
+            <span class="l l--indent"><em>dark half</em></span>
+            <span class="l">of the year.</span>
+          </h1>
+
+          <p class="opening__lede">
+            Fifty lamps a year from a workshop under the railway bridge on
+            Jonavos. Brass we cut ourselves, glass blown four streets away,
+            stone from the quarry at Karpenai, and a switch you can find with a
+            glove on.
+          </p>
+
+          <div class="opening__foot">
+            <a class="arrowlink" href="#lamps"><span>See the five</span><i></i></a>
+            <a class="arrowlink" href="#workshop"><span>How they are made</span><i></i></a>
+          </div>
+        </div>
+
+        <!-- HERO DRAWING, PULL THE CHAIN -->
+        <figure class="hero">
+          <div class="hero__lamp" id="heroLamp" data-lamp>
+            <svg viewBox="0 0 340 470" class="dwg" aria-label="Pendant lamp, click the chain to switch it on">
+              <g class="dwg__beam">
+                <path d="M170 250 L330 470 L10 470 Z" />
+              </g>
+              <g class="dwg__halo">
+                <circle cx="170" cy="238" r="120" />
+              </g>
+              <g class="dwg__dim">
+                <path d="M20 24 L320 24" />
+                <path d="M20 16 L36 32 M52 16 L68 32 M84 16 L100 32 M116 16 L132 32 M148 16 L164 32 M180 16 L196 32 M212 16 L228 32 M244 16 L260 32 M276 16 L292 32 M308 16 L324 32" />
+                <path d="M296 118 L296 214" />
+                <path d="M288 118 L304 118 M288 214 L304 214" />
+                <text x="292" y="172" text-anchor="end">380</text>
+                <path d="M62 232 L278 232" />
+                <path d="M62 224 L62 240 M278 224 L278 240" />
+                <text x="170" y="252" text-anchor="middle">440 dia</text>
+              </g>
+              <g class="dwg__line">
+                <path d="M170 24 L170 82" />
+                <circle cx="170" cy="90" r="9" />
+                <path d="M170 99 L170 118" />
+                <path d="M62 214 Q170 92 278 214" />
+                <path d="M62 214 L278 214" />
+                <path d="M84 190 L256 190" class="dwg__thin" />
+                <path d="M104 164 L236 164" class="dwg__thin" />
+                <path d="M124 140 L216 140" class="dwg__thin" />
+              </g>
+              <g class="dwg__bulb">
+                <circle cx="170" cy="232" r="22" />
+                <path d="M160 240 Q170 214 180 240" class="dwg__fil" />
+              </g>
+              <g class="dwg__chain">
+                <path d="M262 216 L262 314" />
+                <circle cx="262" cy="322" r="10" />
+              </g>
+            </svg>
+          </div>
+          <figcaption>
+            <b>No. 1 Sietas</b>
+            <span>Pull the chain</span>
+          </figcaption>
+        </figure>
+      </section>
+
+      <!-- DRAWINGS -->
+      <section class="dwgs" id="drawings">
+        <div class="sec__head">
+          <p class="tag">The drawings <span class="rule"></span> 01</p>
+          <h2 class="h2">Every lamp is drawn before it is made. Switch them on.</h2>
+          <p class="sec__lede">
+            These are the shop elevations we work from, at a tenth of full size.
+            Click one to light it. The counter keeps track, and the switch in
+            the corner of the page lights the lot.
+          </p>
+          <p class="dwgs__count"><b id="litCount">0</b> of 4 lit</p>
+        </div>
+
+        <div class="dwgs__grid" id="dwgGrid">
+          <!-- 01 -->
+          <figure class="card" data-lamp>
+            <div class="card__art">
+              <svg viewBox="0 0 260 300" class="dwg">
+                <g class="dwg__beam"><path d="M130 212 L252 300 L8 300 Z" /></g>
+                <g class="dwg__halo"><circle cx="130" cy="200" r="96" /></g>
+                <g class="dwg__dim">
+                  <path d="M14 20 L246 20" />
+                  <path d="M14 12 L28 26 M42 12 L56 26 M70 12 L84 26 M98 12 L112 26 M126 12 L140 26 M154 12 L168 26 M182 12 L196 26 M210 12 L224 26" />
+                  <path d="M232 108 L232 186" />
+                  <path d="M226 108 L238 108 M226 186 L238 186" />
+                  <text x="228" y="152" text-anchor="end">380</text>
+                </g>
+                <g class="dwg__line">
+                  <path d="M130 20 L130 74" />
+                  <circle cx="130" cy="82" r="7" />
+                  <path d="M130 89 L130 106" />
+                  <path d="M42 186 Q130 84 218 186" />
+                  <path d="M42 186 L218 186" />
+                  <path d="M62 164 L198 164" class="dwg__thin" />
+                  <path d="M80 142 L180 142" class="dwg__thin" />
+                  <path d="M98 122 L162 122" class="dwg__thin" />
+                </g>
+                <g class="dwg__bulb">
+                  <circle cx="130" cy="200" r="18" />
+                  <path d="M122 208 Q130 186 138 208" class="dwg__fil" />
+                </g>
+              </svg>
+            </div>
+            <figcaption>
+              <span class="card__no">01</span>
+              <b>Sietas</b>
+              <span class="card__mt">Perforated brass, 380 mm</span>
+              <span class="card__st">Off</span>
+            </figcaption>
+          </figure>
+
+          <!-- 02 -->
+          <figure class="card" data-lamp>
+            <div class="card__art">
+              <svg viewBox="0 0 260 300" class="dwg">
+                <g class="dwg__beam"><path d="M130 200 L240 300 L20 300 Z" /></g>
+                <g class="dwg__halo"><circle cx="130" cy="150" r="96" /></g>
+                <g class="dwg__dim">
+                  <path d="M226 72 L226 272" />
+                  <path d="M220 72 L232 72 M220 272 L232 272" />
+                  <text x="222" y="176" text-anchor="end">240</text>
+                  <path d="M58 288 L202 288" />
+                  <path d="M58 282 L58 294 M202 282 L202 294" />
+                </g>
+                <g class="dwg__line">
+                  <path d="M50 272 L210 272" />
+                  <path d="M96 272 L164 272 L156 254 L104 254 Z" />
+                  <path d="M130 254 L130 210" />
+                  <path d="M58 208 L202 208 L192 186 L68 186 Z" />
+                  <path d="M68 180 L192 180 L182 158 L78 158 Z" />
+                  <path d="M78 152 L182 152 L172 130 L88 130 Z" />
+                  <path d="M88 124 L172 124 L162 102 L98 102 Z" />
+                  <path d="M98 96 L162 96 L152 78 L108 78 Z" />
+                  <path d="M130 78 L130 64" class="dwg__thin" />
+                  <circle cx="130" cy="58" r="8" />
+                </g>
+                <g class="dwg__bulb">
+                  <rect x="68" y="180" width="124" height="6" />
+                  <rect x="78" y="152" width="104" height="6" />
+                  <rect x="88" y="124" width="84" height="6" />
+                  <rect x="98" y="96" width="64" height="6" />
+                </g>
+              </svg>
+            </div>
+            <figcaption>
+              <span class="card__no">02</span>
+              <b>Vabalas</b>
+              <span class="card__mt">Steel shell, oak base, 240 mm</span>
+              <span class="card__st">Off</span>
+            </figcaption>
+          </figure>
+
+          <!-- 03 -->
+          <figure class="card" data-lamp>
+            <div class="card__art">
+              <svg viewBox="0 0 260 300" class="dwg">
+                <g class="dwg__beam"><path d="M130 150 L226 300 L34 300 Z" /></g>
+                <g class="dwg__halo"><circle cx="130" cy="150" r="98" /></g>
+                <g class="dwg__dim">
+                  <path d="M222 32 L222 280" />
+                  <path d="M216 32 L228 32 M216 280 L228 280" />
+                  <text x="218" y="160" text-anchor="end">820</text>
+                  <path d="M74 294 L186 294" />
+                  <path d="M74 288 L74 300 M186 288 L186 300" />
+                </g>
+                <g class="dwg__line">
+                  <path d="M74 280 L186 280" />
+                  <rect x="84" y="238" width="92" height="42" />
+                  <rect x="92" y="196" width="76" height="26" />
+                  <rect x="84" y="154" width="92" height="30" />
+                  <rect x="92" y="116" width="76" height="24" />
+                  <rect x="86" y="72" width="88" height="30" />
+                  <path d="M130 72 L130 44" class="dwg__thin" />
+                  <path d="M112 44 L148 44" class="dwg__thin" />
+                </g>
+                <g class="dwg__bulb">
+                  <rect x="88" y="222" width="84" height="16" />
+                  <rect x="88" y="184" width="84" height="12" />
+                  <rect x="88" y="140" width="84" height="14" />
+                  <rect x="90" y="102" width="80" height="14" />
+                </g>
+              </svg>
+            </div>
+            <figcaption>
+              <span class="card__no">03</span>
+              <b>Stulpas</b>
+              <span class="card__mt">Stone and glass, 820 mm</span>
+              <span class="card__st">Off</span>
+            </figcaption>
+          </figure>
+
+          <!-- 04 -->
+          <figure class="card" data-lamp>
+            <div class="card__art">
+              <svg viewBox="0 0 260 300" class="dwg">
+                <g class="dwg__beam"><path d="M130 132 L244 300 L16 300 Z" /></g>
+                <g class="dwg__halo"><circle cx="130" cy="128" r="104" /></g>
+                <g class="dwg__dim">
+                  <path d="M226 34 L226 276" />
+                  <path d="M220 34 L232 34 M220 276 L232 276" />
+                  <text x="222" y="164" text-anchor="end">610</text>
+                  <path d="M42 34 L218 34" />
+                  <path d="M42 28 L42 40 M218 28 L218 40" />
+                  <text x="130" y="26" text-anchor="middle">290 dia</text>
+                </g>
+                <g class="dwg__line">
+                  <path d="M52 276 L208 276" />
+                  <path d="M130 276 L92 196 M130 276 L168 196 M130 276 L130 200" />
+                  <circle cx="130" cy="128" r="88" class="dwg__ring" />
+                  <circle cx="130" cy="128" r="70" class="dwg__thin" />
+                  <path d="M130 198 L130 216" />
+                  <ellipse cx="130" cy="196" rx="16" ry="6" />
+                </g>
+                <g class="dwg__bulb">
+                  <circle cx="130" cy="128" r="79" class="dwg__ring2" />
+                </g>
+              </svg>
+            </div>
+            <figcaption>
+              <span class="card__no">04</span>
+              <b>Vetra</b>
+              <span class="card__mt">Frosted ring on ash tripod, 610 mm</span>
+              <span class="card__st">Off</span>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- 3D LAMPS -->
+      <section class="lamps" id="lamps">
+        <div class="sec__head">
+          <p class="tag">The lamps <span class="rule"></span> 02</p>
+          <h2 class="h2">Five models, all of them a little strange.</h2>
+          <p class="sec__lede">
+            Turn the shelf by dragging it. Click a lamp to switch that one on,
+            or use the list. Nothing here is a render of a photograph, it is the
+            same geometry we cut from.
+          </p>
+        </div>
+
+        <div class="lamps__tabs" id="tabs"></div>
+
+        <div class="lamps__body">
+          <div class="stage" id="stage">
+            <canvas id="lampCanvas"></canvas>
+            <div class="stage__fail" id="stageFail" hidden>
+              <p>
+                This shelf needs WebGL. The drawings above work without it and
+                every specification is written out below.
+              </p>
+            </div>
+            <p class="stage__hint" id="stageHint">Drag to turn, click a lamp to switch it on</p>
+          </div>
+
+          <aside class="picked">
+            <div class="picked__head">
+              <span class="picked__no" id="pkNo">01</span>
+              <h3 id="pkName">Sietas</h3>
+              <p id="pkLine"></p>
+            </div>
+            <p class="picked__desc" id="pkDesc"></p>
+            <dl class="picked__spec" id="pkSpec"></dl>
+            <div class="picked__foot">
+              <span class="picked__price" id="pkPrice"></span>
+              <button class="switch" id="pkSwitch" type="button" aria-pressed="false">
+                <i></i><span>Switch on</span>
+              </button>
+            </div>
+          </aside>
+        </div>
+
+        <ul class="shelf" id="shelf"></ul>
+      </section>
+
+      <!-- WORKSHOP -->
+      <section class="workshop" id="workshop">
+        <div class="workshop__grid">
+          <p class="tag">The workshop <span class="rule"></span> 03</p>
+
+          <div class="workshop__body">
+            <p class="dropcap">
+              We are not fast. A lamp takes eleven weeks from the first drawing
+              to the box, and most of that is waiting: for brass to arrive, for
+              glass to be blown and annealed, for lacquer to cure properly
+              rather than nearly. Nothing is speeded up with heat.
+            </p>
+            <p>
+              Everything electrical is done to the same standard whether it
+              shows or not. Fabric flex, a switch rated for a hundred thousand
+              throws, a plug you can rewire with one screwdriver, and an earth
+              on anything with metal you can touch.
+            </p>
+            <p>
+              We do not sell bulbs. Every lamp is designed around a 2200 kelvin
+              filament because that is the colour the evening actually is here
+              in December, and we would rather tell you what to buy than sell
+              you a worse one.
+            </p>
+          </div>
+
+          <dl class="facts">
+            <div><dt>Founded</dt><dd>2014</dd></div>
+            <div><dt>People</dt><dd>6</dd></div>
+            <div><dt>Lamps a year</dt><dd>50</dd></div>
+            <div><dt>Weeks per lamp</dt><dd>11</dd></div>
+            <div><dt>Made in house</dt><dd>Everything but the glass</dd></div>
+            <div><dt>Guarantee</dt><dd>Twelve years, rewiring included</dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <!-- PULL -->
+      <section class="pull">
+        <blockquote>
+          <p>
+            A lamp is not there to be looked at.<br />
+            It is there to make the room worth looking at.
+          </p>
+          <cite>Gabija Rimkute, founder</cite>
+        </blockquote>
+      </section>
+
+      <!-- ORDER -->
+      <section class="order" id="order">
+        <div class="order__grid">
+          <div>
+            <p class="tag">Orders <span class="rule"></span> 04</p>
+            <h2 class="h2">Tell us which room it is for.</h2>
+            <p class="order__note">
+              We build in batches of ten, twice a season. Tell us the lamp, the
+              finish and roughly where it will hang or stand, and we will tell
+              you which batch it lands in before you pay anything. Collection
+              from the workshop is free and includes coffee.
+            </p>
+            <dl class="order__addr">
+              <div>
+                <dt>Workshop</dt>
+                <dd>Jonavos g. 42<br />44269 Kaunas</dd>
+              </div>
+              <div>
+                <dt>Open</dt>
+                <dd>Thursday and Friday<br />14:00 to 19:00</dd>
+              </div>
+            </dl>
+          </div>
+
+          <form class="eform" id="eform" novalidate>
+            <label class="efield">
+              <span>Name</span>
+              <input name="name" type="text" autocomplete="name" />
+              <em></em>
+            </label>
+            <label class="efield">
+              <span>Email</span>
+              <input name="email" type="email" autocomplete="email" />
+              <em></em>
+            </label>
+            <label class="efield">
+              <span>Which lamp</span>
+              <select name="lamp" id="eLamp"></select>
+            </label>
+            <label class="efield">
+              <span>Finish</span>
+              <select name="finish">
+                <option>Raw brass, left to go dark</option>
+                <option>Brushed and lacquered</option>
+                <option>Black oxide</option>
+                <option>Not sure, advise us</option>
+              </select>
+            </label>
+            <label class="efield efield--wide">
+              <span>Which room, and how high is the ceiling</span>
+              <textarea name="brief" rows="5"></textarea>
+              <em></em>
+            </label>
+            <button class="ebtn" type="submit">Send the order<i></i></button>
+            <p class="eform__fine">
+              Concept site. Nothing is transmitted or charged; the message stays
+              in this browser.
+            </p>
+          </form>
+
+          <div class="edone" id="edone" hidden>
+            <h3>Noted.</h3>
+            <p id="edoneText"></p>
+            <button class="arrowlink" type="button" id="eagain">
+              <span>Write another</span><i></i>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="foot__grid">
+        <div>
+          <h3>Workshop</h3>
+          <p>Jonavos g. 42<br />44269 Kaunas<br />Lithuania</p>
+        </div>
+        <div>
+          <h3>Open</h3>
+          <p>Thursday and Friday<br />14:00 to 19:00<br />or by arrangement</p>
+        </div>
+        <div>
+          <h3>Orders</h3>
+          <p>
+            studio@vakaris.example<br />
+            Batches close in February and September.
+          </p>
+        </div>
+      </div>
+      <div class="foot__mark" aria-hidden="true">VAKARIS</div>
+      <p class="foot__fine">
+        Concept site. Vakaris is a fictional lamp workshop created to
+        demonstrate editorial layout, drawn interaction and real time lighting
+        in the browser.
+      </p>
+    </footer>
+
+    <script src="vendor/three.min.js"></script>
+    <script src="scene.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

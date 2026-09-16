@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cold Frame / Seeds for a short season</title>
+    <meta
+      name="description"
+      content="Open pollinated seed, grown and saved on four hectares outside Kaunas. Sow it, save it, send some back."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="paper" aria-hidden="true"></div>
+
+    <header class="top">
+      <a class="logo" href="#top">
+        <span class="logo__seed" aria-hidden="true"></span>
+        Cold<br />Frame
+      </a>
+      <nav class="top__nav" id="nav">
+        <a href="#calendar">When to sow</a>
+        <a href="#catalogue">Catalogue</a>
+        <a href="#saving">Seed saving</a>
+      </nav>
+      <button class="boxbtn" type="button" id="boxBtn">
+        Seed box <b id="boxCount">0</b>
+      </button>
+    </header>
+
+    <main id="top">
+      <!-- HERO -->
+      <section class="hero">
+        <div class="hero__text">
+          <p class="stamp">Open pollinated <i></i> Saved on site</p>
+          <h1 class="riso">
+            <span class="riso__a">Seeds for a</span>
+            <span class="riso__a">short season</span>
+          </h1>
+          <p class="hero__lede">
+            Four hectares of sandy ground outside Kaunas, a hundred and forty
+            varieties, and a growing season that gives up in the middle of
+            September. Everything in the catalogue has finished here.
+          </p>
+          <div class="hero__btns">
+            <a class="btn" href="#catalogue">See the catalogue<i></i></a>
+            <a class="btn btn--ghost" href="#calendar">What to sow now</a>
+          </div>
+        </div>
+        <div class="hero__art" aria-hidden="true">
+          <span class="blob blob--1"></span>
+          <span class="blob blob--2"></span>
+          <span class="sprout">
+            <i class="sprout__stem"></i>
+            <i class="sprout__leaf sprout__leaf--l"></i>
+            <i class="sprout__leaf sprout__leaf--r"></i>
+            <i class="sprout__seed"></i>
+          </span>
+        </div>
+      </section>
+
+      <!-- RULE -->
+      <div class="rule" aria-hidden="true">
+        <span>SOW IT</span><b></b><span>GROW IT</span><b></b><span>SAVE IT</span
+        ><b></b><span>SEND SOME BACK</span><b></b><span>SOW IT</span><b></b
+        ><span>GROW IT</span><b></b><span>SAVE IT</span><b></b>
+      </div>
+
+      <!-- CALENDAR -->
+      <section class="cal" id="calendar">
+        <div class="sec__head">
+          <h2>What to sow, and when to stop.</h2>
+          <p>
+            Pick a month. These are our own sowing dates for zone 6b on sand,
+            not a national average, so they are earlier under glass and later
+            outside than you will read elsewhere.
+          </p>
+        </div>
+
+        <div class="months" id="months"></div>
+        <div class="calout">
+          <div class="calout__col">
+            <h3>Under glass</h3>
+            <ul id="calGlass"></ul>
+          </div>
+          <div class="calout__col">
+            <h3>Direct outside</h3>
+            <ul id="calOut"></ul>
+          </div>
+          <div class="calout__col calout__col--note">
+            <h3>Note</h3>
+            <p id="calNote"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CATALOGUE -->
+      <section class="cat" id="catalogue">
+        <div class="sec__head">
+          <h2>A hundred and forty. Here are twelve.</h2>
+          <p>
+            Filter by what you actually have. There is no point selling you
+            something that wants eight hours of sun if you have a balcony
+            facing a wall.
+          </p>
+        </div>
+
+        <div class="filters">
+          <div class="fgroup">
+            <span>Light</span>
+            <button class="chip is-on" data-f="light" data-v="any" type="button">Any</button>
+            <button class="chip" data-f="light" data-v="sun" type="button">Full sun</button>
+            <button class="chip" data-f="light" data-v="part" type="button">Part shade</button>
+          </div>
+          <div class="fgroup">
+            <span>Where</span>
+            <button class="chip is-on" data-f="where" data-v="any" type="button">Any</button>
+            <button class="chip" data-f="where" data-v="pot" type="button">Pots</button>
+            <button class="chip" data-f="where" data-v="ground" type="button">Ground</button>
+          </div>
+          <div class="fgroup">
+            <span>Effort</span>
+            <button class="chip is-on" data-f="effort" data-v="any" type="button">Any</button>
+            <button class="chip" data-f="effort" data-v="easy" type="button">Forgiving</button>
+            <button class="chip" data-f="effort" data-v="fussy" type="button">Needs watching</button>
+          </div>
+        </div>
+
+        <div class="packets" id="packets"></div>
+        <p class="cat__meta" id="catMeta"></p>
+      </section>
+
+      <!-- SEED SAVING -->
+      <section class="saving" id="saving">
+        <div class="sec__head sec__head--light">
+          <h2>Send some back and the next packet is free.</h2>
+          <p>
+            Everything we sell is open pollinated, which means the seed you save
+            comes true. Save a variety properly, send us a portion, and your
+            next packet of it costs nothing for as long as you keep doing it.
+          </p>
+        </div>
+        <ol class="save">
+          <li><span>01</span><b>Grow at least six plants</b>Fewer than six and the line narrows. This is the only rule that really matters.</li>
+          <li><span>02</span><b>Leave the best ones</b>Not the first to bolt. The one that stood the longest without complaining.</li>
+          <li><span>03</span><b>Dry hard, then harder</b>A week on paper indoors, then a fortnight in a jar with the lid off.</li>
+          <li><span>04</span><b>Label with the year</b>An unlabelled jar is compost with extra steps.</li>
+        </ol>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="foot__grid">
+        <p class="foot__wm">Cold<br />Frame</p>
+        <div><h4>Ground</h4><p>Girionys, Kaunas district<br />Four hectares, sand over clay</p></div>
+        <div><h4>Write</h4><p>seed@coldframe.example<br />Answered in the evenings</p></div>
+        <div><h4>Post</h4><p>Two working days<br />Plain envelope, no plastic</p></div>
+      </div>
+      <p class="foot__fine">
+        Concept site. Cold Frame is a fictional seed company created to
+        demonstrate risograph inspired print design on the web. Every sowing
+        date on this page is invented.
+      </p>
+    </footer>
+
+    <!-- SEED BOX -->
+    <aside class="box" id="box" hidden>
+      <div class="box__scrim" data-close></div>
+      <div class="box__panel" role="dialog" aria-modal="true" aria-label="Seed box">
+        <div class="box__head">
+          <h3>Seed box</h3>
+          <button class="box__x" type="button" data-close aria-label="Close">&times;</button>
+        </div>
+        <ul class="box__list" id="boxList"></ul>
+        <p class="box__empty" id="boxEmpty">Nothing in the box yet.</p>
+        <div class="box__foot">
+          <div class="box__line"><span>Packets</span><b id="boxPackets">0</b></div>
+          <div class="box__line"><span>Post</span><b>2.40 EUR</b></div>
+          <div class="box__tot"><span>Total</span><b id="boxTotal">0.00 EUR</b></div>
+          <button class="btn btn--full" type="button" id="boxGo">Send it<i></i></button>
+          <p class="box__fine">Concept site. Nothing is ordered or charged.</p>
+        </div>
+        <div class="box__done" id="boxDone" hidden>
+          <span class="box__mark" aria-hidden="true"></span>
+          <h4>In the post.</h4>
+          <p id="boxDoneText"></p>
+          <button class="btn" type="button" data-close>Close<i></i></button>
+        </div>
+      </div>
+    </aside>
+
+    <script src="script.js"></script>
+  </body>
+</html>

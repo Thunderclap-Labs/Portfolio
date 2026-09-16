@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Baltic Watch / Coastal observation network</title>
+    <meta
+      name="description"
+      content="Sea state, wind and water temperature from six stations on the Lithuanian coast. Observations every ten minutes, forecast to seven days."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- MASTHEAD -->
+    <header class="mast">
+      <div class="mast__in">
+        <a class="brand" href="#top">
+          <span class="brand__mark" aria-hidden="true">
+            <i></i><i></i><i></i>
+          </span>
+          <span class="brand__txt">
+            <b>Baltic Watch</b>
+            <em>Coastal observation network</em>
+          </span>
+        </a>
+        <nav class="mast__nav">
+          <a href="#now">Now</a>
+          <a href="#charts">Charts</a>
+          <a href="#forecast">Forecast</a>
+          <a href="#method">Method</a>
+        </nav>
+        <div class="mast__tools">
+          <div class="units" role="group" aria-label="Units">
+            <button class="unit is-on" data-u="metric" type="button">Metric</button>
+            <button class="unit" data-u="imperial" type="button">Imperial</button>
+          </div>
+          <p class="issued">Issued <b id="issued">--:--</b></p>
+        </div>
+      </div>
+      <div class="mast__ticker" id="ticker" aria-hidden="true"></div>
+    </header>
+
+    <main id="top">
+      <!-- NOW -->
+      <section class="now" id="now">
+        <div class="now__head">
+          <h1>Six stations, ten minute observations, one coast.</h1>
+          <p>
+            Pick a station on the chart. Everything below follows it, including
+            the seven day outlook and the sea state model on the right.
+          </p>
+        </div>
+
+        <div class="now__grid">
+          <!-- MAP -->
+          <div class="card card--map">
+            <div class="card__head">
+              <h2>Network</h2>
+              <span class="card__meta" id="mapMeta">6 stations reporting</span>
+            </div>
+            <div class="map">
+              <svg viewBox="0 0 320 460" class="map__svg" aria-label="Station map">
+                <defs>
+                  <pattern id="sea" width="8" height="8" patternUnits="userSpaceOnUse">
+                    <path d="M0 8 L8 0" stroke="#cfe0ee" stroke-width="1" />
+                  </pattern>
+                </defs>
+                <rect x="0" y="0" width="320" height="460" fill="url(#sea)" />
+                <path
+                  class="map__land"
+                  d="M150 0 L168 34 L160 70 L172 104 L164 140 L176 176 L170 212 L182 250 L176 288 L190 326 L184 362 L198 400 L192 436 L206 460 L320 460 L320 0 Z"
+                />
+                <path
+                  class="map__spit"
+                  d="M120 236 L128 280 L134 324 L142 368 L152 410 L160 448 L148 452 L138 412 L128 368 L120 322 L112 278 L108 238 Z"
+                />
+                <path
+                  class="map__coast"
+                  d="M150 0 L168 34 L160 70 L172 104 L164 140 L176 176 L170 212 L182 250 L176 288 L190 326 L184 362 L198 400 L192 436 L206 460"
+                />
+                <g id="pins"></g>
+              </svg>
+              <div class="map__key">
+                <span><i class="k k--calm"></i>Under 1.0</span>
+                <span><i class="k k--mod"></i>1.0 to 2.0</span>
+                <span><i class="k k--rough"></i>Over 2.0</span>
+                <em>Significant wave height, metres</em>
+              </div>
+            </div>
+          </div>
+
+          <!-- READOUT -->
+          <div class="card card--read">
+            <div class="card__head">
+              <h2 id="stName">Station</h2>
+              <span class="card__meta" id="stMeta"></span>
+            </div>
+
+            <div class="read" id="read"></div>
+
+            <div class="scrub">
+              <div class="scrub__top">
+                <span>Time</span>
+                <b id="scrubLabel">Now</b>
+              </div>
+              <input
+                id="scrub"
+                type="range"
+                min="-24"
+                max="48"
+                step="1"
+                value="0"
+                aria-label="Hours from now"
+              />
+              <div class="scrub__ax">
+                <span>&minus;24 h</span><span>Now</span><span>+24 h</span><span>+48 h</span>
+              </div>
+              <p class="scrub__note" id="scrubNote"></p>
+            </div>
+          </div>
+
+          <!-- SEA STATE -->
+          <div class="card card--sea">
+            <div class="card__head">
+              <h2>Sea state model</h2>
+              <span class="card__meta" id="seaMeta"></span>
+            </div>
+            <div class="sea" id="sea">
+              <canvas id="seaCanvas"></canvas>
+              <div class="sea__fail" id="seaFail" hidden>
+                <p>
+                  This panel needs WebGL. Every figure on the page is available
+                  without it.
+                </p>
+              </div>
+              <div class="sea__hud">
+                <span><b id="seaHs">--</b>Significant height</span>
+                <span><b id="seaTp">--</b>Peak period</span>
+                <span><b id="seaDir">--</b>Coming from</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CHARTS -->
+      <section class="charts" id="charts">
+        <div class="sec__head">
+          <h2>Three ways of looking at the same water.</h2>
+          <p>
+            Drawn from the same record as the readout. The vertical rule marks
+            the hour you have selected, so it moves when you move the slider.
+          </p>
+        </div>
+
+        <div class="charts__grid">
+          <figure class="chart">
+            <figcaption>
+              <h3>Sea level</h3>
+              <span>Centimetres above chart datum, 72 hours</span>
+            </figcaption>
+            <canvas id="tideCanvas" height="260"></canvas>
+            <p class="chart__note" id="tideNote"></p>
+          </figure>
+
+          <figure class="chart chart--rose">
+            <figcaption>
+              <h3>Wind rose</h3>
+              <span>Direction the wind comes from, last 30 days</span>
+            </figcaption>
+            <canvas id="roseCanvas" height="260"></canvas>
+            <p class="chart__note" id="roseNote"></p>
+          </figure>
+
+          <figure class="chart">
+            <figcaption>
+              <h3>Wave height</h3>
+              <span>Significant height by hour, 72 hours</span>
+            </figcaption>
+            <canvas id="waveCanvas" height="260"></canvas>
+            <p class="chart__note" id="waveNote"></p>
+          </figure>
+
+          <figure class="chart">
+            <figcaption>
+              <h3>Water and air</h3>
+              <span>Degrees, 72 hours, water in blue</span>
+            </figcaption>
+            <canvas id="tempCanvas" height="260"></canvas>
+            <p class="chart__note" id="tempNote"></p>
+          </figure>
+        </div>
+      </section>
+
+      <!-- FORECAST -->
+      <section class="fc" id="forecast">
+        <div class="sec__head">
+          <h2>Seven days, and how much to trust each one.</h2>
+          <p>
+            Confidence is the agreement between the three models we run. Below
+            sixty per cent we would not plan a crossing on it.
+          </p>
+        </div>
+
+        <div class="fc__wrap">
+          <table class="fc__table">
+            <thead>
+              <tr>
+                <th scope="col">Day</th>
+                <th scope="col">Wind</th>
+                <th scope="col">Gust</th>
+                <th scope="col">Wave</th>
+                <th scope="col">Water</th>
+                <th scope="col">Air</th>
+                <th scope="col">Confidence</th>
+                <th scope="col">Note</th>
+              </tr>
+            </thead>
+            <tbody id="fcBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ALERTS -->
+      <section class="alerts" id="alerts">
+        <div class="sec__head sec__head--light">
+          <h2>Standing notices</h2>
+          <p>
+            Issued by the duty forecaster, not by the model. They stay up until
+            somebody takes them down.
+          </p>
+        </div>
+        <ul class="alist" id="alist"></ul>
+      </section>
+
+      <!-- METHOD -->
+      <section class="method" id="method">
+        <div class="sec__head">
+          <h2>Where the numbers come from.</h2>
+          <p>
+            Nothing here is smoothed for presentation. If an instrument is out,
+            the row says so rather than filling the gap.
+          </p>
+        </div>
+        <ol class="steps">
+          <li>
+            <span>01</span>
+            <b>Measure</b>
+            <p>
+              Each station carries a pressure sensor, an acoustic wave gauge, a
+              two metre anemometer mast and a pair of thermistors. Everything
+              samples continuously and averages to ten minutes.
+            </p>
+          </li>
+          <li>
+            <span>02</span>
+            <b>Check</b>
+            <p>
+              Readings pass a range test, a step test and a neighbour test
+              against the two nearest stations. A failed reading is flagged, not
+              deleted, and stays flagged in the archive.
+            </p>
+          </li>
+          <li>
+            <span>03</span>
+            <b>Model</b>
+            <p>
+              Three wave models run on the same wind field, at 1 km, 3 km and 9
+              km. The spread between them is what the confidence column shows.
+            </p>
+          </li>
+          <li>
+            <span>04</span>
+            <b>Publish</b>
+            <p>
+              Observations go out ten minutes after the hour, forecasts four
+              times a day. The whole archive is open and it goes back to 1994.
+            </p>
+          </li>
+        </ol>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="foot__grid">
+        <div>
+          <h4>Baltic Watch</h4>
+          <p>Coastal observation network<br />Klaipeda, Lithuania</p>
+        </div>
+        <div>
+          <h4>Data</h4>
+          <p>Open archive, 1994 onward<br />CSV, NetCDF, JSON</p>
+        </div>
+        <div>
+          <h4>Duty desk</h4>
+          <p>Staffed 06:00 to 22:00<br />duty@balticwatch.example</p>
+        </div>
+        <div>
+          <h4>Stations</h4>
+          <p id="footStations"></p>
+        </div>
+      </div>
+      <p class="foot__fine">
+        Concept site. Baltic Watch is a fictional observation network built to
+        demonstrate data heavy interface design. Every reading, forecast and
+        notice on this page is generated in the browser.
+      </p>
+    </footer>
+
+    <script src="vendor/three.min.js"></script>
+    <script src="scene.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

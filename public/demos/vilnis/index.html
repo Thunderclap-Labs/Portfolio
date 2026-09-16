@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vilnis Type / A grotesk for the Baltic</title>
+    <meta
+      name="description"
+      content="Vilnis Grotesk. Nine weights, 862 glyphs, drawn in Kaunas. Test it here."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <a class="wm" href="#top">Vilnis<span>Type</span></a>
+      <nav class="bar__nav" id="nav">
+        <a href="#test">Test</a>
+        <a href="#weights">Weights</a>
+        <a href="#glyphs">Glyphs</a>
+        <a href="#licence">Licence</a>
+      </nav>
+      <span class="bar__meta">Kaunas <b></b> Est. 2016</span>
+    </header>
+
+    <main id="top">
+      <!-- MASTHEAD -->
+      <section class="mast">
+        <div class="mast__grid">
+          <p class="col-a num">01</p>
+          <div class="col-b">
+            <h1>Vilnis<br />Grotesk</h1>
+          </div>
+          <div class="col-c">
+            <dl class="mast__facts">
+              <div><dt>Weights</dt><dd>9</dd></div>
+              <div><dt>Styles</dt><dd>18 with italics</dd></div>
+              <div><dt>Glyphs</dt><dd>862</dd></div>
+              <div><dt>Languages</dt><dd>219 Latin</dd></div>
+              <div><dt>Released</dt><dd>2024</dd></div>
+            </dl>
+          </div>
+        </div>
+        <div class="mast__strap">
+          <p>
+            A neo grotesk drawn for signage on a coast where it rains
+            sideways. Tight apertures, a tall x height, and numerals that keep
+            their width when everything else changes.
+          </p>
+          <a class="lnk" href="#test">Set your own words<i></i></a>
+        </div>
+      </section>
+
+      <!-- BIG SPECIMEN -->
+      <section class="giant">
+        <p class="giant__line" data-w="900">ABCDEFGHIJKLM</p>
+        <p class="giant__line" data-w="300">NOPQRSTUVWXYZ</p>
+        <p class="giant__line giant__line--red" data-w="700">0123456789</p>
+      </section>
+
+      <!-- TESTER -->
+      <section class="test" id="test">
+        <div class="test__head">
+          <p class="num">02</p>
+          <h2>Type something into it.</h2>
+        </div>
+
+        <div class="test__ctrl">
+          <label class="ctl">
+            <span>Size <b id="vSize">96</b> px</span>
+            <input id="size" type="range" min="18" max="220" value="96" />
+          </label>
+          <label class="ctl">
+            <span>Weight <b id="vWeight">700</b></span>
+            <input id="weight" type="range" min="100" max="900" step="100" value="700" />
+          </label>
+          <label class="ctl">
+            <span>Tracking <b id="vTrack">-3</b></span>
+            <input id="track" type="range" min="-6" max="12" value="-3" />
+          </label>
+          <label class="ctl">
+            <span>Leading <b id="vLead">0.95</b></span>
+            <input id="lead" type="range" min="80" max="180" value="95" />
+          </label>
+          <div class="ctl ctl--btns">
+            <span>Case</span>
+            <div>
+              <button class="pill is-on" data-case="none" type="button">As typed</button>
+              <button class="pill" data-case="uppercase" type="button">Upper</button>
+              <button class="pill" data-case="lowercase" type="button">Lower</button>
+            </div>
+          </div>
+          <div class="ctl ctl--btns">
+            <span>Style</span>
+            <div>
+              <button class="pill is-on" data-style="normal" type="button">Roman</button>
+              <button class="pill" data-style="italic" type="button">Italic</button>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="test__field"
+          id="field"
+          contenteditable="true"
+          spellcheck="false"
+        >Vilnis is a wave that arrives sideways</div>
+        <p class="test__hint">Click the line and type. Nothing is saved.</p>
+      </section>
+
+      <!-- WEIGHTS -->
+      <section class="weights" id="weights">
+        <div class="test__head">
+          <p class="num">03</p>
+          <h2>Nine weights, one skeleton.</h2>
+        </div>
+        <ul class="wlist" id="wlist"></ul>
+      </section>
+
+      <!-- GLYPHS -->
+      <section class="glyphs" id="glyphs">
+        <div class="test__head">
+          <p class="num">04</p>
+          <h2>862 glyphs. Here are 190 of them.</h2>
+        </div>
+        <div class="gfilters">
+          <button class="pill is-on" data-g="all" type="button">All</button>
+          <button class="pill" data-g="upper" type="button">Uppercase</button>
+          <button class="pill" data-g="lower" type="button">Lowercase</button>
+          <button class="pill" data-g="fig" type="button">Figures</button>
+          <button class="pill" data-g="punct" type="button">Punctuation</button>
+          <button class="pill" data-g="dia" type="button">Diacritics</button>
+        </div>
+        <div class="gwrap">
+          <div class="ggrid" id="ggrid"></div>
+          <aside class="gzoom">
+            <div class="gzoom__box" id="gzoomChar">A</div>
+            <dl class="gzoom__meta">
+              <div><dt>Unicode</dt><dd id="gzoomCode">U+0041</dd></div>
+              <div><dt>Set</dt><dd id="gzoomSet">Uppercase</dd></div>
+            </dl>
+          </aside>
+        </div>
+      </section>
+
+      <!-- LICENCE -->
+      <section class="lic" id="licence">
+        <div class="test__head">
+          <p class="num">05</p>
+          <h2>One price list, no sales call.</h2>
+        </div>
+
+        <div class="lic__grid">
+          <div class="lic__opts">
+            <div class="opt">
+              <span class="opt__k">Package</span>
+              <div class="opt__row">
+                <button class="pill is-on" data-pkg="single" type="button">Single weight</button>
+                <button class="pill" data-pkg="text" type="button">Text pair</button>
+                <button class="pill" data-pkg="full" type="button">Full family</button>
+              </div>
+            </div>
+
+            <div class="opt">
+              <span class="opt__k">Desktop seats</span>
+              <div class="stepper">
+                <button data-t="desktop" data-d="-1" type="button">&minus;</button>
+                <b id="nDesktop">3</b>
+                <button data-t="desktop" data-d="1" type="button">+</button>
+              </div>
+            </div>
+
+            <div class="opt">
+              <span class="opt__k">Web, monthly pageviews</span>
+              <div class="opt__row">
+                <button class="pill is-on" data-web="0" type="button">None</button>
+                <button class="pill" data-web="50" type="button">50 k</button>
+                <button class="pill" data-web="500" type="button">500 k</button>
+                <button class="pill" data-web="5000" type="button">5 M</button>
+              </div>
+            </div>
+
+            <div class="opt">
+              <span class="opt__k">App bundling</span>
+              <div class="opt__row">
+                <button class="pill is-on" data-app="0" type="button">No</button>
+                <button class="pill" data-app="1" type="button">One app</button>
+                <button class="pill" data-app="3" type="button">Up to three</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="lic__out">
+            <table class="lic__table" id="licTable"><tbody></tbody></table>
+            <div class="lic__total">
+              <span>Total, one off</span>
+              <strong id="licTotal">340 EUR</strong>
+            </div>
+            <button class="bigred" type="button" id="licBuy">
+              Add to cart<i></i>
+            </button>
+            <p class="lic__fine">
+              Perpetual. No renewal, no tracking script, no phoning home.
+              Concept site, so nothing is charged.
+            </p>
+            <div class="lic__done" id="licDone" hidden>
+              <p id="licDoneText"></p>
+              <button class="lnk" type="button" id="licAgain">Start over<i></i></button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="foot__grid">
+        <p class="foot__wm">Vilnis Type</p>
+        <div>
+          <h4>Foundry</h4>
+          <p>Studentu g. 65<br />Kaunas, Lithuania</p>
+        </div>
+        <div>
+          <h4>Write</h4>
+          <p>licence@vilnis.example<br />custom@vilnis.example</p>
+        </div>
+        <div>
+          <h4>Trials</h4>
+          <p>Free for testing<br />Never for publishing</p>
+        </div>
+      </div>
+      <p class="foot__fine">
+        Concept site. Vilnis Type is a fictional foundry created to demonstrate
+        Swiss grid layout and interactive specimen design. The specimen is set
+        in the system grotesk, not in a real Vilnis Grotesk.
+      </p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

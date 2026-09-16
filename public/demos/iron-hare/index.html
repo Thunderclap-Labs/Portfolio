@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Iron Hare / Distilled in Kaunas since 1927</title>
+    <meta
+      name="description"
+      content="A small copper still, eleven botanicals and one very slow cut. Iron Hare London Dry."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="top">
+      <span class="top__rule" aria-hidden="true"></span>
+      <a class="crest" href="#top">
+        <span class="crest__mark" aria-hidden="true"></span>
+        <span class="crest__name">Iron Hare</span>
+        <span class="crest__sub">Kaunas &#183; 1927</span>
+      </a>
+      <nav class="top__nav" id="nav">
+        <a href="#still">The still</a>
+        <a href="#botanicals">Botanicals</a>
+        <a href="#serves">Serves</a>
+        <a href="#visit">Visit</a>
+      </nav>
+      <span class="top__rule" aria-hidden="true"></span>
+    </header>
+
+    <main id="top">
+      <!-- HERO -->
+      <section class="hero">
+        <div class="hero__side hero__side--l">
+          <p class="deco-eyebrow"><i></i>Gin distillery, Kaunas<i></i></p>
+          <h1 class="hero__title">
+            <span>London</span>
+            <span class="hero__amp">Dry Gin</span>
+          </h1>
+          <p class="hero__lede">
+            One distillery, one gin, made in a 1927 copper still on Vytauto
+            prospektas. Eleven botanicals and a middle cut chosen on tasting by
+            the same distiller for thirty one years.
+          </p>
+          <dl class="hero__facts">
+            <div><dt>Strength</dt><dd>44.2&#8202;%</dd></div>
+            <div><dt>Still</dt><dd>Copper, 480 L</dd></div>
+            <div><dt>Run</dt><dd>620 bottles</dd></div>
+          </dl>
+        </div>
+
+        <div class="hero__stage">
+          <div class="bottle" id="bottle" aria-label="Iron Hare bottle, drag to turn">
+            <div class="bottle__fail" id="bottleFail" hidden>
+              This browser cannot run WebGL, so the bottle is not shown.
+            </div>
+          </div>
+          <p class="bottle__hint">Turn the bottle</p>
+        </div>
+
+        <div class="hero__side hero__side--r">
+          <div class="medal">
+            <span class="medal__ring" aria-hidden="true"></span>
+            <span class="medal__t">Gold</span>
+            <span class="medal__s">Baltic Spirits<br />2025</span>
+          </div>
+          <p class="hero__note">
+            Bottled at the distillery on Vytauto prospektas, by hand, on the
+            morning of the day it ships.
+          </p>
+        </div>
+      </section>
+
+      <!-- BAND -->
+      <div class="band" aria-hidden="true">
+        <span>JUNIPER</span><i></i><span>ANGELICA</span><i></i><span>ORRIS</span
+        ><i></i><span>CORIANDER</span><i></i><span>LEMON PEEL</span><i></i
+        ><span>CARDAMOM</span><i></i><span>PINE TIP</span><i></i
+        ><span>MEADOWSWEET</span><i></i>
+      </div>
+
+      <!-- THE STILL -->
+      <section class="chap" id="still">
+        <div class="chap__frame">
+          <p class="deco-eyebrow"><i></i>The still<i></i></p>
+          <h2>Four hundred and eighty litres of copper, run once a week.</h2>
+          <div class="chap__cols">
+            <p>
+              The still was built in Hamburg in 1927 and has stood in this
+              building since 1954. It holds 480 litres, it is heated by steam
+              rather than by flame, and it has been rebricked twice without any
+              change to the shape of the neck.
+            </p>
+            <p>
+              One run a week, 620 bottles. The heads and the tails are cut on
+              tasting and confirmed against the hydrometer, and only the middle
+              cut is bottled. Everything outside it is redistilled with the
+              following batch rather than thrown away.
+            </p>
+          </div>
+          <ul class="steps">
+            <li><span>I</span>Steep overnight, cold</li>
+            <li><span>II</span>Slow rise, four hours to first drip</li>
+            <li><span>III</span>Cut on tasting, twice</li>
+            <li><span>IV</span>Rest three weeks in steel</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- BOTANICALS -->
+      <section class="chap chap--dark" id="botanicals">
+        <div class="chap__frame">
+          <p class="deco-eyebrow deco-eyebrow--gold"><i></i>Botanicals<i></i></p>
+          <h2>Choose three and the bottle changes.</h2>
+          <p class="chap__note">
+            Every autumn we release a small run built on three chosen
+            botanicals. Pick yours and watch the label and the spirit change on
+            the bottle above.
+          </p>
+
+          <ul class="bots" id="bots">
+            <li><button data-b="Juniper" data-c="#e9d7a3" type="button">Juniper<em>Macedonian, hand picked</em></button></li>
+            <li><button data-b="Angelica" data-c="#dfc98e" type="button">Angelica<em>Root, two years dried</em></button></li>
+            <li><button data-b="Orris" data-c="#e6d3a8" type="button">Orris<em>Florentine iris</em></button></li>
+            <li><button data-b="Coriander" data-c="#e2cf92" type="button">Coriander<em>Seed, lightly cracked</em></button></li>
+            <li><button data-b="Lemon peel" data-c="#f0dc93" type="button">Lemon peel<em>Sorrento, unwaxed</em></button></li>
+            <li><button data-b="Cardamom" data-c="#d9c48a" type="button">Cardamom<em>Green, split</em></button></li>
+            <li><button data-b="Pine tip" data-c="#cfd6a0" type="button">Pine tip<em>Curonian, May only</em></button></li>
+            <li><button data-b="Meadowsweet" data-c="#eadfae" type="button">Meadowsweet<em>Riverbank, Nemunas</em></button></li>
+            <li><button data-b="Rowan" data-c="#e8b98a" type="button">Rowan<em>After the first frost</em></button></li>
+            <li><button data-b="Caraway" data-c="#dcc68d" type="button">Caraway<em>Lithuanian, of course</em></button></li>
+          </ul>
+
+          <div class="blend">
+            <p class="blend__k">Your blend</p>
+            <p class="blend__v" id="blendOut">Pick three botanicals</p>
+            <button class="deco-btn" id="blendReset" type="button" hidden>
+              Clear
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SERVES -->
+      <section class="chap" id="serves">
+        <div class="chap__frame">
+          <p class="deco-eyebrow"><i></i>Serves<i></i></p>
+          <h2>Four ways, and one of them is nothing.</h2>
+          <div class="serves" id="serves">
+            <article class="serve">
+              <button class="serve__hit" type="button">
+                <span class="serve__n">01</span>
+                <span class="serve__t">Neat, no ice</span>
+                <span class="serve__x" aria-hidden="true"></span>
+              </button>
+              <div class="serve__body"><div>
+                <p>
+                  Fifty millilitres in a small tulip glass at room temperature.
+                  This is how we taste every run and it is the only way to find
+                  out whether you actually like gin or whether you like tonic.
+                </p>
+                <ul><li>50 ml Iron Hare</li><li>Nothing else</li></ul>
+              </div></div>
+            </article>
+            <article class="serve">
+              <button class="serve__hit" type="button">
+                <span class="serve__n">02</span>
+                <span class="serve__t">The Kaunas Martini</span>
+                <span class="serve__x" aria-hidden="true"></span>
+              </button>
+              <div class="serve__body"><div>
+                <p>
+                  Stirred, never anything else, and colder than you think is
+                  reasonable. The pine tip in the botanical bill does the work
+                  that a garnish usually has to.
+                </p>
+                <ul><li>60 ml Iron Hare</li><li>10 ml dry vermouth</li><li>Stir 30 seconds over block ice</li><li>Lemon peel, expressed and discarded</li></ul>
+              </div></div>
+            </article>
+            <article class="serve">
+              <button class="serve__hit" type="button">
+                <span class="serve__n">03</span>
+                <span class="serve__t">Hare and Tonic</span>
+                <span class="serve__x" aria-hidden="true"></span>
+              </button>
+              <div class="serve__body"><div>
+                <p>
+                  A tall glass, a lot of ice, and half as much tonic as you have
+                  been taught to pour. The ratio is one to two, not one to four.
+                </p>
+                <ul><li>50 ml Iron Hare</li><li>100 ml Indian tonic</li><li>Rowan berry, if it is autumn</li></ul>
+              </div></div>
+            </article>
+            <article class="serve">
+              <button class="serve__hit" type="button">
+                <span class="serve__n">04</span>
+                <span class="serve__t">The Barge</span>
+                <span class="serve__x" aria-hidden="true"></span>
+              </button>
+              <div class="serve__body"><div>
+                <p>
+                  Our own, named after the boat the still arrived on. Slightly
+                  sweet, slightly bitter, and it improves for about an hour if
+                  you leave it alone.
+                </p>
+                <ul><li>45 ml Iron Hare</li><li>20 ml sweet vermouth</li><li>10 ml amaro</li><li>Two dashes orange bitters</li></ul>
+              </div></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- VISIT -->
+      <section class="chap chap--dark" id="visit">
+        <div class="chap__frame">
+          <p class="deco-eyebrow deco-eyebrow--gold"><i></i>Visit<i></i></p>
+          <h2>Come and stand next to her.</h2>
+          <p class="chap__note">
+            Two hours, eight people at a time, and you leave with the bottle you
+            watched come off the still. Thursdays and Saturdays only, because
+            the rest of the week she is working.
+          </p>
+
+          <div class="visit">
+            <div class="visit__slots" id="slots"></div>
+            <form class="visit__form" id="vform" novalidate>
+              <label class="vf">
+                <span>Name</span><input name="name" type="text" /><em></em>
+              </label>
+              <label class="vf">
+                <span>Email</span><input name="email" type="email" /><em></em>
+              </label>
+              <label class="vf">
+                <span>How many</span>
+                <div class="stepper">
+                  <button data-d="-1" type="button">&minus;</button>
+                  <b id="party">2</b>
+                  <button data-d="1" type="button">+</button>
+                </div>
+              </label>
+              <div class="vf vf--tot">
+                <span>Total</span>
+                <strong id="vTotal">70 EUR</strong>
+              </div>
+              <button class="deco-btn deco-btn--big" type="submit">
+                Reserve the bench
+              </button>
+              <p class="vf__fine">
+                Concept site. Nothing is booked and nothing is charged.
+              </p>
+            </form>
+            <div class="visit__done" id="vdone" hidden>
+              <p class="deco-eyebrow deco-eyebrow--gold"><i></i>Booked<i></i></p>
+              <h3>The bench is yours.</h3>
+              <p id="vdoneText"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="foot__crest">
+        <span class="crest__mark" aria-hidden="true"></span>
+        <span>Iron Hare</span>
+      </div>
+      <div class="foot__cols">
+        <div><h4>Distillery</h4><p>Vytauto pr. 41<br />Kaunas, Lithuania</p></div>
+        <div><h4>Trade</h4><p>trade@ironhare.example<br />Wholesale from 6 cases</p></div>
+        <div><h4>Hours</h4><p>Thursday and Saturday<br />Tours at 15:00 and 18:00</p></div>
+      </div>
+      <p class="foot__fine">
+        Concept site. Iron Hare is a fictional distillery created to demonstrate
+        art deco layout and transmissive glass in the browser. Please do not
+        drink anything on the strength of a made up label.
+      </p>
+    </footer>
+
+    <script src="vendor/three.min.js"></script>
+    <script src="scene.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

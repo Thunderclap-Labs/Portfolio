@@ -1,0 +1,881 @@
+/* Vakaris / the shelf
+   Five lamps standing on one plinth, built from lathes, tubes and rings rather
+   than from a model file. Every lamp owns its emissive parts, a point light and
+   a glow sprite, so switching one on is a single call and switching them all on
+   is the same call five times. */
+
+var VakarisShelf = (function () {
+  "use strict";
+
+  var renderer, scene, camera, clock, raycaster, pmrem;
+  var shelf, wall, plinth;
+  var lamps = [];
+  var live = false;
+  var pickHandler = null;
+
+  var night = false;
+  var focusIdx = -1;
+  var lastT = 0;
+
+  var spin = { y: 0, x: 0.06, ty: 0, tx: 0.06 };
+  var cam = {
+    pos: new THREE.Vector3(0, 2.9, 13.6),
+    look: new THREE.Vector3(0, 1.55, 0),
+    tPos: new THREE.Vector3(0, 2.9, 13.6),
+    tLook: new THREE.Vector3(0, 1.55, 0),
+  };
+
+  var X = [-6.6, -3.3, 0, 3.3, 6.6];
+
+  /* -------------------------------------------------------------- textures */
+
+  function envTexture(dark) {
+    var c = document.createElement("canvas");
+
+    c.width = 512;
+    c.height = 256;
+
+    var x = c.getContext("2d");
+    var g = x.createLinearGradient(0, 0, 0, 256);
+
+    if (dark) {
+      g.addColorStop(0, "#0b0907");
+      g.addColorStop(0.55, "#171310");
+      g.addColorStop(1, "#050403");
+    } else {
+      g.addColorStop(0, "#fbf5e9");
+      g.addColorStop(0.5, "#e8dcc6");
+      g.addColorStop(1, "#b9ab93");
+    }
+    x.fillStyle = g;
+    x.fillRect(0, 0, 512, 256);
+
+    // a couple of soft sources so brass has something to reflect
+    [
+      [120, 70, 70, dark ? "rgba(240,163,58,0.45)" : "rgba(255,252,240,0.9)"],
+      [380, 90, 90, dark ? "rgba(240,163,58,0.28)" : "rgba(255,248,228,0.7)"],
+    ].forEach(function (s) {
+      var r = x.createRadialGradient(s[0], s[1], 0, s[0], s[1], s[2]);
+
+      r.addColorStop(0, s[3]);
+      r.addColorStop(1, "rgba(0,0,0,0)");
+      x.fillStyle = r;
+      x.fillRect(s[0] - s[2], s[1] - s[2], s[2] * 2, s[2] * 2);
+    });
+
+    var t = new THREE.CanvasTexture(c);
+
+    t.mapping = THREE.EquirectangularReflectionMapping;
+
+    return t;
+  }
+
+  function perforation() {
+    var c = document.createElement("canvas");
+
+    c.width = 256;
+    c.height = 256;
+
+    var x = c.getContext("2d");
+
+    x.fillStyle = "#ffffff";
+    x.fillRect(0, 0, 256, 256);
+    x.fillStyle = "#000000";
+
+    for (var row = 0; row < 22; row++) {
+      for (var col = 0; col < 30; col++) {
+        var ox = (row % 2) * 4.3;
+
+        x.beginPath();
+        x.arc(col * 8.6 + ox + 3, row * 11.6 + 5, 2.4, 0, Math.PI * 2);
+        x.fill();
+      }
+    }
+
+    var t = new THREE.CanvasTexture(c);
+
+    t.wrapS = t.wrapT = THREE.RepeatWrapping;
+
+    return t;
+  }
+
+  function glowSprite() {
+    var c = document.createElement("canvas");
+
+    c.width = c.height = 128;
+
+    var x = c.getContext("2d");
+    var g = x.createRadialGradient(64, 64, 0, 64, 64, 64);
+
+    g.addColorStop(0, "rgba(255,214,150,1)");
+    g.addColorStop(0.32, "rgba(240,163,58,0.5)");
+    g.addColorStop(1, "rgba(240,163,58,0)");
+    x.fillStyle = g;
+    x.fillRect(0, 0, 128, 128);
+
+    return new THREE.Sprite(
+      new THREE.SpriteMaterial({
+        map: new THREE.CanvasTexture(c),
+        blending: THREE.AdditiveBlending,
+        transparent: true,
+        depthWrite: false,
+        depthTest: false,
+        opacity: 0,
+      }),
+    );
+  }
+
+  /* ------------------------------------------------------------- materials */
+
+  var M = {};
+
+  function materials(env) {
+    M.brass = new THREE.MeshStandardMaterial({
+      color: 0xb08444,
+      metalness: 0.94,
+      roughness: 0.26,
+      envMap: env,
+      envMapIntensity: 1.1,
+    });
+    M.brassDark = new THREE.MeshStandardMaterial({
+      color: 0x6d5327,
+      metalness: 0.9,
+      roughness: 0.42,
+      envMap: env,
+    });
+    M.steel = new THREE.MeshStandardMaterial({
+      color: 0x33383c,
+      metalness: 0.75,
+      roughness: 0.38,
+      envMap: env,
+    });
+    M.oak = new THREE.MeshStandardMaterial({
+      color: 0x9a7648,
+      metalness: 0,
+      roughness: 0.78,
+    });
+    M.ash = new THREE.MeshStandardMaterial({
+      color: 0xc4a674,
+      metalness: 0,
+      roughness: 0.72,
+    });
+    M.stone = new THREE.MeshStandardMaterial({
+      color: 0x6c665d,
+      metalness: 0.05,
+      roughness: 0.94,
+    });
+    M.plinth = new THREE.MeshStandardMaterial({
+      color: 0x6a4f33,
+      metalness: 0,
+      roughness: 0.85,
+    });
+    M.wall = new THREE.MeshStandardMaterial({
+      color: 0xcfc2ab,
+      metalness: 0,
+      roughness: 1,
+    });
+  }
+
+  /* frosted glass, without the cost of real transmission: five of those at
+     once is more than a laptop should be asked for */
+  function frost(tint) {
+    return new THREE.MeshPhysicalMaterial({
+      color: tint || 0xe9dcc2,
+      metalness: 0,
+      roughness: 0.42,
+      transparent: true,
+      opacity: 0.82,
+      clearcoat: 1,
+      clearcoatRoughness: 0.3,
+      emissive: 0xf0a33a,
+      emissiveIntensity: 0,
+      side: THREE.DoubleSide,
+    });
+  }
+
+  function emissiveMat(colour) {
+    return new THREE.MeshStandardMaterial({
+      color: colour || 0x2a2621,
+      emissive: 0xffc271,
+      emissiveIntensity: 0,
+      roughness: 0.5,
+      metalness: 0,
+    });
+  }
+
+  /* ----------------------------------------------------------------- lamps */
+
+  function newLamp(i, x) {
+    var g = new THREE.Group();
+
+    g.position.x = x;
+    g.userData = { idx: i, on: false, glowParts: [], k: 0, open: 0 };
+
+    var light = new THREE.PointLight(0xffb257, 0, 11, 2);
+
+    light.position.set(0, 2.1, 0);
+    g.add(light);
+
+    var sprite = glowSprite();
+
+    sprite.renderOrder = 5;
+    sprite.position.set(0, 2.1, 0);
+    sprite.scale.set(5, 5, 1);
+    g.add(sprite);
+
+    g.userData.light = light;
+    g.userData.sprite = sprite;
+
+    return g;
+  }
+
+  /* 01 Sietas: a perforated brass dome hung off a cranked arm */
+  function buildSietas(i) {
+    var g = newLamp(i, X[i]);
+    var base = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.92, 1.08, 0.22, 40),
+      M.brassDark,
+    );
+
+    base.position.y = 0.11;
+    g.add(base);
+
+    var post = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.085, 0.085, 3.2, 16),
+      M.brass,
+    );
+
+    post.position.y = 1.7;
+    g.add(post);
+
+    var arm = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.075, 0.075, 1.5, 14),
+      M.brass,
+    );
+
+    arm.position.set(0.72, 3.28, 0);
+    arm.rotation.z = Math.PI * 0.5;
+    g.add(arm);
+
+    var knuckle = new THREE.Mesh(
+      new THREE.SphereGeometry(0.13, 14, 12),
+      M.brassDark,
+    );
+
+    knuckle.position.set(0, 3.28, 0);
+    g.add(knuckle);
+
+    var drop = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.045, 0.045, 0.5, 10),
+      M.brassDark,
+    );
+
+    drop.position.set(1.42, 3.03, 0);
+    g.add(drop);
+
+    // the shade profile, lathed, with the holes punched by an alpha map
+    var pts = [];
+
+    for (var a = 0; a <= 14; a++) {
+      var t = a / 14;
+
+      pts.push(
+        new THREE.Vector2(0.07 + Math.sin(t * Math.PI * 0.5) * 1.1, 1.0 - t * 1.0),
+      );
+    }
+
+    var shade = new THREE.Mesh(
+      new THREE.LatheGeometry(pts, 48),
+      new THREE.MeshStandardMaterial({
+        color: 0xb08444,
+        metalness: 0.9,
+        roughness: 0.3,
+        envMap: M.brass.envMap,
+        alphaMap: perforation(),
+        transparent: true,
+        side: THREE.DoubleSide,
+      }),
+    );
+
+    shade.position.set(1.42, 2.78, 0);
+    g.add(shade);
+
+    var rim = new THREE.Mesh(
+      new THREE.TorusGeometry(1.17, 0.035, 8, 44),
+      M.brassDark,
+    );
+
+    rim.position.set(1.42, 2.78, 0);
+    rim.rotation.x = Math.PI * 0.5;
+    g.add(rim);
+
+    var bulb = new THREE.Mesh(
+      new THREE.SphereGeometry(0.34, 20, 16),
+      emissiveMat(0xf3e3c8),
+    );
+
+    bulb.position.set(1.42, 3.06, 0);
+    g.add(bulb);
+
+    g.userData.glowParts.push(bulb);
+    g.userData.light.position.set(1.42, 2.9, 0);
+    g.userData.sprite.position.set(1.42, 2.98, 0);
+
+    return g;
+  }
+
+  /* 02 Vabalas: six shells that lift apart when it is switched on */
+  function buildVabalas(i) {
+    var g = newLamp(i, X[i]);
+    var base = new THREE.Mesh(
+      new THREE.CylinderGeometry(1.02, 1.16, 0.34, 8),
+      M.oak,
+    );
+
+    base.position.y = 0.17;
+    g.add(base);
+
+    var core = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.42, 0.58, 2.2, 22),
+      emissiveMat(0x2b2622),
+    );
+
+    core.position.y = 1.5;
+    g.add(core);
+    g.userData.glowParts.push(core);
+
+    var plates = [];
+
+    for (var k = 0; k < 6; k++) {
+      var rb = 1.02 - k * 0.13;
+      var rt = 0.94 - k * 0.13;
+      var plate = new THREE.Mesh(
+        new THREE.CylinderGeometry(rt, rb, 0.34, 28, 1, true),
+        M.steel,
+      );
+
+      plate.position.y = 0.52 + k * 0.33;
+      plate.userData.rest = plate.position.y;
+      plate.userData.tilt = k * 0.16;
+      plate.rotation.y = plate.userData.tilt;
+      g.add(plate);
+      plates.push(plate);
+    }
+
+    var cap = new THREE.Mesh(
+      new THREE.SphereGeometry(0.3, 18, 12, 0, Math.PI * 2, 0, Math.PI * 0.5),
+      M.brass,
+    );
+
+    cap.position.y = 2.5;
+    g.add(cap);
+
+    g.userData.plates = plates;
+    g.userData.light.position.set(0, 1.5, 0);
+    g.userData.sprite.position.set(0, 1.5, 0);
+    g.userData.sprite.scale.set(5.4, 5.4, 1);
+
+    return g;
+  }
+
+  /* 03 Stulpas: stone and glass stacked like a core sample */
+  function buildStulpas(i) {
+    var g = newLamp(i, X[i]);
+    var y = 0;
+    var order = [
+      ["stone", 0.34, 1.02],
+      ["glass", 0.3, 0.86],
+      ["stone", 0.26, 0.94],
+      ["glass", 0.42, 0.8],
+      ["stone", 0.3, 0.9],
+      ["glass", 0.26, 0.74],
+      ["stone", 0.5, 0.84],
+    ];
+
+    order.forEach(function (o) {
+      var isGlass = o[0] === "glass";
+      var mat = isGlass ? frost(0xf6e6c6) : M.stone;
+      var m = new THREE.Mesh(
+        new THREE.CylinderGeometry(o[2] * 0.92, o[2], o[1], 34),
+        mat,
+      );
+
+      m.position.y = y + o[1] / 2;
+      y += o[1];
+      m.rotation.y = y * 1.7;
+      g.add(m);
+
+      if (isGlass) g.userData.glowParts.push(m);
+    });
+
+    g.userData.light.position.set(0, 1.4, 0);
+    g.userData.light.distance = 9;
+    g.userData.sprite.position.set(0, 1.4, 0);
+    g.userData.sprite.scale.set(4.2, 6.4, 1);
+
+    return g;
+  }
+
+  /* 04 Vetra: a broken ring on three legs, tilted the way a gate is */
+  function buildVetra(i) {
+    var g = newLamp(i, X[i]);
+    var hub = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.24, 0.3, 0.3, 18),
+      M.brassDark,
+    );
+
+    hub.position.y = 1.16;
+    g.add(hub);
+
+    for (var k = 0; k < 3; k++) {
+      var leg = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.08, 0.055, 1.6, 12),
+        M.ash,
+      );
+      var a = (k / 3) * Math.PI * 2 + 0.5;
+
+      leg.position.set(Math.cos(a) * 0.4, 0.68, Math.sin(a) * 0.4);
+      leg.rotation.z = -Math.cos(a) * 0.44;
+      leg.rotation.x = Math.sin(a) * 0.44;
+      g.add(leg);
+    }
+
+    var stem = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.065, 0.065, 1.2, 12),
+      M.brass,
+    );
+
+    stem.position.y = 1.72;
+    g.add(stem);
+
+    var ring = new THREE.Group();
+
+    ring.position.y = 2.72;
+    ring.rotation.set(0.3, 0.22, 0.42);
+    g.add(ring);
+
+    var glassRing = new THREE.Mesh(
+      new THREE.TorusGeometry(1.34, 0.2, 20, 64, Math.PI * 1.74),
+      frost(0xf3e4c9),
+    );
+
+    ring.add(glassRing);
+
+    // a thin brass edge on each side, so the ring has a line to read against
+    [1.53, 1.15].forEach(function (r) {
+      var edge = new THREE.Mesh(
+        new THREE.TorusGeometry(r, 0.028, 8, 60, Math.PI * 1.74),
+        M.brass,
+      );
+
+      ring.add(edge);
+    });
+
+    var endA = new THREE.Mesh(
+      new THREE.SphereGeometry(0.2, 12, 10),
+      M.brassDark,
+    );
+
+    endA.position.set(1.34, 0, 0);
+    ring.add(endA);
+
+    var endB = new THREE.Mesh(
+      new THREE.SphereGeometry(0.2, 12, 10),
+      M.brassDark,
+    );
+
+    endB.position.set(
+      Math.cos(Math.PI * 1.74) * 1.34,
+      Math.sin(Math.PI * 1.74) * 1.34,
+      0,
+    );
+    ring.add(endB);
+
+    g.userData.glowParts.push(glassRing);
+    g.userData.ring = ring;
+    g.userData.light.position.set(0, 2.72, 0);
+    g.userData.light.distance = 10;
+    g.userData.sprite.position.set(0, 2.72, 0);
+    g.userData.sprite.scale.set(6.4, 6.4, 1);
+
+    return g;
+  }
+
+  /* 05 Meduza: a bell with lit strands hanging under it */
+  function buildMeduza(i) {
+    var g = newLamp(i, X[i]);
+    var stand = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.9, 1.05, 0.2, 36),
+      M.brassDark,
+    );
+
+    stand.position.y = 0.1;
+    g.add(stand);
+
+    var post = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.07, 0.07, 3.5, 14),
+      M.brass,
+    );
+
+    post.position.y = 1.85;
+    g.add(post);
+
+    var pts = [];
+
+    for (var a = 0; a <= 14; a++) {
+      var t = a / 14;
+
+      pts.push(
+        new THREE.Vector2(0.05 + Math.sin(t * Math.PI * 0.62) * 1.18, 1.05 - t * 1.05),
+      );
+    }
+
+    var bell = new THREE.Mesh(new THREE.LatheGeometry(pts, 40), frost(0xefdfc0));
+
+    bell.position.y = 2.5;
+    g.add(bell);
+    g.userData.glowParts.push(bell);
+
+    var bellRim = new THREE.Mesh(
+      new THREE.TorusGeometry(1.23, 0.04, 8, 46),
+      M.brass,
+    );
+
+    bellRim.position.y = 2.5;
+    bellRim.rotation.x = Math.PI * 0.5;
+    g.add(bellRim);
+
+    var strands = [];
+
+    for (var k = 0; k < 22; k++) {
+      var ang = (k / 22) * Math.PI * 2;
+      var rad = 0.55 + (k % 3) * 0.22;
+      var len = 0.7 + (k % 5) * 0.18;
+      var strand = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.012, 0.012, len, 5),
+        M.brassDark,
+      );
+
+      strand.position.set(
+        Math.cos(ang) * rad,
+        2.46 - len / 2,
+        Math.sin(ang) * rad,
+      );
+      g.add(strand);
+
+      var tip = new THREE.Mesh(
+        new THREE.SphereGeometry(0.055, 8, 6),
+        emissiveMat(0xd8c8a8),
+      );
+
+      tip.position.set(
+        Math.cos(ang) * rad,
+        2.46 - len,
+        Math.sin(ang) * rad,
+      );
+      g.add(tip);
+      strands.push(tip);
+      g.userData.glowParts.push(tip);
+    }
+
+    g.userData.strands = strands;
+    g.userData.light.position.set(0, 2.1, 0);
+    g.userData.sprite.position.set(0, 2.2, 0);
+    g.userData.sprite.scale.set(5.6, 5.6, 1);
+
+    return g;
+  }
+
+  /* ------------------------------------------------------------------ init */
+
+  function init(canvas) {
+    if (!window.THREE) return false;
+
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+    } catch (e) {
+      return false;
+    }
+
+    if (!renderer.getContext()) return false;
+
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
+    renderer.outputEncoding = THREE.sRGBEncoding;
+
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xefe9df);
+
+    camera = new THREE.PerspectiveCamera(36, 1, 0.1, 120);
+    camera.position.copy(cam.pos);
+
+    pmrem = new THREE.PMREMGenerator(renderer);
+    pmrem.compileEquirectangularShader();
+
+    var env = pmrem.fromEquirectangular(envTexture(false)).texture;
+
+    scene.environment = env;
+    materials(env);
+
+    scene.add(new THREE.HemisphereLight(0xfff3e2, 0x8a7a63, 0.7));
+
+    var key = new THREE.DirectionalLight(0xfff1dd, 1.1);
+
+    key.position.set(-6, 9, 8);
+    scene.add(key);
+
+    var fill = new THREE.DirectionalLight(0xdfe6f0, 0.35);
+
+    fill.position.set(7, 4, 6);
+    scene.add(fill);
+
+    scene.userData.lights = [scene.children[0], key, fill];
+
+    shelf = new THREE.Group();
+    scene.add(shelf);
+
+    wall = new THREE.Mesh(new THREE.PlaneGeometry(60, 30), M.wall);
+    wall.position.set(0, 6, -9);
+    scene.add(wall);
+
+    plinth = new THREE.Mesh(new THREE.BoxGeometry(17.4, 0.6, 4.2), M.plinth);
+    plinth.position.y = -0.3;
+    shelf.add(plinth);
+
+    [buildSietas, buildVabalas, buildStulpas, buildVetra, buildMeduza].forEach(
+      function (fn, i) {
+        var lamp = fn(i);
+
+        shelf.add(lamp);
+        lamps.push(lamp);
+      },
+    );
+
+    clock = new THREE.Clock();
+    raycaster = new THREE.Raycaster();
+    live = true;
+
+    bind(canvas);
+    resize(canvas);
+    window.addEventListener("resize", function () {
+      resize(canvas);
+    });
+
+    tick();
+
+    return true;
+  }
+
+  function resize(canvas) {
+    var w = canvas.clientWidth || 1;
+    var h = canvas.clientHeight || 1;
+
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+
+  /* --------------------------------------------------------------- pointer */
+
+  function bind(canvas) {
+    var dragging = false;
+    var moved = 0;
+    var last = { x: 0, y: 0 };
+
+    canvas.addEventListener("pointerdown", function (e) {
+      dragging = true;
+      moved = 0;
+      last.x = e.clientX;
+      last.y = e.clientY;
+      canvas.setPointerCapture(e.pointerId);
+    });
+
+    canvas.addEventListener("pointermove", function (e) {
+      if (!dragging) return;
+
+      var dx = e.clientX - last.x;
+      var dy = e.clientY - last.y;
+
+      moved += Math.abs(dx) + Math.abs(dy);
+      last.x = e.clientX;
+      last.y = e.clientY;
+      spin.ty += dx * 0.006;
+      spin.tx = Math.max(-0.24, Math.min(0.45, spin.tx + dy * 0.003));
+    });
+
+    function release(e) {
+      if (!dragging) return;
+      dragging = false;
+
+      // a click is a drag that went nowhere
+      if (moved < 6) pick(canvas, e);
+    }
+
+    canvas.addEventListener("pointerup", release);
+    canvas.addEventListener("pointercancel", function () {
+      dragging = false;
+    });
+  }
+
+  function pick(canvas, e) {
+    var r = canvas.getBoundingClientRect();
+    var p = new THREE.Vector2(
+      ((e.clientX - r.left) / r.width) * 2 - 1,
+      -((e.clientY - r.top) / r.height) * 2 + 1,
+    );
+
+    raycaster.setFromCamera(p, camera);
+
+    var hits = raycaster.intersectObjects(shelf.children, true);
+
+    for (var i = 0; i < hits.length; i++) {
+      var o = hits[i].object;
+
+      while (o && o.parent) {
+        if (o.userData && typeof o.userData.idx === "number") {
+          if (pickHandler) pickHandler(o.userData.idx);
+
+          return;
+        }
+        o = o.parent;
+      }
+    }
+  }
+
+  /* ------------------------------------------------------------------ loop */
+
+  function tick() {
+    if (!live) return;
+    requestAnimationFrame(tick);
+
+    /* getElapsedTime already consumes the delta, so keep our own */
+    var t = clock.getElapsedTime();
+    var dt = Math.min(0.05, t - lastT);
+
+    lastT = t;
+
+    spin.y += (spin.ty - spin.y) * 0.09;
+    spin.x += (spin.tx - spin.x) * 0.09;
+    shelf.rotation.y = spin.y;
+    shelf.rotation.x = spin.x;
+
+    cam.pos.lerp(cam.tPos, 0.06);
+    cam.look.lerp(cam.tLook, 0.06);
+    camera.position.copy(cam.pos);
+    camera.lookAt(cam.look);
+
+    lamps.forEach(function (g, i) {
+      var d = g.userData;
+      var want = d.on ? 1 : 0;
+
+      d.k += (want - d.k) * Math.min(1, dt * 5.5);
+
+      // a filament does not come up perfectly smoothly
+      var flick = d.on ? 1 + Math.sin(t * 7.3 + i) * 0.02 : 1;
+      var k = d.k * flick;
+
+      var lift = night ? 1.45 : 1;
+
+      d.glowParts.forEach(function (m) {
+        m.material.emissiveIntensity =
+          k * lift * (m.material.transparent ? 1.7 : 2.6);
+        if (m.material.transparent) {
+          m.material.opacity = 0.8 + k * 0.18;
+        }
+      });
+
+      d.light.intensity = k * (night ? 2.6 : 1.5);
+      d.sprite.material.opacity = k * (night ? 0.55 : 0.3);
+
+      if (d.plates) {
+        d.open += (want - d.open) * Math.min(1, dt * 4);
+        d.plates.forEach(function (p, k2) {
+          p.position.y = p.userData.rest + d.open * (0.06 + k2 * 0.055);
+          p.rotation.y = p.userData.tilt + d.open * (0.2 + k2 * 0.1);
+          p.rotation.z = d.open * 0.06 * (k2 % 2 ? 1 : -1);
+        });
+      }
+
+      if (d.ring) d.ring.rotation.z = 0.42 + Math.sin(t * 0.5 + i) * 0.04;
+
+      if (d.strands) {
+        d.strands.forEach(function (s, k3) {
+          s.position.y =
+            s.position.y * 0.97 +
+            0.03 * (s.position.y + Math.sin(t * 1.4 + k3) * 0.004);
+        });
+      }
+    });
+
+    renderer.render(scene, camera);
+  }
+
+  /* --------------------------------------------------------------- control */
+
+  function setOn(i, on) {
+    if (!lamps[i]) return;
+    lamps[i].userData.on = !!on;
+  }
+
+  function isOn(i) {
+    return lamps[i] ? lamps[i].userData.on : false;
+  }
+
+  function setNight(v) {
+    if (!live) return;
+    night = !!v;
+
+    var env = pmrem.fromEquirectangular(envTexture(night)).texture;
+
+    scene.environment = env;
+    Object.keys(M).forEach(function (k) {
+      if (M[k].envMap) M[k].envMap = env;
+      M[k].needsUpdate = true;
+    });
+
+    scene.background = new THREE.Color(night ? 0x0d0b09 : 0xefe9df);
+    M.wall.color.set(night ? 0x191510 : 0xcfc2ab);
+    M.plinth.color.set(night ? 0x2b2018 : 0x6a4f33);
+
+    var l = scene.userData.lights;
+
+    l[0].intensity = night ? 0.1 : 0.7;
+    l[1].intensity = night ? 0.12 : 1.1;
+    l[2].intensity = night ? 0.05 : 0.35;
+    renderer.toneMappingExposure = night ? 0.95 : 1.05;
+  }
+
+  function focus(i) {
+    focusIdx = i;
+
+    if (i < 0 || !lamps[i]) {
+      cam.tPos.set(0, 2.9, 13.6);
+      cam.tLook.set(0, 1.55, 0);
+      spin.ty = 0;
+      spin.tx = 0.06;
+
+      return;
+    }
+
+    var x = X[i];
+
+    cam.tPos.set(x * 0.78, 2.4, 8.4);
+    cam.tLook.set(x, 1.6, 0);
+    spin.ty = 0;
+    spin.tx = 0.02;
+  }
+
+  function onPick(fn) {
+    pickHandler = fn;
+  }
+
+  return {
+    init: init,
+    setOn: setOn,
+    isOn: isOn,
+    setNight: setNight,
+    focus: focus,
+    onPick: onPick,
+  };
+})();

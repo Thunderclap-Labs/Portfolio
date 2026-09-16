@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UOLA / Bouldering in Kaunas</title>
+    <meta
+      name="description"
+      content="Ninety four problems on eight hundred square metres of wall, reset every fortnight. A bouldering gym in a former textile hall in Kaunas."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="top">
+      <a class="mark" href="#top">
+        <span class="mark__box" aria-hidden="true"><i></i><i></i><i></i></span>
+        UOLA
+      </a>
+      <nav class="top__nav" id="nav">
+        <a href="#wall">The wall</a>
+        <a href="#routes">Problems</a>
+        <a href="#book">Book</a>
+        <a href="#visit">Visit</a>
+      </nav>
+      <p class="open" id="open">
+        <i></i><b id="openState">Open</b><span id="openUntil"></span>
+      </p>
+      <a class="cta" href="#book">Book a session</a>
+    </header>
+
+    <div class="tape" aria-hidden="true">
+      <div>
+        <span>RESET EVERY SECOND TUESDAY</span>
+        <span>94 PROBLEMS UP RIGHT NOW</span>
+        <span>V0 TO V11</span>
+        <span>800 SQUARE METRES</span>
+        <span>RESET EVERY SECOND TUESDAY</span>
+        <span>94 PROBLEMS UP RIGHT NOW</span>
+        <span>V0 TO V11</span>
+        <span>800 SQUARE METRES</span>
+      </div>
+    </div>
+
+    <main id="top">
+      <!-- HERO -->
+      <section class="hero">
+        <h1 class="hero__h">
+          <span>Ninety four</span>
+          <span class="hero__h--out">problems.</span>
+          <span>One of them</span>
+          <span class="hero__h--fill">is yours.</span>
+        </h1>
+
+        <div class="hero__grid">
+          <p class="hero__lede">
+            A bouldering gym in the old textile hall on Drobes. Four metres of
+            wall, no ropes, no belaying and no waiting for a partner. Half the
+            gym is stripped and reset every second Tuesday, so nothing you have
+            already climbed stays up long enough to get boring.
+          </p>
+          <dl class="hero__facts">
+            <div><dt>Wall</dt><dd>800 m<sup>2</sup></dd></div>
+            <div><dt>Height</dt><dd>4.2 m</dd></div>
+            <div><dt>Problems</dt><dd>94</dd></div>
+            <div><dt>Grades</dt><dd>V0 to V11</dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <!-- THE WALL -->
+      <section class="wall" id="wall">
+        <div class="sec__head">
+          <p class="kick">The wall</p>
+          <h2>Pick a problem and it lights up.</h2>
+          <p class="sec__lede">
+            This is the main face, drawn flat. Choose a problem on the right and
+            only its holds stay lit, numbered from the start. It is what the
+            tape on the wall does, without the tape.
+          </p>
+        </div>
+
+        <div class="wall__body">
+          <figure class="board">
+            <svg id="board" viewBox="0 0 900 620" aria-label="Climbing wall">
+              <g id="panels"></g>
+              <g id="path"></g>
+              <g id="holds"></g>
+            </svg>
+            <figcaption class="board__cap">
+              <span id="boardName">Every problem on the face</span>
+              <span class="board__hint">Hover a row to preview, click to keep it</span>
+            </figcaption>
+          </figure>
+
+          <aside class="picker">
+            <div class="picker__head">
+              <span>Filter</span>
+              <div class="chips" id="gradeChips"></div>
+            </div>
+            <ul class="rlist" id="rlist"></ul>
+            <div class="picker__foot">
+              <button class="ghost" type="button" id="showAll">Show every problem</button>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- PROBLEM DETAIL -->
+      <section class="detail" id="routes">
+        <div class="detail__grid">
+          <div class="detail__info">
+            <p class="kick" id="dGrade">V4</p>
+            <h2 id="dName">Problem</h2>
+            <p class="detail__lede" id="dNote"></p>
+            <dl class="detail__spec" id="dSpec"></dl>
+            <div class="detail__send">
+              <div class="sendbar"><i id="dBar"></i></div>
+              <p><b id="dSends">0</b> sends from <b id="dTries">0</b> logged attempts</p>
+            </div>
+          </div>
+
+          <div class="detail__hold">
+            <canvas id="holdCanvas"></canvas>
+            <div class="detail__fail" id="holdFail" hidden>
+              <p>This viewer needs WebGL. Everything else on the page works without it.</p>
+            </div>
+            <p class="detail__cap">Hold of the month, drag to turn.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- BOOKING -->
+      <section class="book" id="book">
+        <div class="sec__head sec__head--light">
+          <p class="kick kick--light">Sessions</p>
+          <h2>Two hour slots, twenty four people each.</h2>
+          <p class="sec__lede sec__lede--light">
+            We cap every slot so there is never a queue under a problem. Pick a
+            day and a time, and the spaces left are the spaces that are actually
+            left.
+          </p>
+        </div>
+
+        <div class="days" id="days"></div>
+        <div class="slots" id="slots"></div>
+
+        <div class="basket" id="basket">
+          <div class="basket__l">
+            <span id="bkWhen">Nothing selected</span>
+            <b id="bkPrice">0 EUR</b>
+          </div>
+          <div class="basket__r">
+            <label class="who">
+              <span>People</span>
+              <select id="bkPeople">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+              </select>
+            </label>
+            <label class="who">
+              <span>Shoes</span>
+              <select id="bkShoes">
+                <option>Own shoes</option>
+                <option>Rental shoes</option>
+              </select>
+            </label>
+            <button class="cta cta--big" type="button" id="bkGo">Reserve</button>
+          </div>
+        </div>
+
+        <div class="done" id="done" hidden>
+          <p class="done__code" id="doneCode"></p>
+          <p class="done__txt" id="doneTxt"></p>
+          <button class="ghost ghost--light" type="button" id="doneAgain">
+            Book another
+          </button>
+        </div>
+      </section>
+
+      <!-- PRICES AND VISIT -->
+      <section class="visit" id="visit">
+        <div class="visit__grid">
+          <div>
+            <p class="kick">Prices</p>
+            <table class="ptable">
+              <tbody>
+                <tr><th scope="row">Single session</th><td>9 EUR</td></tr>
+                <tr><th scope="row">Ten sessions</th><td>75 EUR</td></tr>
+                <tr><th scope="row">Month, unlimited</th><td>45 EUR</td></tr>
+                <tr><th scope="row">Under 18 and students</th><td>6 EUR</td></tr>
+                <tr><th scope="row">Shoe hire</th><td>3 EUR</td></tr>
+                <tr><th scope="row">First session with an instructor</th><td>15 EUR</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div>
+            <p class="kick">Hours</p>
+            <table class="ptable">
+              <tbody id="hours"></tbody>
+            </table>
+          </div>
+
+          <div>
+            <p class="kick">House rules</p>
+            <ol class="rules">
+              <li>Do not sit under a problem somebody is on.</li>
+              <li>Brush the holds you have just greased.</li>
+              <li>Down climb where you can. The mat is not a landing zone.</li>
+              <li>Chalk balls only. Loose chalk stays in the bag.</li>
+              <li>If a hold spins, tell the desk rather than the internet.</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="foot__grid">
+        <div><h3>Where</h3><p>Drobes g. 62<br />45219 Kaunas</p></div>
+        <div><h3>Contact</h3><p>desk@uola.example<br />Answered between sessions</p></div>
+        <div><h3>Setting</h3><p>Second Tuesday, half the wall<br />Fourth Tuesday, the other half</p></div>
+      </div>
+      <p class="foot__mark" aria-hidden="true">UOLA</p>
+      <p class="foot__fine">
+        Concept site. UOLA is a fictional bouldering gym created to demonstrate
+        interactive diagram design. Every problem, grade and opening time on
+        this page is invented.
+      </p>
+    </footer>
+
+    <script src="vendor/three.min.js"></script>
+    <script src="scene.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

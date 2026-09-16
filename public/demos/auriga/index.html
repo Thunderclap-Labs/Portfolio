@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Auriga Drive 12 / Robot joint actuator</title>
+    <meta
+      name="description"
+      content="A 12 Nm robot joint actuator with every layer published. Scroll to take it apart."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- the model lives here, behind everything, for the whole page -->
+    <div class="stage" id="stage" aria-hidden="true">
+      <div class="stage__grid"></div>
+      <div class="stage__gl" id="gl"></div>
+      <div class="stage__fail" id="glFail" hidden>
+        WebGL is unavailable in this browser, so the cutaway is not shown.
+      </div>
+    </div>
+
+    <header class="top">
+      <a class="mark" href="#top">
+        <span class="mark__ring" aria-hidden="true"></span>
+        AURIGA
+      </a>
+      <nav class="top__nav" id="topnav">
+        <a href="#shell">01</a>
+        <a href="#copper">02</a>
+        <a href="#brain">03</a>
+        <a href="#gears">04</a>
+        <a href="#all">05</a>
+      </nav>
+      <div class="top__right">
+        <span class="top__code" id="scrollPct">00 %</span>
+        <a class="top__cta" href="#quote">Request a quote</a>
+      </div>
+    </header>
+
+    <!-- chapter rail -->
+    <aside class="rail" id="rail" aria-label="Chapters">
+      <button data-go="hero" class="is-on" type="button"><i></i><span>Drive 12</span></button>
+      <button data-go="shell" type="button"><i></i><span>Housing</span></button>
+      <button data-go="copper" type="button"><i></i><span>Stator</span></button>
+      <button data-go="brain" type="button"><i></i><span>Encoder</span></button>
+      <button data-go="gears" type="button"><i></i><span>Gearbox</span></button>
+      <button data-go="all" type="button"><i></i><span>All of it</span></button>
+    </aside>
+
+    <main id="top">
+      <!-- HERO -->
+      <section class="ch ch--hero" id="hero" data-pose="hero">
+        <div class="ch__col ch__col--l">
+          <p class="tag"><i></i>Model AX&#8209;12 <span>/</span> Rev D</p>
+          <h1>
+            Nothing in here<br />
+            is a black box.
+          </h1>
+          <p class="lede">
+            A 12 newton metre robot joint with every layer published: the
+            winding count, the magnet grade, the encoder resolution, and the
+            torque you actually hold at forty degrees rather than the one you
+            hold for three seconds.
+          </p>
+          <p class="scrollcue"><span></span>Scroll to take it apart</p>
+
+          <dl class="headline-specs">
+            <div><dt>Peak torque</dt><dd><b>36</b><i>N&#183;m</i></dd></div>
+            <div><dt>Continuous</dt><dd><b>12</b><i>N&#183;m</i></dd></div>
+            <div><dt>Backlash</dt><dd><b>3</b><i>arcmin</i></dd></div>
+            <div><dt>Mass</dt><dd><b>740</b><i>g</i></dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <!-- 01 HOUSING -->
+      <section class="ch" id="shell" data-pose="shell" data-focus="housing">
+        <div class="ch__col ch__col--l">
+          <p class="chnum">01</p>
+          <h2>The shell is a heatsink that happens to be a shell.</h2>
+          <p>
+            Anodised 7075 with a 1.8&nbsp;mm wall and twenty eight fins cut
+            straight into the barrel. There is no separate heatsink because a
+            separate heatsink is a thermal joint, and a thermal joint is a
+            place where your continuous rating quietly disappears.
+          </p>
+          <ul class="notes">
+            <li><span>Material</span>7075&#8209;T6, hard anodised</li>
+            <li><span>Wall</span>1.8 mm</li>
+            <li><span>Fins</span>28, machined not bonded</li>
+            <li><span>Sealing</span>IP65 with the M12 cap fitted</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 02 STATOR -->
+      <section class="ch ch--right" id="copper" data-pose="copper" data-focus="stator">
+        <div class="ch__col ch__col--r">
+          <p class="chnum">02</p>
+          <h2>Copper, and an unfashionable amount of it.</h2>
+          <p>
+            Twelve slots, 0.63&nbsp;mm wire, 84 turns a tooth, wound on a
+            machine we own rather than one we rent. Slot fill is 62&nbsp;per
+            cent, which is the number that decides whether the continuous
+            rating on this page is honest.
+          </p>
+          <ul class="notes">
+            <li><span>Slots</span>12, distributed</li>
+            <li><span>Turns</span>84 per tooth</li>
+            <li><span>Slot fill</span>62 %</li>
+            <li><span>Class</span>H, 180 &deg;C</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 03 ENCODER -->
+      <section class="ch" id="brain" data-pose="brain" data-focus="pcb">
+        <div class="ch__col ch__col--l">
+          <p class="chnum">03</p>
+          <h2>The encoder is the product. The motor is the easy part.</h2>
+          <p>
+            A 21&#8209;bit absolute encoder on the rotor and a 17&#8209;bit on
+            the output, so the drive knows the difference between a joint that
+            moved and a joint that flexed. Commutation, current loop and
+            thermal model all run on this board at 40&nbsp;kHz.
+          </p>
+          <ul class="notes">
+            <li><span>Rotor side</span>21 bit absolute</li>
+            <li><span>Output side</span>17 bit absolute</li>
+            <li><span>Loop rate</span>40 kHz current, 8 kHz position</li>
+            <li><span>Bus</span>EtherCAT or CAN FD</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 04 GEARBOX -->
+      <section class="ch ch--right" id="gears" data-pose="gears" data-focus="gearbox">
+        <div class="ch__col ch__col--r">
+          <p class="chnum">04</p>
+          <h2>Three planets, one sun, and no cycloid mysticism.</h2>
+          <p>
+            A planetary set with ground helical teeth, because it is
+            serviceable, it is quiet, and the efficiency curve is something we
+            can publish rather than imply. Choose one, two or three stages when
+            you configure the unit.
+          </p>
+          <ul class="notes">
+            <li><span>Type</span>Planetary, ground helical</li>
+            <li><span>Ratios</span>1:9, 1:36, 1:121</li>
+            <li><span>Efficiency</span>94 % at rated load</li>
+            <li><span>Backlash</span>3 arcmin, measured per unit</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 05 ALL -->
+      <section class="ch ch--all" id="all" data-pose="all">
+        <div class="ch__wide">
+          <p class="chnum">05</p>
+          <h2>Eight parts. All eight are sold on their own.</h2>
+          <p class="wide-lede">
+            The exploded view above is the parts list. Every layer has a part
+            number, a drawing and a price, and the drawings ship with the unit
+            rather than after an email exchange.
+          </p>
+          <div class="partsgrid" id="partsGrid"></div>
+        </div>
+      </section>
+
+      <!-- CONFIGURATOR -->
+      <section class="cfg" id="configure" data-pose="config">
+        <div class="cfg__panel">
+          <p class="tag"><i></i>Configure</p>
+          <h2>Build the one you need.</h2>
+          <p class="cfg__lede">
+            Every choice below changes the model beside it, the numbers under
+            it and the price. There is no hidden option and no call for pricing.
+          </p>
+
+          <div class="opt" data-opt="ratio">
+            <span class="opt__k">Reduction</span>
+            <div class="opt__row">
+              <button class="opt__b" data-v="9" type="button">1:9<em>one stage</em></button>
+              <button class="opt__b is-on" data-v="36" type="button">1:36<em>two stages</em></button>
+              <button class="opt__b" data-v="121" type="button">1:121<em>three stages</em></button>
+            </div>
+          </div>
+
+          <div class="opt" data-opt="brake">
+            <span class="opt__k">Brake</span>
+            <div class="opt__row">
+              <button class="opt__b is-on" data-v="0" type="button">None<em>lighter</em></button>
+              <button class="opt__b" data-v="1" type="button">Fail safe<em>holds unpowered</em></button>
+            </div>
+          </div>
+
+          <div class="opt" data-opt="bus">
+            <span class="opt__k">Bus</span>
+            <div class="opt__row">
+              <button class="opt__b is-on" data-v="ethercat" type="button">EtherCAT<em>8 kHz cyclic</em></button>
+              <button class="opt__b" data-v="canfd" type="button">CAN FD<em>5 Mbit</em></button>
+            </div>
+          </div>
+
+          <table class="spec" id="spec">
+            <tbody></tbody>
+          </table>
+
+          <figure class="curve">
+            <canvas id="curve" width="720" height="300"></canvas>
+            <figcaption>
+              Torque against speed for the selected build. The shaded band is
+              continuous, the outline is peak for two seconds.
+            </figcaption>
+          </figure>
+
+          <div class="cfg__foot">
+            <div class="cfg__price">
+              <span>Unit price, from</span>
+              <strong id="price">1 940 EUR</strong>
+              <em id="lead">Lead time 4 weeks</em>
+            </div>
+            <a class="btn" href="#quote">
+              Take this build to a quote<i></i>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- QUOTE -->
+      <section class="quote" id="quote">
+        <div class="quote__grid">
+          <div>
+            <p class="tag"><i></i>Quote</p>
+            <h2>Tell us the joint, not the part number.</h2>
+            <p class="quote__lede">
+              Send the payload, the reach and the duty cycle and we will tell
+              you which build fits, including the case where the answer is that
+              you want a smaller unit than the one you asked for.
+            </p>
+            <dl class="quote__facts">
+              <div><dt>Sample</dt><dd>From stock, 5 working days</dd></div>
+              <div><dt>Volume</dt><dd>From 25 units, 8 weeks</dd></div>
+              <div><dt>Drawings</dt><dd>STEP and PDF with the sample</dd></div>
+              <div><dt>Support</dt><dd>An engineer, not a portal</dd></div>
+            </dl>
+          </div>
+
+          <form class="qform" id="qform" novalidate>
+            <div class="qrow">
+              <label class="qf">
+                <span>Name</span><input name="name" type="text" autocomplete="name" /><em></em>
+              </label>
+              <label class="qf">
+                <span>Work email</span><input name="email" type="email" autocomplete="email" /><em></em>
+              </label>
+            </div>
+            <label class="qf">
+              <span>Company</span><input name="company" type="text" /><em></em>
+            </label>
+            <div class="qrow">
+              <label class="qf">
+                <span>Joints per machine</span>
+                <input name="joints" type="number" min="1" value="6" /><em></em>
+              </label>
+              <label class="qf">
+                <span>Machines a year</span>
+                <input name="machines" type="number" min="1" value="40" /><em></em>
+              </label>
+            </div>
+            <label class="qf">
+              <span>What is the joint doing</span>
+              <textarea name="brief" rows="4"></textarea><em></em>
+            </label>
+            <div class="qf qf--build">
+              <span>Build carried over</span>
+              <p id="buildEcho"></p>
+            </div>
+            <button class="btn btn--solid" type="submit">Send it<i></i></button>
+            <p class="qform__fine">
+              Concept site. Nothing is transmitted and no quote is issued.
+            </p>
+          </form>
+
+          <div class="qdone" id="qdone" hidden>
+            <p class="tag"><i></i>Received</p>
+            <h3>We have it.</h3>
+            <p id="qdoneText"></p>
+            <button class="btn" type="button" id="qagain">Send another<i></i></button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="foot__row">
+        <a class="mark" href="#top">
+          <span class="mark__ring" aria-hidden="true"></span>
+          AURIGA
+        </a>
+        <div class="foot__links">
+          <a href="#shell">Housing</a><a href="#copper">Stator</a
+          ><a href="#brain">Encoder</a><a href="#gears">Gearbox</a
+          ><a href="#configure">Configure</a><a href="#quote">Quote</a>
+        </div>
+        <span class="foot__loc">Kaunas <i></i> Eindhoven</span>
+      </div>
+      <p class="foot__fine">
+        Concept site. Auriga is a fictional manufacturer created to demonstrate
+        scroll driven 3D and technical product presentation. Every figure on
+        this page is invented.
+      </p>
+    </footer>
+
+    <script src="vendor/three.min.js"></script>
+    <script src="scene.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

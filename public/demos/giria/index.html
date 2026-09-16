@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Giria / Three nights of songs in a pine wood</title>
+    <meta
+      name="description"
+      content="Giria is a song festival held in a pine wood outside Kaunas. Three nights, no amplification after midnight, everybody sings."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- the wood, behind everything -->
+    <div class="wood" id="wood" aria-hidden="true">
+      <div class="wood__fail" id="woodFail" hidden>
+        This browser cannot run WebGL, so the wood is not shown.
+      </div>
+    </div>
+    <div class="vignette" aria-hidden="true"></div>
+
+    <header class="head">
+      <a class="brand" href="#top">
+        <span class="brand__leaf" aria-hidden="true"></span>
+        Giria
+      </a>
+      <nav class="head__nav" id="nav">
+        <a href="#about">The wood</a>
+        <a href="#lineup">Who sings</a>
+        <a href="#songbook">Songbook</a>
+        <a href="#practical">Getting there</a>
+      </nav>
+      <button class="head__cta" type="button" id="openTk">Tickets</button>
+    </header>
+
+    <main id="top">
+      <!-- OPENING -->
+      <section class="open" id="opening">
+        <p class="kicker">
+          <span></span>Twenty first year <span></span>28 to 30 August
+        </p>
+        <h1 class="title">
+          <span>Giria</span>
+        </h1>
+        <p class="standfirst">
+          Three nights of songs in a pine wood an hour from Kaunas. No
+          amplification after midnight, no headliner, and a fire that somebody
+          has to keep going until morning.
+        </p>
+        <p class="walkcue"><i></i>Keep scrolling, the wood gets darker</p>
+      </section>
+
+      <!-- ABOUT -->
+      <section class="leaf" id="about">
+        <div class="leaf__card">
+          <p class="eyebrow">The wood</p>
+          <h2>You walk in from the road and the noise stops.</h2>
+          <p>
+            The site is nine hundred metres of sand track from the nearest
+            tarmac, which is the single most important thing about it. By the
+            time you reach the clearing you have already slowed down, and the
+            wood has done most of the work that a festival programme usually
+            has to do.
+          </p>
+          <p>
+            There are two places to hear something. The clearing has a low
+            wooden stage and a string of bulbs. The fire, forty metres into the
+            trees, has no stage at all, and that is where most of it happens.
+          </p>
+          <dl class="facts">
+            <div><dt>Capacity</dt><dd>900, and it stays 900</dd></div>
+            <div><dt>Stages</dt><dd>One, plus a fire</dd></div>
+            <div><dt>Curfew</dt><dd>Amplified sound ends at midnight</dd></div>
+            <div><dt>Since</dt><dd>2005, same wood</dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <!-- LINEUP -->
+      <section class="leaf leaf--right" id="lineup">
+        <div class="leaf__card">
+          <p class="eyebrow">Who sings</p>
+          <h2>Eighteen acts, and everybody else.</h2>
+          <p class="leaf__note">
+            The running order is posted on a board by the gate on the morning of
+            each day. There is no clash finder because there is nothing to
+            clash with.
+          </p>
+
+          <div class="days" role="tablist">
+            <button class="day is-on" data-day="all" type="button">All</button>
+            <button class="day" data-day="1" type="button">Thu</button>
+            <button class="day" data-day="2" type="button">Fri</button>
+            <button class="day" data-day="3" type="button">Sat</button>
+          </div>
+
+          <ul class="acts" id="acts">
+            <li class="act" data-day="1"><b>Vakarė Skudutytė</b><i>voice and kanklės</i><em>Clearing</em></li>
+            <li class="act" data-day="1"><b>The Ordinary Weather</b><i>close harmony, four voices</i><em>Fire</em></li>
+            <li class="act" data-day="1"><b>Juodas Šermukšnis</b><i>drone folk</i><em>Clearing</em></li>
+            <li class="act" data-day="1"><b>Marta and the Long Field</b><i>fiddle songs</i><em>Fire</em></li>
+            <li class="act" data-day="1"><b>Rye &amp; Rowan</b><i>two guitars, one story</i><em>Clearing</em></li>
+            <li class="act" data-day="1"><b>Šaltupis</b><i>unaccompanied</i><em>Fire</em></li>
+            <li class="act" data-day="2"><b>Elder Sister Hollow</b><i>banjo and cello</i><em>Clearing</em></li>
+            <li class="act" data-day="2"><b>Aušrinė Tylos</b><i>sutartinės, five singers</i><em>Fire</em></li>
+            <li class="act" data-day="2"><b>The Quiet Mile</b><i>accordion and voice</i><em>Clearing</em></li>
+            <li class="act" data-day="2"><b>Beržo Vanduo</b><i>birch bark flutes</i><em>Fire</em></li>
+            <li class="act" data-day="2"><b>Halden Ferry</b><i>Norwegian ballads</i><em>Clearing</em></li>
+            <li class="act" data-day="2"><b>Ona &amp; Ona</b><i>two voices, one bench</i><em>Fire</em></li>
+            <li class="act" data-day="3"><b>The Long Barrow</b><i>English tradition</i><em>Clearing</em></li>
+            <li class="act" data-day="3"><b>Smėlio Giesmė</b><i>coastal songs</i><em>Fire</em></li>
+            <li class="act" data-day="3"><b>Willowbank</b><i>guitar, quietly</i><em>Clearing</em></li>
+            <li class="act" data-day="3"><b>Rasos Choras</b><i>forty singers, no conductor</i><em>Clearing</em></li>
+            <li class="act" data-day="3"><b>Pelenų Vakaras</b><i>ash and embers</i><em>Fire</em></li>
+            <li class="act" data-day="3"><b>Everyone</b><i>the last hour, all of us</i><em>Fire</em></li>
+          </ul>
+          <p class="acts__meta" id="actsMeta"></p>
+        </div>
+      </section>
+
+      <!-- SONGBOOK -->
+      <section class="leaf" id="songbook">
+        <div class="leaf__card leaf__card--wide">
+          <p class="eyebrow">Songbook</p>
+          <h2>Learn four of them before you come.</h2>
+          <p class="leaf__note">
+            These four get sung every year and nobody announces them. Open one
+            and the lanterns come up. Words are ours, tunes are old and belong
+            to nobody.
+          </p>
+
+          <div class="songs" id="songs">
+            <article class="song" data-song="1">
+              <button class="song__hit" type="button">
+                <span class="song__n">01</span>
+                <span class="song__t">The Sand Track</span>
+                <span class="song__m">Sung walking in, any key</span>
+                <span class="song__x" aria-hidden="true"></span>
+              </button>
+              <div class="song__body">
+                <div class="song__inner">
+                  <p class="verse">
+                    Nine hundred metres of loose grey sand,<br />
+                    a bag on my back and a cup in my hand.<br />
+                    The road went quiet a mile ago,<br />
+                    and whatever I brought, I am putting down.
+                  </p>
+                  <p class="song__note">
+                    Two chords. Whoever is at the front sets the pace, and the
+                    pace is walking pace.
+                  </p>
+                </div>
+              </div>
+            </article>
+
+            <article class="song" data-song="2">
+              <button class="song__hit" type="button">
+                <span class="song__n">02</span>
+                <span class="song__t">Keep It Going</span>
+                <span class="song__m">For the person on fire duty</span>
+                <span class="song__x" aria-hidden="true"></span>
+              </button>
+              <div class="song__body">
+                <div class="song__inner">
+                  <p class="verse">
+                    Somebody has to keep it going,<br />
+                    somebody has to stay awake.<br />
+                    Put another arm of pine on,<br />
+                    the morning is not far away.
+                  </p>
+                  <p class="song__note">
+                    Call and response. The fire keeper sings the first line and
+                    everybody gives it back.
+                  </p>
+                </div>
+              </div>
+            </article>
+
+            <article class="song" data-song="3">
+              <button class="song__hit" type="button">
+                <span class="song__n">03</span>
+                <span class="song__t">Nobody Is Headlining</span>
+                <span class="song__m">Faster than you think</span>
+                <span class="song__x" aria-hidden="true"></span>
+              </button>
+              <div class="song__body">
+                <div class="song__inner">
+                  <p class="verse">
+                    No one is bigger than the wood tonight,<br />
+                    no one is louder than the rain.<br />
+                    We put our names in the same tin,<br />
+                    and we pull them out again.
+                  </p>
+                  <p class="song__note">
+                    The running order really is drawn from a tin. This is the
+                    song about the tin.
+                  </p>
+                </div>
+              </div>
+            </article>
+
+            <article class="song" data-song="4">
+              <button class="song__hit" type="button">
+                <span class="song__n">04</span>
+                <span class="song__t">Last Hour</span>
+                <span class="song__m">Sunday, before anyone leaves</span>
+                <span class="song__x" aria-hidden="true"></span>
+              </button>
+              <div class="song__body">
+                <div class="song__inner">
+                  <p class="verse">
+                    Take the ash out to the birches,<br />
+                    fold the canvas while it is dry.<br />
+                    Whatever we found in here this weekend,<br />
+                    carry it out, do not let it lie.
+                  </p>
+                  <p class="song__note">
+                    Slow. Everybody stands. It is the only moment of the weekend
+                    that is organised.
+                  </p>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- PRACTICAL -->
+      <section class="leaf leaf--right" id="practical">
+        <div class="leaf__card">
+          <p class="eyebrow">Getting there and staying</p>
+          <h2>Everything you need to know is short.</h2>
+          <div class="prac">
+            <div>
+              <h3>The track</h3>
+              <p>
+                Bus 27 from Kaunas to Girionys, then the sand track east. It is
+                nine hundred metres and it is not lit. Bring a small torch and
+                use it pointing down.
+              </p>
+            </div>
+            <div>
+              <h3>Sleeping</h3>
+              <p>
+                Camping is in the ticket. Pitch under the pines on the south
+                side, two metres apart, and take everything out with you on
+                Sunday.
+              </p>
+            </div>
+            <div>
+              <h3>The fire</h3>
+              <p>
+                One fire, always lit, always someone minding it. If you sit down
+                at it you are on the rota. That is the only rule we enforce.
+              </p>
+            </div>
+            <div>
+              <h3>Quiet</h3>
+              <p>
+                Amplified sound stops at midnight and does not come back until
+                four in the afternoon. Unamplified singing has never stopped and
+                never will.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CLEARING -->
+      <section class="clearing" id="clearing">
+        <p class="eyebrow eyebrow--c">The clearing</p>
+        <h2 class="clearing__t">
+          Come out of the trees<br />
+          and the whole thing is lit.
+        </h2>
+        <button class="bigbtn" type="button" id="openTk2">
+          Take a ticket<span></span>
+        </button>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="foot__grid">
+        <div>
+          <h4>Giria</h4>
+          <p>28 to 30 August 2026<br />Girionys, Kaunas district</p>
+        </div>
+        <div>
+          <h4>Write</h4>
+          <p>hello@giria.example<br />Volunteers: rota@giria.example</p>
+        </div>
+        <div>
+          <h4>Years</h4>
+          <p>2005 to 2019<br />2022 to 2026</p>
+        </div>
+      </div>
+      <p class="foot__fine">
+        Concept site. Giria is a fictional festival created to demonstrate
+        atmospheric 3D and warm editorial design. All verses on this page were
+        written for it.
+      </p>
+    </footer>
+
+    <!-- TICKETS -->
+    <div class="tk" id="tk" hidden>
+      <div class="tk__scrim" data-close></div>
+      <div class="tk__panel" role="dialog" aria-modal="true" aria-label="Tickets">
+        <button class="tk__x" type="button" data-close aria-label="Close">&times;</button>
+        <p class="eyebrow">Tickets</p>
+        <h3>Three nights, camping in.</h3>
+        <ul class="tk__list" id="tkList"></ul>
+
+        <label class="tk__check">
+          <input type="checkbox" id="tkRota" checked />
+          <span>Put me on the fire rota for one two hour shift</span>
+        </label>
+        <label class="tk__check">
+          <input type="checkbox" id="tkCoach" />
+          <span>Coach from Kaunas bus station, 7 EUR each way</span>
+        </label>
+
+        <div class="tk__total">
+          <span>Total</span><strong id="tkTotal">0 EUR</strong>
+        </div>
+        <button class="bigbtn bigbtn--full" type="button" id="tkGo">
+          Confirm<span></span>
+        </button>
+        <p class="tk__fine">
+          Concept site. No payment is taken and no ticket is issued.
+        </p>
+
+        <div class="tk__done" id="tkDone" hidden>
+          <h4>Saved you a place by the fire.</h4>
+          <p id="tkDoneText"></p>
+          <button class="bigbtn" type="button" data-close>Close<span></span></button>
+        </div>
+      </div>
+    </div>
+
+    <script src="vendor/three.min.js"></script>
+    <script src="scene.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
