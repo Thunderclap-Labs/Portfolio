@@ -125,7 +125,7 @@ export function HeroSection() {
                   transition={{ duration: 0.8, ease: EASE, delay: 0.1 }}
                 />
                 <span className="eyebrow text-white !opacity-80">
-                  Web Design · Development · 3D
+                  Research · Design · Build
                 </span>
               </div>
 
@@ -203,11 +203,11 @@ export function HeroSection() {
             </h1>
 
             <div className="flex flex-wrap items-center justify-center gap-4">
-              <span className="eyebrow text-white opacity-80">Web Design</span>
+              <span className="eyebrow text-white opacity-80">Research</span>
               <span className="w-px h-3 bg-white opacity-40" aria-hidden="true" />
-              <span className="eyebrow text-white opacity-80">Development</span>
+              <span className="eyebrow text-white opacity-80">Design</span>
               <span className="w-px h-3 bg-white opacity-40" aria-hidden="true" />
-              <span className="eyebrow text-white opacity-80">3D &amp; Interaction</span>
+              <span className="eyebrow text-white opacity-80">Build</span>
             </div>
 
             <div className="flex flex-wrap justify-center gap-4 mt-2">

@@ -10,7 +10,7 @@ export function AboutSection() {
               Who We Are
             </span>
             <h2 className="text-[35px] font-normal leading-[110%] tracking-[-0.7px] max-w-2xl mt-16 md:mt-0 pr-4 md:pr-0">
-              An engineering team that happens to build websites.
+              We research the hard parts, then build the whole thing.
             </h2>
           </div>
           
@@ -18,10 +18,10 @@ export function AboutSection() {
           <div className="py-10.5 md:py-16 xl:py-16 flex flex-col justify-end md:pt-16">
             <div className="max-w-xl flex flex-col gap-6">
               <p className="text-[14.7px] tracking-[-0.126px]">
-                Based in Kaunas, Lithuania, Thunderclap Labs designs and builds websites and web applications. We came out of hardware engineering and kept the habits: rapid prototyping, aggressive testing, and doing the whole job in-house instead of handing it between four agencies.
+                Thunderclap Labs is a web studio in Kaunas, Lithuania. We came out of hardware engineering, where nothing counts until the thing actually runs, and that is still how we work. Every project opens with a prototype of whatever looks riskiest, so the unknowns get settled while they are cheap to settle.
               </p>
               <p className="text-[14.7px] tracking-[-0.126px] opacity-60">
-                Design, front-end, back-end, CMS, 3D and the infrastructure underneath — all from the same small team. That covers marketing sites, storefronts, configurators, dashboards and internal tools. We don&apos;t ship slide decks; we ship working sites.
+                Once that part holds, the rest follows quickly. Design, front-end, back-end, CMS, 3D and the infrastructure underneath all come from the same small team, across marketing sites, storefronts, configurators, dashboards and internal tools. Nothing gets passed between four agencies, so nothing goes missing on the way.
               </p>
             </div>
           </div>
