@@ -78,9 +78,14 @@
                 <path d="M296 118 L296 214" />
                 <path d="M288 118 L304 118 M288 214 L304 214" />
                 <text x="292" y="172" text-anchor="end">380</text>
-                <path d="M62 232 L278 232" />
-                <path d="M62 224 L62 240 M278 224 L278 240" />
-                <text x="170" y="252" text-anchor="middle">440 dia</text>
+                <!-- Diameter is dimensioned below the whole lamp. Run across
+                     the rim and both the line and the label collide with the
+                     bulb, which sits on exactly that centreline. -->
+                <path d="M62 222 L62 372" class="dwg__ext" />
+                <path d="M278 222 L278 372" class="dwg__ext" />
+                <path d="M62 364 L278 364" />
+                <path d="M62 356 L62 372 M278 356 L278 372" />
+                <text x="170" y="356" text-anchor="middle">440 dia</text>
               </g>
               <g class="dwg__line">
                 <path d="M170 24 L170 82" />
@@ -88,9 +93,14 @@
                 <path d="M170 99 L170 118" />
                 <path d="M62 214 Q170 92 278 214" />
                 <path d="M62 214 L278 214" />
-                <path d="M84 190 L256 190" class="dwg__thin" />
-                <path d="M104 164 L236 164" class="dwg__thin" />
-                <path d="M124 140 L216 140" class="dwg__thin" />
+                <!-- Perforation bands. A quadratic only reaches halfway to its
+                     control point, so this dome peaks at y=153, not y=92. The
+                     spans below are solved against the actual curve, which is
+                     why the top band sits at 162 and not up at 140 where it
+                     floated clear of the shade. -->
+                <path d="M82 196 L258 196" class="dwg__thin" />
+                <path d="M104 178 L236 178" class="dwg__thin" />
+                <path d="M131 162 L209 162" class="dwg__thin" />
               </g>
               <g class="dwg__bulb">
                 <circle cx="170" cy="232" r="22" />
@@ -142,9 +152,11 @@
                   <path d="M130 89 L130 106" />
                   <path d="M42 186 Q130 84 218 186" />
                   <path d="M42 186 L218 186" />
-                  <path d="M62 164 L198 164" class="dwg__thin" />
-                  <path d="M80 142 L180 142" class="dwg__thin" />
-                  <path d="M98 122 L162 122" class="dwg__thin" />
+                  <!-- Same curve correction as the hero: this dome peaks at
+                       y=135, so the bands are solved against that. -->
+                  <path d="M58 172 L202 172" class="dwg__thin" />
+                  <path d="M74 158 L186 158" class="dwg__thin" />
+                  <path d="M94 145 L166 145" class="dwg__thin" />
                 </g>
                 <g class="dwg__bulb">
                   <circle cx="130" cy="200" r="18" />
@@ -211,8 +223,11 @@
                   <path d="M222 32 L222 280" />
                   <path d="M216 32 L228 32 M216 280 L228 280" />
                   <text x="218" y="160" text-anchor="end">820</text>
-                  <path d="M74 294 L186 294" />
-                  <path d="M74 288 L74 300 M186 288 L186 300" />
+                  <!-- Pulled up off the viewBox edge, where the end ticks were
+                       being cut in half, and given its figure. -->
+                  <path d="M74 290 L186 290" />
+                  <path d="M74 284 L74 296 M186 284 L186 296" />
+                  <text x="130" y="281" text-anchor="middle">390</text>
                 </g>
                 <g class="dwg__line">
                   <path d="M74 280 L186 280" />
@@ -247,20 +262,26 @@
                 <g class="dwg__beam"><path d="M130 132 L244 300 L16 300 Z" /></g>
                 <g class="dwg__halo"><circle cx="130" cy="128" r="104" /></g>
                 <g class="dwg__dim">
-                  <path d="M226 34 L226 276" />
-                  <path d="M220 34 L232 34 M220 276 L232 276" />
-                  <text x="222" y="164" text-anchor="end">610</text>
-                  <path d="M42 34 L218 34" />
-                  <path d="M42 28 L42 40 M218 28 L218 40" />
-                  <text x="130" y="26" text-anchor="middle">290 dia</text>
+                  <!-- Height figure sits outboard of the line. Anchored back
+                       over it, "610" landed on the ring itself. -->
+                  <path d="M232 34 L232 276" />
+                  <path d="M226 34 L238 34 M226 276 L238 276" />
+                  <text x="236" y="164" text-anchor="start">610</text>
+                  <path d="M42 30 L218 30" />
+                  <path d="M42 24 L42 36 M218 24 L218 36" />
+                  <text x="130" y="20" text-anchor="middle">290 dia</text>
                 </g>
                 <g class="dwg__line">
                   <path d="M52 276 L208 276" />
-                  <path d="M130 276 L92 196 M130 276 L168 196 M130 276 L130 200" />
                   <circle cx="130" cy="128" r="88" class="dwg__ring" />
                   <circle cx="130" cy="128" r="70" class="dwg__thin" />
-                  <path d="M130 198 L130 216" />
-                  <ellipse cx="130" cy="196" rx="16" ry="6" />
+                  <!-- The ring stands on the tripod. Previously the legs ran up
+                       to y=196, which is inside the ring, so all three crossed
+                       the outline and stopped in open air. They now meet a hub
+                       below the ring and splay to the floor from there. -->
+                  <path d="M130 216 L130 222" />
+                  <ellipse cx="130" cy="228" rx="16" ry="6" />
+                  <path d="M130 233 L92 276 M130 233 L168 276 M130 233 L130 276" />
                 </g>
                 <g class="dwg__bulb">
                   <circle cx="130" cy="128" r="79" class="dwg__ring2" />
@@ -311,6 +332,12 @@
             </div>
             <p class="picked__desc" id="pkDesc"></p>
             <dl class="picked__spec" id="pkSpec"></dl>
+
+            <div class="finish">
+              <span class="finish__lab">Metal finish</span>
+              <div class="finish__row" id="finishRow" role="group" aria-label="Metal finish"></div>
+              <span class="finish__now" id="finishNow">Polished brass</span>
+            </div>
             <div class="picked__foot">
               <span class="picked__price" id="pkPrice"></span>
               <button class="switch" id="pkSwitch" type="button" aria-pressed="false">

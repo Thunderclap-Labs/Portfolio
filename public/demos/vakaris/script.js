@@ -233,6 +233,41 @@
   });
 
   paintTabs();
+  /* Metal finish swatches. The whole shelf changes together, because the
+     workshop finishes a batch in one go rather than a lamp at a time. */
+  function buildFinishes() {
+    var row = $("#finishRow");
+    var now = $("#finishNow");
+
+    if (!row) return;
+
+    VakarisShelf.finishes().forEach(function (f) {
+      var b = document.createElement("button");
+
+      b.type = "button";
+      b.className = "fsw";
+      b.dataset.finish = f.id;
+      b.title = f.label;
+      b.setAttribute("aria-label", f.label);
+      b.setAttribute(
+        "aria-pressed",
+        String(f.id === VakarisShelf.finish()),
+      );
+      b.style.setProperty(
+        "--sw",
+        "#" + f.swatch.toString(16).padStart(6, "0"),
+      );
+      b.addEventListener("click", function () {
+        if (!VakarisShelf.setFinish(f.id)) return;
+        if (now) now.textContent = f.label;
+        row.querySelectorAll(".fsw").forEach(function (o) {
+          o.setAttribute("aria-pressed", String(o === b));
+        });
+      });
+      row.appendChild(b);
+    });
+  }
+
   paintShelf();
   paintPicked();
 
@@ -241,7 +276,12 @@
   if (!has3d) {
     $("#stageFail").hidden = false;
     $("#stageHint").hidden = true;
+    // The swatches only mean anything against the rendered shelf.
+    var fw = $("#finishRow");
+
+    if (fw && fw.parentNode) fw.parentNode.hidden = true;
   } else {
+    buildFinishes();
     VakarisShelf.onPick(function (i) {
       if (i === sel) {
         toggle(i);

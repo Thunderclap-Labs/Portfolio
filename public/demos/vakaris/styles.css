@@ -371,6 +371,15 @@ section {
   letter-spacing: 0.08em;
 }
 
+/* Projection lines carrying a dimension away from the part it measures. They
+   sit lighter than the dimension line itself, as on a real shop drawing. */
+.dwg__dim path.dwg__ext {
+  stroke: var(--ink-16);
+  stroke-width: 0.6;
+  stroke-dasharray: 3 4;
+  opacity: 0.75;
+}
+
 .dwg__line ellipse {
   fill: none;
   stroke: var(--ink);
@@ -1213,4 +1222,62 @@ section {
   * {
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ------------------------------------------------ metal finish swatches -- */
+
+.finish {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid var(--ink-16);
+}
+
+.finish__lab {
+  font-family: var(--sans);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-45);
+}
+
+.finish__row {
+  display: flex;
+  gap: 10px;
+}
+
+.finish__now {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  color: var(--ink-45);
+}
+
+/* The swatch is the metal itself: a small lit sphere rather than a flat chip,
+   so brushed and polished read as different before you click them. */
+.fsw {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--ink-16);
+  border-radius: 50%;
+  cursor: pointer;
+  background:
+    radial-gradient(
+      circle at 34% 28%,
+      rgba(255, 255, 255, 0.85),
+      rgba(255, 255, 255, 0) 46%
+    ),
+    linear-gradient(150deg, var(--sw), rgba(0, 0, 0, 0.45));
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+}
+
+.fsw:hover {
+  transform: translateY(-2px);
+}
+
+.fsw[aria-pressed="true"] {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 2px var(--paper), 0 0 0 3px var(--ink);
 }

@@ -50,18 +50,56 @@ var VakarisShelf = (function () {
     x.fillStyle = g;
     x.fillRect(0, 0, 512, 256);
 
-    // a couple of soft sources so brass has something to reflect
-    [
-      [120, 70, 70, dark ? "rgba(240,163,58,0.45)" : "rgba(255,252,240,0.9)"],
-      [380, 90, 90, dark ? "rgba(240,163,58,0.28)" : "rgba(255,248,228,0.7)"],
-    ].forEach(function (s) {
-      var r = x.createRadialGradient(s[0], s[1], 0, s[0], s[1], s[2]);
+    // A horizon. Without one, polished brass has nothing to divide sky from
+    // floor and the curvature of a shade never reads.
+    var hz = x.createLinearGradient(0, 120, 0, 190);
 
-      r.addColorStop(0, s[3]);
-      r.addColorStop(1, "rgba(0,0,0,0)");
-      x.fillStyle = r;
-      x.fillRect(s[0] - s[2], s[1] - s[2], s[2] * 2, s[2] * 2);
+    hz.addColorStop(0, dark ? "rgba(0,0,0,0)" : "rgba(0,0,0,0)");
+    hz.addColorStop(1, dark ? "rgba(0,0,0,0.55)" : "rgba(96,84,66,0.5)");
+    x.fillStyle = hz;
+    x.fillRect(0, 120, 512, 70);
+
+    /* Tall softboxes. A curved metal surface only looks like metal when it has
+       long vertical sources to draw down its sides; round blobs give it a
+       single hotspot and nothing else, which is what flat brass is. */
+    [70, 232, 400].forEach(function (cx, i) {
+      var w = i === 1 ? 46 : 34;
+      var top = 18;
+      var h = 132;
+      var lg = x.createLinearGradient(cx - w, 0, cx + w, 0);
+      var core = dark
+        ? "rgba(246,178,86,0.72)"
+        : "rgba(255,253,246,0.98)";
+
+      lg.addColorStop(0, "rgba(0,0,0,0)");
+      lg.addColorStop(0.5, core);
+      lg.addColorStop(1, "rgba(0,0,0,0)");
+      x.fillStyle = lg;
+      x.fillRect(cx - w, top, w * 2, h);
+
+      // soft falloff at the ends so the strip does not stop dead
+      var vg = x.createLinearGradient(0, top, 0, top + h);
+
+      vg.addColorStop(0, "rgba(0,0,0,0.5)");
+      vg.addColorStop(0.2, "rgba(0,0,0,0)");
+      vg.addColorStop(0.8, "rgba(0,0,0,0)");
+      vg.addColorStop(1, "rgba(0,0,0,0.5)");
+      x.globalCompositeOperation = "destination-out";
+      x.fillStyle = vg;
+      x.fillRect(cx - w, top, w * 2, h);
+      x.globalCompositeOperation = "source-over";
     });
+
+    // one warm bounce low down, to keep the underside of the shades alive
+    var bounce = x.createRadialGradient(256, 236, 0, 256, 236, 150);
+
+    bounce.addColorStop(
+      0,
+      dark ? "rgba(240,163,58,0.22)" : "rgba(255,238,206,0.5)",
+    );
+    bounce.addColorStop(1, "rgba(0,0,0,0)");
+    x.fillStyle = bounce;
+    x.fillRect(0, 150, 512, 106);
 
     var t = new THREE.CanvasTexture(c);
 
@@ -128,6 +166,9 @@ var VakarisShelf = (function () {
   /* ------------------------------------------------------------- materials */
 
   var M = {};
+  // Materials that cannot be shared (alpha maps, per-lamp tints) but should
+  // still follow the chosen finish.
+  var extraMetal = [];
 
   function materials(env) {
     M.brass = new THREE.MeshStandardMaterial({
@@ -298,6 +339,9 @@ var VakarisShelf = (function () {
     );
 
     shade.position.set(1.42, 2.78, 0);
+    // The perforated dome needs its own material for the alpha map, so it is
+    // registered here to be retinted along with the rest of the metal.
+    extraMetal.push(shade.material);
     g.add(shade);
 
     var rim = new THREE.Mesh(
@@ -603,6 +647,10 @@ var VakarisShelf = (function () {
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.05;
     renderer.outputEncoding = THREE.sRGBEncoding;
+    // Without shadows the lamps sit on the shelf with no contact at all, which
+    // is most of why the shading read as flat.
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xefe9df);
@@ -623,12 +671,32 @@ var VakarisShelf = (function () {
     var key = new THREE.DirectionalLight(0xfff1dd, 1.1);
 
     key.position.set(-6, 9, 8);
+    key.castShadow = true;
+    key.shadow.mapSize.set(2048, 2048);
+    key.shadow.camera.left = -14;
+    key.shadow.camera.right = 14;
+    key.shadow.camera.top = 12;
+    key.shadow.camera.bottom = -6;
+    key.shadow.camera.near = 1;
+    key.shadow.camera.far = 40;
+    // Tight bias range: the shades are thin, so a heavier bias detaches the
+    // shadow from the object and a lighter one stipples the curved surfaces.
+    key.shadow.bias = -0.0009;
+    key.shadow.normalBias = 0.022;
+    key.shadow.radius = 3;
     scene.add(key);
 
     var fill = new THREE.DirectionalLight(0xdfe6f0, 0.35);
 
     fill.position.set(7, 4, 6);
     scene.add(fill);
+
+    // Rim from behind, so brass separates from the wall instead of merging
+    // into it at the silhouette.
+    var rim = new THREE.DirectionalLight(0xffe9c8, 0.5);
+
+    rim.position.set(2, 5, -8);
+    scene.add(rim);
 
     scene.userData.lights = [scene.children[0], key, fill];
 
@@ -651,6 +719,23 @@ var VakarisShelf = (function () {
         lamps.push(lamp);
       },
     );
+
+    /* Shadow flags, set in one pass once everything is built. Emissive parts
+       (bulbs, halos, glow sprites) are skipped: a light source casting its own
+       shadow is what makes a lit lamp look switched off. */
+    shelf.traverse(function (o) {
+      if (!o.isMesh) return;
+      var m = o.material;
+      var emissive = m && m.emissive && m.emissive.getHex() !== 0x000000;
+
+      if (m && (m.isSpriteMaterial || m.transparent === true)) return;
+      o.castShadow = !emissive;
+      o.receiveShadow = true;
+    });
+
+    plinth.castShadow = true;
+    plinth.receiveShadow = true;
+    wall.receiveShadow = true;
 
     clock = new THREE.Clock();
     raycaster = new THREE.Raycaster();
@@ -870,6 +955,90 @@ var VakarisShelf = (function () {
     pickHandler = fn;
   }
 
+  /* The four finishes the workshop will actually do. Every metal part on the
+     shelf shares three materials, so a finish is a retint of those three
+     rather than a walk over the meshes. Roughness moves with the colour:
+     lacquered brass and blackened steel do not scatter light the same way,
+     and leaving roughness fixed is what makes a recolour look like a recolour
+     rather than a different metal. */
+  var FINISHES = {
+    brass: {
+      label: "Polished brass",
+      base: 0xb08444,
+      dark: 0x6d5327,
+      steel: 0x33383c,
+      rough: 0.26,
+      darkRough: 0.42,
+      metal: 0.94,
+    },
+    brushed: {
+      label: "Brushed brass",
+      base: 0xa88b57,
+      dark: 0x6b562f,
+      steel: 0x3b4044,
+      rough: 0.52,
+      darkRough: 0.62,
+      metal: 0.9,
+    },
+    copper: {
+      label: "Copper",
+      base: 0xb46e4e,
+      dark: 0x6f3f2a,
+      steel: 0x3a3230,
+      rough: 0.3,
+      darkRough: 0.46,
+      metal: 0.95,
+    },
+    blackened: {
+      label: "Blackened steel",
+      base: 0x4a474a,
+      dark: 0x2a282b,
+      steel: 0x232528,
+      rough: 0.58,
+      darkRough: 0.7,
+      metal: 0.82,
+    },
+  };
+
+  var finish = "brass";
+
+  function setFinish(name) {
+    var f = FINISHES[name];
+
+    if (!f || !M.brass) return false;
+    finish = name;
+
+    M.brass.color.setHex(f.base);
+    M.brass.roughness = f.rough;
+    M.brass.metalness = f.metal;
+
+    M.brassDark.color.setHex(f.dark);
+    M.brassDark.roughness = f.darkRough;
+    M.brassDark.metalness = f.metal;
+
+    M.steel.color.setHex(f.steel);
+    M.steel.roughness = f.darkRough;
+
+    M.brass.needsUpdate = true;
+    M.brassDark.needsUpdate = true;
+    M.steel.needsUpdate = true;
+
+    extraMetal.forEach(function (m) {
+      m.color.setHex(f.base);
+      m.roughness = f.rough;
+      m.metalness = f.metal;
+      m.needsUpdate = true;
+    });
+
+    return true;
+  }
+
+  function finishes() {
+    return Object.keys(FINISHES).map(function (k) {
+      return { id: k, label: FINISHES[k].label, swatch: FINISHES[k].base };
+    });
+  }
+
   return {
     init: init,
     setOn: setOn,
@@ -877,5 +1046,10 @@ var VakarisShelf = (function () {
     setNight: setNight,
     focus: focus,
     onPick: onPick,
+    setFinish: setFinish,
+    finishes: finishes,
+    finish: function () {
+      return finish;
+    },
   };
 })();
