@@ -760,3 +760,84 @@ h1 {
     scroll-behavior: auto;
   }
 }
+
+/* ------------------------------------------------------- wave specimen -- */
+
+.wave {
+  border-top: 1px solid var(--ink);
+  padding: 0;
+}
+
+.wave__head {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 24px;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.wave__note {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--grey);
+}
+
+.wave__canvas {
+  display: block;
+  width: 100%;
+  height: clamp(280px, 38vw, 460px);
+  cursor: crosshair;
+  touch-action: pan-y;
+}
+
+.wave__fallback {
+  margin: 0;
+  padding: 80px 24px;
+  font-size: clamp(48px, 12vw, 160px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.wave__words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border-top: 1px solid var(--rule);
+}
+
+.wave__words button {
+  flex: 1 1 auto;
+  padding: 14px 18px;
+  border: 0;
+  border-right: 1px solid var(--rule);
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.wave__words button:last-child {
+  border-right: 0;
+}
+
+.wave__words button:hover {
+  background: #f2f2f2;
+}
+
+.wave__words button[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+@media (max-width: 720px) {
+  .wave__head {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}

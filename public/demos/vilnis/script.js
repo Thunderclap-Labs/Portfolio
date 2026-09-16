@@ -323,3 +323,35 @@
     })();
   });
 })();
+
+/* ---------------------------------------------------------- wave specimen --
+   Kinetic specimen in the masthead. Progressive: if the canvas or the pixel
+   read is unavailable the section drops out and the page loses nothing. */
+(function () {
+  var canvas = document.getElementById("waveCanvas");
+  var section = document.getElementById("wave");
+
+  if (!canvas || !window.VilnisWave) {
+    if (section) section.hidden = true;
+    return;
+  }
+
+  if (!VilnisWave.init(canvas)) {
+    section.hidden = true;
+    return;
+  }
+
+  var row = document.getElementById("waveWords");
+
+  if (!row) return;
+
+  row.addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-word]");
+
+    if (!b) return;
+    VilnisWave.setWord(b.dataset.word);
+    row.querySelectorAll("button").forEach(function (o) {
+      o.setAttribute("aria-pressed", String(o === b));
+    });
+  });
+})();

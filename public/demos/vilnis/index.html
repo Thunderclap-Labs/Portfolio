@@ -50,6 +50,31 @@
         </div>
       </section>
 
+      <!-- WAVE SPECIMEN -->
+      <section class="wave" id="wave">
+        <div class="wave__head">
+          <p class="num">02</p>
+          <p class="wave__note">
+            The word is set in Vilnis, rasterised, and sampled on a four pixel
+            grid. Every dot is a pixel the letterform claims. Push it about.
+          </p>
+        </div>
+        <canvas
+          class="wave__canvas"
+          id="waveCanvas"
+          aria-label="Kinetic specimen. The word breaks into a wave under the pointer."
+        ></canvas>
+        <noscript>
+          <p class="wave__fallback">Vilnis Grotesk</p>
+        </noscript>
+        <div class="wave__words" id="waveWords" role="group" aria-label="Set the specimen">
+          <button type="button" data-word="Vilnis" aria-pressed="true">Vilnis</button>
+          <button type="button" data-word="Baltija" aria-pressed="false">Baltija</button>
+          <button type="button" data-word="Šiaurė" aria-pressed="false">Šiaurė</button>
+          <button type="button" data-word="Grotesk" aria-pressed="false">Grotesk</button>
+        </div>
+      </section>
+
       <!-- BIG SPECIMEN -->
       <section class="giant">
         <p class="giant__line" data-w="900">ABCDEFGHIJKLM</p>
@@ -60,7 +85,7 @@
       <!-- TESTER -->
       <section class="test" id="test">
         <div class="test__head">
-          <p class="num">02</p>
+          <p class="num">03</p>
           <h2>Type something into it.</h2>
         </div>
 
@@ -110,7 +135,7 @@
       <!-- WEIGHTS -->
       <section class="weights" id="weights">
         <div class="test__head">
-          <p class="num">03</p>
+          <p class="num">04</p>
           <h2>Nine weights, one skeleton.</h2>
         </div>
         <ul class="wlist" id="wlist"></ul>
@@ -119,7 +144,7 @@
       <!-- GLYPHS -->
       <section class="glyphs" id="glyphs">
         <div class="test__head">
-          <p class="num">04</p>
+          <p class="num">05</p>
           <h2>862 glyphs. Here are 190 of them.</h2>
         </div>
         <div class="gfilters">
@@ -145,7 +170,7 @@
       <!-- LICENCE -->
       <section class="lic" id="licence">
         <div class="test__head">
-          <p class="num">05</p>
+          <p class="num">06</p>
           <h2>One price list, no sales call.</h2>
         </div>
 
@@ -234,6 +259,7 @@
       </p>
     </footer>
 
+    <script src="wave.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
