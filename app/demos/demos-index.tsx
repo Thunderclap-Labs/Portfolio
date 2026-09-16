@@ -39,7 +39,7 @@ function DemoCard({ slug }: { slug: (typeof demos)[number] }) {
         <div className="relative w-full overflow-hidden" style={{ aspectRatio: "1600/1000" }}>
           <Image
             src={previewUrl(demo)}
-            alt={`${demo.name} — ${demo.tagline}`}
+            alt={`${demo.name}, ${demo.tagline}`}
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1120px) 50vw, 33vw"
@@ -188,10 +188,11 @@ export function DemosIndex() {
           Ten Sites, Ten Briefs, Built From Scratch.
         </h1>
         <p className="mt-16 max-w-2xl text-[0.938rem] tracking-[-0.009rem] font-normal leading-[120%]">
-          Each of these is a complete concept site for a different kind of business — a
-          hardware maker, a festival, a type foundry, a public data service. They are not
-          mockups. Every one runs in your browser, with the 3D, the configurators, the
-          checkouts and the live data working.
+          This is where we test ideas before they reach client work. Each one is a
+          complete concept site for a different kind of business: a hardware maker, a
+          festival, a type foundry, a public data service. None of them are mockups.
+          Open any of them and the 3D, the configurators, the checkouts and the live
+          data all work.
         </p>
       </header>
 

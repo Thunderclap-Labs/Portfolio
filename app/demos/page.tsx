@@ -7,7 +7,7 @@ import { DemosIndex } from "./demos-index";
 export const metadata: Metadata = {
   title: "Demos | Thunderclap Labs",
   description:
-    "Ten concept sites built end-to-end at Thunderclap Labs — 3D product pages, configurators, checkouts, live data and booking. Every one runs in your browser.",
+    "Ten concept sites built start to finish at Thunderclap Labs. 3D product pages, configurators, checkouts, live data and booking, all running in your browser.",
   alternates: { canonical: "/demos" },
   openGraph: {
     type: "website",
