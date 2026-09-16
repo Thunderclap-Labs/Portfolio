@@ -8,7 +8,7 @@ import { ScrambleText } from "@/components/common/scramble-text";
 import { NAV_LINKS } from "@/constants/nav";
 import { SOCIALS } from "@/constants/socials";
 
-type DropdownKey = "projects" | "articles";
+type DropdownKey = "projects" | "articles" | "demos";
 type PanelKey = DropdownKey | "contact";
 
 interface NavLink {
@@ -25,9 +25,11 @@ const navLinks: NavLink[] = [
         ? ("articles" as PanelKey)
         : link.href === "/projects"
           ? ("projects" as PanelKey)
-          : link.href === "/contact"
-            ? ("contact" as PanelKey)
-            : undefined,
+          : link.href === "/demos"
+            ? ("demos" as PanelKey)
+            : link.href === "/contact"
+              ? ("contact" as PanelKey)
+              : undefined,
   })),
 ];
 
@@ -43,6 +45,13 @@ const DROPDOWN_COPY: Record<DropdownKey, { eyebrow: string; description: string;
     description: "News, technical writeups, and dispatches from the lab.",
     viewAllHref: "/articles",
     viewAllLabel: "View all articles",
+  },
+  demos: {
+    eyebrow: "Demos",
+    description:
+      "Concept sites built here from the brief up — 3D product pages, configurators, checkouts and live data. Every one runs in your browser.",
+    viewAllHref: "/demos",
+    viewAllLabel: "View all demos",
   },
 };
 
@@ -406,6 +415,7 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
                   </div>
                   {[
                     { label: "Home", href: "/" },
+                    { label: "Demos", href: "/demos" },
                     { label: "Projects", href: "/projects" },
                     { label: "Articles", href: "/articles" },
                     { label: "Contact Us", href: "/contact" },
