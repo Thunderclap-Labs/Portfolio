@@ -45,6 +45,37 @@ var UolaHold = (function () {
     return t;
   }
 
+  /* The room the hold is standing in, as far as reflections are concerned: a
+     dark hall with a run of ceiling strip lights and a pale floor. */
+  function gymEnv() {
+    var c = document.createElement("canvas");
+
+    c.width = 256;
+    c.height = 128;
+
+    var x = c.getContext("2d");
+    var g = x.createLinearGradient(0, 0, 0, 128);
+
+    g.addColorStop(0, "#3a3d42");
+    g.addColorStop(0.46, "#212329");
+    g.addColorStop(0.54, "#15161a");
+    g.addColorStop(1, "#4a4740");
+    x.fillStyle = g;
+    x.fillRect(0, 0, 256, 128);
+
+    // ceiling strips
+    for (var i = 0; i < 4; i++) {
+      x.fillStyle = "rgba(255,250,238,0.92)";
+      x.fillRect(18 + i * 60, 12, 34, 7);
+    }
+
+    var t = new THREE.CanvasTexture(c);
+
+    t.mapping = THREE.EquirectangularReflectionMapping;
+
+    return t;
+  }
+
   function plywood() {
     var c = document.createElement("canvas");
 
@@ -92,59 +123,64 @@ var UolaHold = (function () {
     );
   }
 
-  // the lumpy blob itself, before anything is cut into it
+  /* The hold itself, before anything is cut into it.
+
+     A moulded resin hold is a fairly disciplined object: wide, low, flat at
+     the back, with one clear edge you pull on and a rounded shoulder above it.
+     The noise here is deliberately small. Turned up it stops reading as a
+     moulded part and starts reading as a blob, which is what it was doing. */
   function shape(v) {
     var n =
-      0.16 * Math.sin(v.x * 2.1 + 0.4) +
-      0.13 * Math.sin(v.y * 2.7 - 1.1) +
-      0.1 * Math.sin(v.z * 3.3 + 2.2) +
-      0.07 * Math.sin(v.x * 5.1 + v.y * 4.2);
+      0.065 * Math.sin(v.x * 2.4 + 0.4) +
+      0.05 * Math.sin(v.y * 3.1 - 1.1) +
+      0.035 * Math.sin(v.z * 2.6 + 2.2);
 
     v.multiplyScalar(1 + n);
 
-    // squash into a hold shape: wide, not very tall, and deep at the front
-    v.x *= 1.36;
-    v.y *= 0.82;
-    v.z *= 1.1;
+    // wide, low, and not very deep
+    v.x *= 1.42;
+    v.y *= 0.78;
+    v.z *= 0.95;
 
-    // the back is flat, because it bolts to a sheet of ply
+    // Flatten the top into a shoulder. A dome has nothing to stand a foot on
+    // and reads as an egg from every angle.
+    if (v.y > 0.22) v.y = 0.22 + (v.y - 0.22) * 0.5;
+
+    /* The incut. Below the mid line the face rolls back toward the wall, so
+       the front edge stands proud of it and there is somewhere for fingers to
+       go. Without this the hold is a dome and has no edge at all. */
+    if (v.y < -0.12) {
+      var t = Math.min(1, (-0.12 - v.y) / 0.52);
+
+      v.z -= t * t * 0.42;
+      v.x *= 1 - t * 0.06;
+    }
+
+    /* Flat back, applied last. Run before the incut and the tuck punches
+       through the mounting face. */
     if (v.z < -0.42) v.z = -0.42;
-
-    // a lip under the front edge, which is the part you actually pull on
-    if (v.y < -0.3 && v.z > 0) v.z *= 1.12;
 
     return v;
   }
 
-  /* Where the bolt goes, and which way it points. The front of the blob is not
-     square to the camera: the noise tilts it about forty degrees off Z, which
-     is why a Z aligned bolt and washer used to sit half sunk and half proud and
-     tear through the surface as the hold turned. Taking the real surface normal
-     here means the bore, the shoulder and the head all share one axis, so the
-     head stays inside its recess from every angle. */
+  /* Where the bolt goes, and which way it points.
+
+     Square to the wall, straight down +Z. The T nut is fixed in the panel, so
+     that is the only direction a bolt can physically go. Taking the axis from
+     the lumpy surface normal instead, as this did, tilted the bore off to one
+     side: the recess came out on the shoulder of the hold, the head sat half
+     sunk and half proud, and the rim tore open as the hold turned. */
   function boltFrame() {
     if (boltAxis) return;
 
-    var h = 1e-4;
-    var p = new THREE.Vector3();
-    var a = new THREE.Vector3();
-    var b = new THREE.Vector3();
-    var c = new THREE.Vector3();
-    var d = new THREE.Vector3();
-    var q = Math.PI / 2;
+    var p = new THREE.Vector3(0, 0, 1);
 
-    shape(onSphere(q, q, p));
-    shape(onSphere(q + h, q, a));
-    shape(onSphere(q - h, q, b));
-    shape(onSphere(q, q + h, c));
-    shape(onSphere(q, q - h, d));
+    shape(p);
 
-    var n = a.sub(b).cross(c.sub(d)).normalize();
-
-    if (n.z < 0) n.negate();
-
-    boltPoint = p;
-    boltAxis = n;
+    boltAxis = new THREE.Vector3(0, 0, 1);
+    // Held on the axis: shape() can nudge x and y off centre, and a bore that
+    // is a hair off centre is a bore with a crescent shaped shoulder.
+    boltPoint = new THREE.Vector3(0, 0, p.z);
   }
 
   /* Cut the recess in that frame. Clamping the axial offset only ever removes
@@ -202,6 +238,12 @@ var UolaHold = (function () {
 
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.outputEncoding = THREE.sRGBEncoding;
+    // Untonemapped, the saturated tape colours clipped flat and the hold read
+    // as coloured plastic with no shading left in the highlight.
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.setClearColor(0x1c1c16, 1);
 
     scene = new THREE.Scene();
@@ -209,17 +251,44 @@ var UolaHold = (function () {
     camera.position.set(0, 0.28, 5.3);
     camera.lookAt(0, 0, 0);
 
-    scene.add(new THREE.HemisphereLight(0xdfe6ff, 0x2a2a22, 0.55));
+    scene.add(new THREE.HemisphereLight(0xdfe6ff, 0x2a2a22, 0.5));
 
-    var key = new THREE.DirectionalLight(0xfff4e2, 2.1);
+    /* A gym is lit from overhead, so the key comes from high and slightly off
+       to one side. It casts, which is what puts the hold onto the ply rather
+       than in front of it, and drops the shadow line into the incut. */
+    var key = new THREE.DirectionalLight(0xfff4e2, 2.4);
 
-    key.position.set(-3, 4, 5);
+    key.position.set(-3.2, 4.4, 4.6);
+    key.castShadow = true;
+    key.shadow.mapSize.set(1024, 1024);
+    key.shadow.camera.left = -3;
+    key.shadow.camera.right = 3;
+    key.shadow.camera.top = 3;
+    key.shadow.camera.bottom = -3;
+    key.shadow.camera.near = 0.5;
+    key.shadow.camera.far = 16;
+    key.shadow.bias = -0.0012;
+    key.shadow.normalBias = 0.02;
+    key.shadow.radius = 2.5;
     scene.add(key);
 
-    var rim = new THREE.DirectionalLight(0x8fb4ff, 1.1);
+    var rim = new THREE.DirectionalLight(0x8fb4ff, 1.15);
 
     rim.position.set(4, 1, -3);
     scene.add(rim);
+
+    // A short warm bounce off the floor, so the underside of the incut is dark
+    // rather than black and the edge still reads.
+    var bounce = new THREE.DirectionalLight(0xffd9a8, 0.45);
+
+    bounce.position.set(0.5, -3, 2.5);
+    scene.add(bounce);
+
+    // Somewhere for the bolt head and the resin sheen to reflect.
+    var pm = new THREE.PMREMGenerator(renderer);
+
+    pm.compileEquirectangularShader();
+    scene.environment = pm.fromEquirectangular(gymEnv()).texture;
 
     group = new THREE.Group();
     scene.add(group);
@@ -234,7 +303,10 @@ var UolaHold = (function () {
       }),
     );
 
-    panel.position.z = -0.78;
+    // Front face of the ply sits just behind the flat back of the hold. It was
+    // at -0.605, leaving the hold floating about 0.19 off the wall.
+    panel.position.z = -0.6;
+    panel.receiveShadow = true;
     group.add(panel);
 
     // the T nut it bolts into
@@ -248,19 +320,29 @@ var UolaHold = (function () {
     );
 
     tnut.rotation.x = Math.PI / 2;
-    tnut.position.z = -0.52;
+    tnut.position.z = -0.47;
     group.add(tnut);
+
+    /* Polyurethane hold: matte body with a faint sheen off the mould, and grit
+       through it. The grit drives a bump as well as roughness, because on the
+       real thing you see the grain catch the light, not just scatter it. */
+    var grit = speckle();
 
     hold = new THREE.Mesh(
       buildHold(),
       new THREE.MeshStandardMaterial({
         color: 0xffd400,
-        roughness: 0.62,
-        metalness: 0.02,
-        roughnessMap: speckle(),
+        roughness: 0.78,
+        metalness: 0.0,
+        roughnessMap: grit,
+        bumpMap: grit,
+        bumpScale: 0.012,
+        envMapIntensity: 0.35,
         flatShading: false,
       }),
     );
+    hold.castShadow = true;
+    hold.receiveShadow = true;
     group.add(hold);
 
     // the bolt head, sitting on the floor of the counterbore
@@ -277,7 +359,23 @@ var UolaHold = (function () {
        the lip of the recess: base a shade below the floor so no gap opens up */
     bolt.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), boltAxis);
     bolt.position.copy(boltPoint).addScaledVector(boltAxis, -FLOOR_D + BOLT_H / 2 - 0.02);
+    bolt.castShadow = true;
     group.add(bolt);
+
+    /* Washer under the head. Every bolted hold has one, and it gives the
+       recess a bright ring so the head does not sit in a black hole. */
+    var washer = new THREE.Mesh(
+      new THREE.CylinderGeometry(FLOOR_R * 0.92, FLOOR_R * 0.92, 0.03, 28),
+      new THREE.MeshStandardMaterial({
+        color: 0x9a9a90,
+        metalness: 0.92,
+        roughness: 0.34,
+      }),
+    );
+
+    washer.quaternion.copy(bolt.quaternion);
+    washer.position.copy(boltPoint).addScaledVector(boltAxis, -FLOOR_D + 0.015);
+    group.add(washer);
 
     clock = new THREE.Clock();
     live = true;
