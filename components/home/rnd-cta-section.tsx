@@ -3,15 +3,15 @@ import Link from "next/link";
 const CAPABILITIES = [
   {
     title: "Rapid Prototyping",
-    desc: "Fast turnaround from concept to functional prototype using CNC, 3D printing, and custom electronics.",
+    desc: "A clickable, running version of the idea in days, not a slide deck in a month. You judge the real thing before we commit to it.",
   },
   {
     title: "Systems Engineering",
-    desc: "End-to-end system design, integration, and optimization across hardware and software.",
+    desc: "Front-end, back-end, CMS, integrations and deployment designed as one system, so the seams don't become your problem later.",
   },
   {
     title: "Testing & Validation",
-    desc: "Rigorous testing protocols for aerospace components, propellants, and electronic systems.",
+    desc: "Performance budgets, accessibility, cross-browser and load testing — measured on real devices before anything goes live.",
   },
 ];
 
@@ -24,10 +24,10 @@ export function RndCtaSection() {
           <div className="py-10.5 md:py-16 md:border-r border-white/15 flex flex-col justify-between gap-10 md:pr-8">
             <div>
               <span className="block font-medium text-[10.5px] uppercase tracking-[0.42px] text-white/60 mb-5 leading-[105%]">
-                R&amp;D Services
+                Rapid R&amp;D
               </span>
               <h2 className="text-[35px] font-normal leading-[125%] tracking-[-0.7px] text-white">
-                Become Our R&amp;D Partner.
+                Bring Us The Hard Part.
               </h2>
             </div>
 
@@ -36,7 +36,7 @@ export function RndCtaSection() {
                 href="/contact"
                 className="group inline-flex items-center gap-3 bg-white text-bg px-7 py-4 text-[14.7px] tracking-[-0.126px] outline-1 outline-white transition-colors duration-300 ease-out hover:bg-transparent hover:text-white"
               >
-                Partner Up
+                Start a project
                 <svg
                   width="12"
                   height="12"
@@ -54,10 +54,10 @@ export function RndCtaSection() {
                 </svg>
               </Link>
               <Link
-                href="/rnd"
+                href="/demos"
                 className="group inline-flex items-center gap-2 text-[14.7px] tracking-[-0.126px] text-white/60 hover:text-white transition-colors duration-300 ease-out"
               >
-                Learn More
+                See what that looks like
                 <svg
                   width="10"
                   height="10"
@@ -80,12 +80,13 @@ export function RndCtaSection() {
           <div className="py-10.5 md:py-16 flex flex-col justify-end md:pl-8">
             <div className="flex flex-col gap-6 max-w-xl">
               <p className="text-[14.7px] leading-[120%] tracking-[-0.126px] text-white/80">
-                We partner with companies and institutions for rapid prototyping,
-                systems engineering, and testing &amp; validation across
-                aerospace, chemistry, and defense technologies.
+                Most of this work is the part other studios quote around: a
+                product you have to see in 3D, a configurator with real rules
+                behind it, live data that has to stay readable, a checkout that
+                cannot drop an order.
               </p>
               <p className="text-[14.7px] leading-[120%] tracking-[-0.126px] text-white/40">
-                From early concept to flight-ready hardware — bring us the
+                From first prototype to the site that goes live — bring us the
                 problem, leave with the solution.
               </p>
             </div>
