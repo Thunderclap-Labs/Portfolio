@@ -7,6 +7,7 @@ import type { NavbarItem } from "@/lib/sanity/queries";
 import { ScrambleText } from "@/components/common/scramble-text";
 import { NAV_LINKS } from "@/constants/nav";
 import { SOCIALS } from "@/constants/socials";
+import { CONTACT_EMAIL } from "@/constants/contact";
 
 type DropdownKey = "projects" | "articles" | "demos";
 type PanelKey = DropdownKey | "contact";
@@ -280,7 +281,7 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
             }}
             className="hover:opacity-100"
           >
-            Partner Up
+            Contact
           </Link>
         </div>
       </nav>
@@ -352,7 +353,7 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
                         <ScrambleText key={`contact-label-${scrambleKey}`} text="Contact" isActive duration={500} />
                       </div>
                       <a
-                        href="mailto:thunderclaplabs@gmail.com"
+                        href={`mailto:${CONTACT_EMAIL}`}
                         style={{
                           fontSize: "14.7px",
                           letterSpacing: "-0.126px",
@@ -361,7 +362,7 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
                         }}
                         className="hover:opacity-70 transition-opacity"
                       >
-                        thunderclaplabs@gmail.com
+                        {CONTACT_EMAIL}
                       </a>
                     </div>
                     <div>
@@ -687,7 +688,7 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
                 Contact
               </div>
               <a
-                href="mailto:thunderclaplabs@gmail.com"
+                href={`mailto:${CONTACT_EMAIL}`}
                 style={{
                   fontSize: "14.7px",
                   letterSpacing: "-0.126px",
@@ -695,7 +696,7 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
                   textDecoration: "none",
                 }}
               >
-                thunderclaplabs@gmail.com
+                {CONTACT_EMAIL}
               </a>
             </div>
             
