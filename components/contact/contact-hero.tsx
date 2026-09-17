@@ -11,9 +11,9 @@ export function ContactHero() {
               Get in touch
             </p>
             <h1 className="text-[70px] font-normal leading-[105%] tracking-[-1.4px] m-0 mt-4">
-              Let&apos;s build
+              Bring us
               <br />
-              what&apos;s next.
+              the hard part.
             </h1>
           </div>
           

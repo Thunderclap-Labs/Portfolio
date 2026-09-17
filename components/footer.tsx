@@ -118,9 +118,9 @@ export function Footer() {
                 letterSpacing: "-1.1px",
               }}
             >
-              Let&apos;s build the
+              Tell us what it
               <br />
-              future, together.
+              has to do.
             </h2>
 
             <div className="flex flex-wrap items-center gap-6 mt-2">
