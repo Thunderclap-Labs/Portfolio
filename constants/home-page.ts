@@ -1,3 +1,5 @@
+import { visibleDemos } from "@/constants/demos";
+
 export interface FocusArea {
   title: string;
   description: string;
@@ -47,5 +49,12 @@ export const statsData: StatData[] = [
     value: "7",
     title: "People On The Team",
     description: "Design, front-end, back-end and 3D, all in one room.",
+  },
+  {
+    // Counted from the catalogue itself, so it cannot drift out of date.
+    value: String(visibleDemos.length),
+    title: "Demo Sites Live",
+    description:
+      "Concept builds you can open and click through in the browser, not mockups.",
   },
 ];

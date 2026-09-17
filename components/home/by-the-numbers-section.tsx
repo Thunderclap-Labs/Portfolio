@@ -13,7 +13,7 @@ export function ByTheNumbersSection() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-t border-l border-white/15">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border-t border-l border-white/15">
           {statsData.map((stat, index) => (
             <div
               key={stat.title}
