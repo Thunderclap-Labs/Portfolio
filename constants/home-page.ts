@@ -48,9 +48,4 @@ export const statsData: StatData[] = [
     title: "People On The Team",
     description: "Design, front-end, back-end and 3D, all in one room.",
   },
-  {
-    value: "∞",
-    title: "Curiosity",
-    description: "We keep taking things apart to find out how they work.",
-  },
 ];
