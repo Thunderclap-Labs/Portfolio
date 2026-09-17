@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ContactHero } from "@/components/contact/contact-hero";
 import { ContactMethods } from "@/components/contact/contact-methods";
-import { RndCtaSection } from "@/components/home/rnd-cta-section";
+import { AfterYouWrite } from "@/components/contact/after-you-write";
 
 export const metadata: Metadata = {
   title: "Contact, Thunderclap Labs",
@@ -20,7 +20,7 @@ export default function ContactPage() {
     <>
       <ContactHero />
       <ContactMethods />
-      <RndCtaSection />
+      <AfterYouWrite />
     </>
   );
 }
