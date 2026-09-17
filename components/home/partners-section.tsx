@@ -22,8 +22,9 @@ export function PartnersSection() {
             </h2>
           </div>
           <p className="max-w-xs text-[14.7px] leading-[120%] tracking-[-0.126px] text-white/50">
-            Working alongside industry leaders, public agencies, and engineering
-            communities to push our missions further, faster.
+            Prototype boards, workshop space, incubator desks and public
+            innovation funding. The hardware work that taught us the hard parts
+            happened in these rooms.
           </p>
         </div>
       </div>
