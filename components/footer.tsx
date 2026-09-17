@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { NAV_LINKS } from "@/constants/nav";
 import { SOCIALS } from "@/constants/socials";
+import { CONTACT_EMAIL } from "@/constants/contact";
 
 type ColumnKey = "pages" | "connect";
 
@@ -146,10 +147,10 @@ export function Footer() {
                 </svg>
               </Link>
               <a
-                href="mailto:thunderclaplabs@gmail.com"
+                href={`mailto:${CONTACT_EMAIL}`}
                 className="group inline-flex items-center gap-2 text-[14.7px] tracking-[-0.126px] text-white/60 hover:text-white transition-colors duration-300 ease-out"
               >
-                thunderclaplabs@gmail.com
+                {CONTACT_EMAIL}
                 <svg
                   width="10"
                   height="10"

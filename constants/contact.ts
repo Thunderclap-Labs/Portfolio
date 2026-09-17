@@ -1,4 +1,4 @@
-export const CONTACT_EMAIL = "contact@thunderclaplabs.com";
+export const CONTACT_EMAIL = "thunderclaplabs@gmail.com";
 export const CONTACT_PHONE = "+370 624 80 682";
 export const CONTACT_PHONE_HREF = "+37062480682";
 
