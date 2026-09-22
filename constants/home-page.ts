@@ -41,7 +41,7 @@ export const focusAreas: FocusArea[] = [
 
 export const statsData: StatData[] = [
   {
-    value: "12",
+    value: "11",
     title: "Awards Won",
     description: "Across AI, space, defence, startup and business categories.",
   },
