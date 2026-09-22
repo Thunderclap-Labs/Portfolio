@@ -129,7 +129,7 @@ export function Footer() {
                 href="/contact"
                 className="group inline-flex items-center gap-3 bg-white text-bg px-7 py-4 text-[14.7px] tracking-[-0.126px] outline-1 outline-white transition-colors duration-300 ease-out hover:bg-transparent hover:text-white"
               >
-                Partner Up
+                Start a project
                 <svg
                   width="12"
                   height="12"

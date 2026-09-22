@@ -281,7 +281,7 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
             }}
             className="hover:opacity-100"
           >
-            Contact
+            Start a project
           </Link>
         </div>
       </nav>
