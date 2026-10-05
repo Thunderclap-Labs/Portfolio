@@ -475,7 +475,6 @@
     $("#dSends").textContent = r.sends;
     $("#dTries").textContent = r.tries;
 
-    if (has3d) UolaHold.setColour(r.tape);
   }
 
   $("#showAll").addEventListener("click", function () {
@@ -710,16 +709,12 @@
 
   /* ------------------------------------------------------------------ wire */
 
-  var has3d = false;
 
   paintList();
   paintWall();
   paintDays();
   paintSlots();
   paintBasket();
-
-  has3d = !!(window.UolaHold && UolaHold.init($("#holdCanvas")));
-  if (!has3d) $("#holdFail").hidden = false;
 
   select(2);
 
