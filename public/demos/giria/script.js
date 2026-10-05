@@ -172,6 +172,7 @@
     });
 
     $("#tkTotal").textContent = total() + " EUR";
+    $("#tkGo").disabled = !heads();
   }
 
   ["tkRota", "tkCoach"].forEach(function (id) {
@@ -185,7 +186,9 @@
   function openTk() {
     tk.hidden = false;
     document.body.classList.add("is-locked");
+    $("#tkForm").hidden = false;
     $("#tkDone").hidden = true;
+    $(".tk__panel").scrollTop = 0;
     if (has3d) window.GiriaScene.lightUp();
   }
 
@@ -204,11 +207,7 @@
   });
 
   $("#tkGo").addEventListener("click", function () {
-    if (!heads()) {
-      $("#tkTotal").textContent = "pick one first";
-
-      return;
-    }
+    if (!heads()) return;
 
     var extras = [];
 
@@ -225,7 +224,10 @@
       ". Reference GIR-" +
       String(2600 + Math.floor(Math.random() * 399)) +
       ". Bus 27 to Girionys, then the sand track east, and bring a torch.";
+    // the basket goes away entirely, so the confirmation is all that is left
+    $("#tkForm").hidden = true;
     $("#tkDone").hidden = false;
+    $(".tk__panel").scrollTop = 0;
     if (has3d) window.GiriaScene.lightUp();
   });
 

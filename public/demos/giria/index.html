@@ -306,28 +306,31 @@
       <div class="tk__scrim" data-close></div>
       <div class="tk__panel" role="dialog" aria-modal="true" aria-label="Tickets">
         <button class="tk__x" type="button" data-close aria-label="Close">&times;</button>
-        <p class="eyebrow">Tickets</p>
-        <h3>Three nights, camping in.</h3>
-        <ul class="tk__list" id="tkList"></ul>
 
-        <label class="tk__check">
-          <input type="checkbox" id="tkRota" checked />
-          <span>Put me on the fire rota for one two hour shift</span>
-        </label>
-        <label class="tk__check">
-          <input type="checkbox" id="tkCoach" />
-          <span>Coach from Kaunas bus station, 7 EUR each way</span>
-        </label>
+        <div id="tkForm">
+          <p class="eyebrow">Tickets</p>
+          <h3>Three nights, camping in.</h3>
+          <ul class="tk__list" id="tkList"></ul>
 
-        <div class="tk__total">
-          <span>Total</span><strong id="tkTotal">0 EUR</strong>
+          <label class="tk__check">
+            <input type="checkbox" id="tkRota" checked />
+            <span>Put me on the fire rota for one two hour shift</span>
+          </label>
+          <label class="tk__check">
+            <input type="checkbox" id="tkCoach" />
+            <span>Coach from Kaunas bus station, 7 EUR each way</span>
+          </label>
+
+          <div class="tk__total">
+            <span>Total</span><strong id="tkTotal">0 EUR</strong>
+          </div>
+          <button class="bigbtn bigbtn--full" type="button" id="tkGo">
+            Confirm<span></span>
+          </button>
+          <p class="tk__fine">
+            Concept site. No payment is taken and no ticket is issued.
+          </p>
         </div>
-        <button class="bigbtn bigbtn--full" type="button" id="tkGo">
-          Confirm<span></span>
-        </button>
-        <p class="tk__fine">
-          Concept site. No payment is taken and no ticket is issued.
-        </p>
 
         <div class="tk__done" id="tkDone" hidden>
           <h4>Saved you a place by the fire.</h4>

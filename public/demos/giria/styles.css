@@ -29,6 +29,34 @@
 
 html {
   scroll-behavior: smooth;
+  /* Firefox and anything else following the standard property. */
+  scrollbar-color: var(--bark) var(--night);
+  scrollbar-width: thin;
+}
+
+/* A default scrollbar is a bright grey stripe down a page that is otherwise
+   night and firelight, so it gets the bark and the dark of the wood instead. */
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--night);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bark);
+  border: 3px solid var(--night);
+  border-radius: 11px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #57452f;
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--night);
 }
 
 body {
@@ -596,10 +624,18 @@ main,
   transition: transform 0.25s, box-shadow 0.35s, background 0.25s;
 }
 
-.bigbtn:hover {
+.bigbtn:hover:not(:disabled) {
   transform: translateY(-2px);
   background: #ffc57e;
   box-shadow: 0 0 46px 0 rgba(240, 176, 100, 0.45);
+}
+
+/* Nothing in the basket yet: still legible, plainly not pressable. */
+.bigbtn:disabled {
+  background: rgba(239, 230, 211, 0.14);
+  color: rgba(239, 230, 211, 0.45);
+  box-shadow: none;
+  cursor: not-allowed;
 }
 
 .bigbtn span {
@@ -697,6 +733,8 @@ main,
   width: min(520px, 100%);
   max-height: 88vh;
   overflow-y: auto;
+  scrollbar-color: var(--bark) #121b15;
+  scrollbar-width: thin;
   padding: 36px 34px 30px;
   background: #121b15;
   border: 1px solid var(--card-line);
@@ -842,14 +880,21 @@ main,
   text-align: center;
 }
 
+/* display:grid below outranks the user agent rule for [hidden], so without
+   this the confirmation stays in the layout and swallows clicks meant for the
+   basket. */
+.tk__done[hidden] {
+  display: none;
+}
+
+/* In normal flow rather than an overlay pinned over the basket. The basket is
+   taken out of the document once an order is confirmed, so an absolutely
+   positioned panel would have nothing left to take its height from, and
+   anything still scrollable underneath could be scrolled back into view. */
 .tk__done {
-  position: absolute;
-  inset: 0;
-  background: #121b15;
   display: grid;
-  align-content: center;
   gap: 16px;
-  padding: 44px 34px;
+  padding: 16px 0 6px;
   text-align: center;
   justify-items: center;
 }
