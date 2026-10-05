@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // The concept sites under public/demos are standalone, hand written and
+    // partly vendored (three.min.js). Linting them buries real findings under
+    // thousands of complaints about minified third party code.
+    "public/**",
   ]),
 ]);
 
