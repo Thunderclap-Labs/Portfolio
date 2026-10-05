@@ -20,11 +20,11 @@ import {
 const CHIP_STYLE = {
   fontSize: "10.5px",
   letterSpacing: "0.42px",
-  padding: "5px 8px",
 } as const;
 
 function chipClass(active: boolean) {
   return [
+    "px-2 py-[5px] pointer-coarse:px-3 pointer-coarse:py-2.5",
     "font-medium uppercase leading-none border transition-colors duration-300 cursor-pointer",
     active
       ? "border-accent text-accent bg-[rgba(223,241,64,0.12)]"

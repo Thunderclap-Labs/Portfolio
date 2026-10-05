@@ -99,6 +99,17 @@ body {
   }
 }
 
+/* Touch devices get a finger sized hit area on the small text links in the
+   footer. They are comfortable with a cursor at their drawn size, and none of
+   them sits inside running prose, so growing the target costs nothing. The
+   filter chips do the same through pointer-coarse utilities. */
+@media (pointer: coarse) {
+  footer a {
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+  }
+}
+
 /* CTA button styles */
 .btn-border-light {
   display: inline-flex;

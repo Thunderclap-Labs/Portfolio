@@ -633,7 +633,7 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
 
         {/* Mobile hamburger */}
         <button
-          className="relative z-1 flex flex-col justify-center items-center gap-1.5 w-8 h-8 cursor-pointer bg-transparent border-0 p-0"
+          className="relative z-1 -mr-2 flex flex-col justify-center items-center gap-1.5 w-11 h-11 cursor-pointer bg-transparent border-0 p-0"
           onClick={() => setMenuOpen((v) => !v)}
           aria-label={menuOpen ? "Close menu" : "Open menu"}
         >
