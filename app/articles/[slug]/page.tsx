@@ -403,37 +403,35 @@ export default async function ArticlePage({
               </SidebarBlock>
             )}
 
-            {article.links && article.links.length > 0 && (
-              <SidebarBlock label="References">
-                <ul className="list-none m-0 p-0 flex flex-col gap-2">
-                  {article.links.map((link) => (
-                    <li key={link.href}>
-                      <a
-                        href={link.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="action-link text-bg"
-                      >
-                        {link.label} <ArrowIcon />
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </SidebarBlock>
-            )}
+            {(() => {
+              // The same URL can be entered twice in the CMS, and the href is
+              // the key, so duplicates have to go before React sees them.
+              const seen = new Set<string>();
+              const links = (article.links ?? []).filter((l) => {
+                if (seen.has(l.href)) return false;
+                seen.add(l.href);
+                return true;
+              });
 
-            {article.relatedProjects && article.relatedProjects.length > 0 && (
-              <SidebarBlock label="Related Projects">
-                <RelatedListLight
-                  items={article.relatedProjects.map((p) => ({
-                    href: `/projects/${p.slug.current}`,
-                    title: p.title,
-                    subtitle: p.tagline,
-                    image: p.mainImage,
-                  }))}
-                />
-              </SidebarBlock>
-            )}
+              return links.length > 0 ? (
+                <SidebarBlock label="References">
+                  <ul className="list-none m-0 p-0 flex flex-col gap-2">
+                    {links.map((link) => (
+                      <li key={link.href}>
+                        <a
+                          href={link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="action-link text-bg"
+                        >
+                          {link.label} <ArrowIcon />
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </SidebarBlock>
+              ) : null;
+            })()}
 
             {(() => {
               const seen = new Set<string>();
