@@ -385,6 +385,7 @@
           <h4>Service</h4>
           <p><a href="#service">Head realignment</a></p>
           <p><a href="#service">Belt and idler kits</a></p>
+          <p><a href="#service">Full transport rebuild</a></p>
         </div>
         <div>
           <h4>Legal</h4>
@@ -404,7 +405,7 @@
       <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <button class="modal__x" type="button" data-close aria-label="Close">&times;</button>
 
-        <p class="eyebrow">Reservation <span>/</span> Batch 05</p>
+        <p class="eyebrow" id="modalEyebrow">Reservation <span>/</span> Batch 05</p>
         <h3 class="modal__title" id="modalTitle">Put your name on a unit.</h3>
         <p class="modal__sub" id="modalSub">
           No payment is taken now. We write to you when your unit reaches the
@@ -424,7 +425,7 @@
             <span class="field__err"></span>
           </label>
 
-          <div class="field">
+          <div class="field" id="modalColourField">
             <span class="field__k">Colourway</span>
             <div class="radios" id="modalColours">
               <label><input type="radio" name="colour" value="Bone" checked /><span>Bone</span></label>
@@ -434,9 +435,9 @@
           </div>
 
           <label class="field">
-            <span class="field__k">Add a service</span>
+            <span class="field__k" id="modalSvcLabel">Add a service</span>
             <select name="service">
-              <option value="">None</option>
+              <option value="" id="modalSvcNone">None</option>
               <option value="Head realignment">Head realignment, 65 EUR</option>
               <option value="Belt and idler kit">Belt and idler kit, 24 EUR</option>
               <option value="Full transport rebuild">
@@ -456,7 +457,7 @@
           </div>
 
           <button class="btn btn--solid btn--lg btn--block" type="submit">
-            Confirm reservation
+            <span id="modalSubmitText">Confirm reservation</span>
             <span class="btn__arrow" aria-hidden="true"></span>
           </button>
           <p class="form__fine">
@@ -467,7 +468,7 @@
 
         <div class="done" id="reserveDone" hidden>
           <div class="done__mark" aria-hidden="true"></div>
-          <h4>You are on the list.</h4>
+          <h4 id="doneTitle">You are on the list.</h4>
           <p id="doneText"></p>
           <button class="btn btn--ghost" type="button" data-close>Close</button>
         </div>

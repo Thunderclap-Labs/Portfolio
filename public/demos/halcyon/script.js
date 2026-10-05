@@ -202,18 +202,25 @@
   var subEl = $("#modalSub");
   var lastFocus = null;
 
+  /* The modal does two jobs. "reserve" puts a name on a new unit, so the total
+     is the unit plus any service added to it. "service" books bench work on a
+     unit the customer already owns, so only the service is charged. */
+  var mode = "reserve";
+
   function money(n) {
     return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " EUR";
   }
 
   function recalcTotal() {
     var svc = form.service.value;
+    var base = mode === "service" ? 0 : PRICE;
 
-    totalEl.textContent = money(PRICE + (SERVICE_PRICE[svc] || 0));
+    totalEl.textContent = money(base + (SERVICE_PRICE[svc] || 0));
   }
 
   function openModal(opts) {
     opts = opts || {};
+    mode = opts.mode === "service" ? "service" : "reserve";
     lastFocus = document.activeElement;
     modal.hidden = false;
     document.body.classList.add("is-locked");
@@ -221,8 +228,24 @@
     done.hidden = true;
     form.service.value = opts.service || "";
 
-    subEl.textContent = opts.service
-      ? "Service is booked alongside a unit. Pick a colourway and we confirm both in the same email."
+    var booking = mode === "service";
+
+    // a colourway is a choice about a unit being built, not about bench work
+    $("#modalColourField").hidden = booking;
+    $("#modalSvcNone").hidden = booking;
+    $("#modalSvcNone").disabled = booking;
+    $("#modalEyebrow").innerHTML = booking
+      ? "Service request"
+      : "Reservation <span>/</span> Batch 05";
+    $("#modalTitle").textContent = booking
+      ? "Book it in for service."
+      : "Put your name on a unit.";
+    $("#modalSvcLabel").textContent = booking ? "Service" : "Add a service";
+    $("#modalSubmitText").textContent = booking
+      ? "Request this service"
+      : "Confirm reservation";
+    subEl.textContent = booking
+      ? "For an HF-1 you already own. No unit is purchased, you are charged for the work only. Post it in or bring it to the bench in Kaunas."
       : "No payment is taken now. We write to you when your unit reaches the bench, and you have seven days to confirm or pass.";
 
     var radio = $('#modalColours input[value="' + colour.name + '"]');
@@ -315,14 +338,16 @@
     }
 
     var svc = form.service.value;
+    var booking = mode === "service";
     var entry = {
       name: form.name.value.trim(),
       email: form.email.value.trim(),
-      colour: form.colour.value,
+      colour: booking ? "" : form.colour.value,
       service: svc,
+      kind: mode,
       note: form.note.value.trim(),
-      total: PRICE + (SERVICE_PRICE[svc] || 0),
-      ref: "B05-" + String(400 + Math.floor(Math.random() * 90)),
+      total: (booking ? 0 : PRICE) + (SERVICE_PRICE[svc] || 0),
+      ref: (booking ? "S05-" : "B05-") + String(400 + Math.floor(Math.random() * 90)),
       at: new Date().toISOString().slice(0, 10),
     };
 
@@ -332,17 +357,29 @@
       /* private mode, carry on without persisting */
     }
 
-    $("#doneText").textContent =
-      "Reference " +
-      entry.ref +
-      ". One HF-1 in " +
-      entry.colour +
-      (entry.service ? ", with " + entry.service.toLowerCase() : "") +
-      ", " +
-      money(entry.total) +
-      ". We write to " +
-      entry.email +
-      " when it reaches the bench.";
+    $("#doneTitle").textContent = booking
+      ? "Booked in."
+      : "You are on the list.";
+    $("#doneText").textContent = booking
+      ? "Reference " +
+        entry.ref +
+        ". " +
+        entry.service +
+        ", " +
+        money(entry.total) +
+        ". We write to " +
+        entry.email +
+        " with the postage label and a bench slot."
+      : "Reference " +
+        entry.ref +
+        ". One HF-1 in " +
+        entry.colour +
+        (entry.service ? ", with " + entry.service.toLowerCase() : "") +
+        ", " +
+        money(entry.total) +
+        ". We write to " +
+        entry.email +
+        " when it reaches the bench.";
 
     form.hidden = true;
     done.hidden = false;
@@ -372,8 +409,11 @@
     var d = JSON.parse(raw);
 
     savedNote.hidden = false;
+    // a service booking has no colourway to show, and it is booked not reserved
     savedText.textContent =
-      d.ref + DOT + d.colour + DOT + money(d.total) + DOT + "reserved " + d.at;
+      d.kind === "service"
+        ? d.ref + DOT + d.service + DOT + money(d.total) + DOT + "booked " + d.at
+        : d.ref + DOT + d.colour + DOT + money(d.total) + DOT + "reserved " + d.at;
   }
 
   $("#clearSaved").addEventListener("click", function () {
@@ -391,7 +431,7 @@
 
   $$(".svc__row").forEach(function (row) {
     row.querySelector("button").addEventListener("click", function () {
-      openModal({ service: row.dataset.svc });
+      openModal({ service: row.dataset.svc, mode: "service" });
     });
   });
 

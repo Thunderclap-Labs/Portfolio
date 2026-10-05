@@ -1351,6 +1351,12 @@ body.is-locked {
   gap: 16px;
 }
 
+/* display:block here outweighs the user agent rule for [hidden], so fields
+   toggled off in script would otherwise stay on screen. */
+.field[hidden] {
+  display: none;
+}
+
 .field {
   display: block;
 }
