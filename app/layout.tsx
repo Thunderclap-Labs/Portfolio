@@ -4,6 +4,8 @@ import "./globals.css";
 import { Navbar } from "@/components/navbar";
 import { SiteChrome } from "@/components/site-chrome";
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://thunderclaplabs.com";
+
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -11,6 +13,10 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  // Without this, every relative OG and Twitter image resolves against
+  // localhost:3000 in the production build.
+  metadataBase: new URL(SITE_URL),
+  alternates: { canonical: "/" },
   title: "Thunderclap Labs | Web Design and Development",
   description:
     "A web studio in Kaunas, Lithuania. We research the hard parts and build the whole thing: 3D product pages, configurators, storefronts, dashboards and internal tools.",
@@ -40,6 +46,15 @@ export const metadata: Metadata = {
     description:
       "Websites and web apps built start to finish in Kaunas, Lithuania.",
     type: "website",
+    url: SITE_URL,
+    siteName: "Thunderclap Labs",
+    locale: "en_GB",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Thunderclap Labs | Web Design and Development",
+    description:
+      "Websites and web apps built start to finish in Kaunas, Lithuania.",
   },
 };
 
