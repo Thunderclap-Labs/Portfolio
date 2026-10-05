@@ -551,6 +551,7 @@
         slotIdx = -1;
         paintDays();
         paintSlots();
+        paintPeople();
         paintBasket();
       });
     });
@@ -585,9 +586,30 @@
       b.addEventListener("click", function () {
         slotIdx = Number(b.dataset.i);
         paintSlots();
+        paintPeople();
         paintBasket();
       });
     });
+  }
+
+  /* The largest group the desk will take in one booking. */
+  var MAX_GROUP = 4;
+
+  /* Rebuild the people options against whatever the chosen slot has left, so a
+     slot with two places free cannot be booked for four. With no slot chosen
+     the full range is offered. */
+  function paintPeople() {
+    var sel = $("#bkPeople");
+    var wanted = Number(sel.value) || 1;
+    var left = slotIdx < 0 ? MAX_GROUP : CAP - taken(dayIdx, slotIdx);
+    var max = Math.max(1, Math.min(MAX_GROUP, left));
+    var out = "";
+    var n;
+
+    for (n = 1; n <= max; n++) out += "<option>" + n + "</option>";
+    sel.innerHTML = out;
+    sel.value = String(Math.min(wanted, max));
+    sel.disabled = slotIdx >= 0 && left <= 1;
   }
 
   function price() {
@@ -714,6 +736,7 @@
   paintWall();
   paintDays();
   paintSlots();
+  paintPeople();
   paintBasket();
 
   select(2);
