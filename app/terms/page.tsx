@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { LegalPage, type LegalSection } from "@/components/legal/legal-page";
 import { CONTACT_EMAIL, CONTACT_ADDRESS } from "@/constants/contact";
 
@@ -24,8 +25,8 @@ const SECTIONS: LegalSection[] = [
       <>
         <p>
           These terms apply to this website and everything published on it,
-          including the concept sites under <a href="/demos">/demos</a> and the
-          writing under <a href="/articles">/articles</a>. By using the site you
+          including the concept sites under <Link href="/demos">/demos</Link> and
+          the writing under <Link href="/articles">/articles</Link>. By using the site you
           accept them.
         </p>
         <p>
@@ -51,7 +52,7 @@ const SECTIONS: LegalSection[] = [
     body: (
       <>
         <p>
-          Every concept site under <a href="/demos">/demos</a> is a fictional
+          Every concept site under <Link href="/demos">/demos</Link> is a fictional
           brand built by us to show what we can do. Halcyon, Auriga, Orbit,
           Giria, Iron Hare, Cold Frame, UOLA, Baltic Watch and the rest are not
           real companies, and nothing on them is a real offer.

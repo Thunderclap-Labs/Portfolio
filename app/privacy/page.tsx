@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { LegalPage, type LegalSection } from "@/components/legal/legal-page";
 import {
   CONTACT_EMAIL,
@@ -162,7 +163,7 @@ const SECTIONS: LegalSection[] = [
     body: (
       <>
         <p>
-          The concept sites under <a href="/demos">/demos</a> are
+          The concept sites under <Link href="/demos">/demos</Link> are
           demonstrations. They are fictional brands built by us, and several of
           them keep a basket or a booking in your own browser so the flow can be
           tried end to end. That data stays on your device, is never sent
