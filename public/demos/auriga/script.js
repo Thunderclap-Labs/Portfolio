@@ -116,9 +116,22 @@
     ["AX12-FLG", "Output flange", "8 x M4 on 71 mm PCD", 88],
   ];
 
+  /* Every part starts in and is switched out, because the list is there to be
+     pared down to what you actually need rather than built up from nothing. */
+  var ASSEMBLED = 1940;
+  var partsOn = {};
+
+  PARTS.forEach(function (p) {
+    partsOn[p[0]] = true;
+  });
+
   $("#partsGrid").innerHTML = PARTS.map(function (p) {
     return (
-      '<div class="pcell"><span class="pcell__n">' +
+      '<button type="button" class="pcell is-on" aria-pressed="true" data-no="' +
+      p[0] +
+      '" data-price="' +
+      p[3] +
+      '"><span class="pcell__n">' +
       p[0] +
       '</span><span class="pcell__t">' +
       p[1] +
@@ -126,9 +139,79 @@
       p[2] +
       '</span><span class="pcell__p">' +
       p[3] +
-      " EUR</span></div>"
+      ' EUR</span><span class="pcell__tick" aria-hidden="true"></span></button>'
     );
   }).join("");
+
+  function partsTotal() {
+    return PARTS.reduce(function (sum, p) {
+      return sum + (partsOn[p[0]] ? p[3] : 0);
+    }, 0);
+  }
+
+  function syncParts() {
+    var chosen = PARTS.filter(function (p) {
+      return partsOn[p[0]];
+    });
+    var total = partsTotal();
+
+    $$(".pcell").forEach(function (c) {
+      var on = !!partsOn[c.dataset.no];
+
+      c.classList.toggle("is-on", on);
+      c.setAttribute("aria-pressed", String(on));
+    });
+
+    $("#partsCount").textContent =
+      chosen.length + " of " + PARTS.length + " parts";
+    $("#partsTotal").textContent = money(total);
+    $("#partsNote").textContent =
+      chosen.length === PARTS.length
+        ? "Bought separately. Assembled and tested as one unit it is " +
+          money(ASSEMBLED) +
+          "."
+        : chosen.length === 0
+          ? "Nothing selected. Switch a part back on to price it."
+          : "Drawings for each of these ship with the order.";
+
+    $("#partsEcho").textContent = chosen.length
+      ? chosen.length +
+        " spare" +
+        (chosen.length === 1 ? "" : "s") +
+        "  /  " +
+        chosen
+          .map(function (p) {
+            return p[0];
+          })
+          .join(", ") +
+        "  /  " +
+        money(total)
+      : "";
+  }
+
+  $("#partsGrid").addEventListener("click", function (e) {
+    var cell = e.target.closest(".pcell");
+
+    if (!cell) return;
+    partsOn[cell.dataset.no] = !partsOn[cell.dataset.no];
+    syncParts();
+  });
+
+  $("#partsAll").addEventListener("click", function () {
+    PARTS.forEach(function (p) {
+      partsOn[p[0]] = true;
+    });
+    syncParts();
+  });
+
+  $("#partsNone").addEventListener("click", function () {
+    PARTS.forEach(function (p) {
+      partsOn[p[0]] = false;
+    });
+    syncParts();
+  });
+
+  syncParts();
 
   /* --------------------------------------------------------- configurator -- */
 
@@ -438,10 +521,12 @@
     };
     var cellNo = map[key];
 
+    // a class rather than an inline background, so it does not fight the
+    // selected and deselected styling of the cell
     $$(".pcell").forEach(function (c) {
-      var on = $(".pcell__n", c).textContent === cellNo;
+      var on = c.dataset.no === cellNo;
 
-      c.style.background = on ? "rgba(43,231,199,0.16)" : "";
+      c.classList.toggle("is-lit", on);
       if (on) c.scrollIntoView({ behavior: "smooth", block: "center" });
     });
   });

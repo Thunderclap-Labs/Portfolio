@@ -162,9 +162,26 @@
           <p class="wide-lede">
             The exploded view above is the parts list. Every layer has a part
             number, a drawing and a price, and the drawings ship with the unit
-            rather than after an email exchange.
+            rather than after an email exchange. Switch off the ones you already
+            have and the total follows you to the quote.
           </p>
           <div class="partsgrid" id="partsGrid"></div>
+
+          <div class="partsum">
+            <div class="partsum__meta">
+              <p class="partsum__count" id="partsCount"></p>
+              <p class="partsum__note" id="partsNote"></p>
+            </div>
+            <div class="partsum__right">
+              <p class="partsum__total">
+                <span>Parts total</span><strong id="partsTotal"></strong>
+              </p>
+              <div class="partsum__act">
+                <button class="pbtn" type="button" id="partsAll">All eight</button>
+                <button class="pbtn" type="button" id="partsNone">None</button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -276,6 +293,7 @@
             <div class="qf qf--build">
               <span>Build carried over</span>
               <p id="buildEcho"></p>
+              <p id="partsEcho" class="qf__parts"></p>
             </div>
             <button class="btn btn--solid" type="submit">Send it<i></i></button>
             <p class="qform__fine">
