@@ -12,7 +12,6 @@ type Method = {
   value: string;
   href: string;
   external?: boolean;
-  accent?: boolean;
   cta: string;
 };
 
@@ -24,7 +23,6 @@ const METHODS: Method[] = [
       "For new projects, quotes, press or careers. We read every message.",
     value: CONTACT_EMAIL,
     href: `mailto:${CONTACT_EMAIL}`,
-    accent: true,
     cta: "Write to us",
   },
   {
@@ -111,13 +109,7 @@ export function ContactMethods() {
                     {method.description}
                   </p>
 
-                  <span
-                    className={
-                      method.accent
-                        ? "text-[14.7px] leading-[120%] tracking-[-0.126px] text-accent break-all"
-                        : "text-[14.7px] leading-[120%] tracking-[-0.126px] text-white break-all"
-                    }
-                  >
+                  <span className="text-[14.7px] leading-[120%] tracking-[-0.126px] text-white break-all">
                     {method.value}
                   </span>
 

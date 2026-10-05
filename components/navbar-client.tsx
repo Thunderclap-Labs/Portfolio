@@ -67,6 +67,7 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
   const [mobilePanelHeight, setMobilePanelHeight] = useState(0);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [hoveredContactLink, setHoveredContactLink] = useState<string | null>(null);
+  const [hoveredCta, setHoveredCta] = useState(false);
   const measureRef = useRef<HTMLDivElement | null>(null);
   const mobileMeasureRef = useRef<HTMLDivElement | null>(null);
 
@@ -262,18 +263,54 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
           style={navStyles}
           onMouseEnter={() => setOpenDropdown(null)}
         >
+          {/* The one action in the bar, so it is a box rather than another
+              link at the same weight as the navigation beside it. */}
           <Link
             href="/contact"
             onClick={closeAll}
+            onMouseEnter={() => setHoveredCta(true)}
+            onMouseLeave={() => setHoveredCta(false)}
             style={{
-              opacity: isActive("/contact") ? 1 : 0.55,
-              color: "inherit",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "8px 16px",
+              border: "1px solid",
+              borderColor:
+                hoveredCta || isActive("/contact")
+                  ? "#ffffff"
+                  : "rgba(255,255,255,0.45)",
+              background:
+                hoveredCta || isActive("/contact") ? "#ffffff" : "transparent",
+              color: hoveredCta || isActive("/contact") ? "#010101" : "#ffffff",
+              opacity: 1,
               textDecoration: "none",
-              transition: "opacity 0.3s ease-out",
+              whiteSpace: "nowrap",
+              transition:
+                "background-color 0.3s ease-out, color 0.3s ease-out, border-color 0.3s ease-out",
             }}
-            className="hover:opacity-100"
           >
             Start a project
+            <svg
+              width="9"
+              height="9"
+              viewBox="0 0 10 10"
+              fill="none"
+              aria-hidden="true"
+              style={{
+                transform:
+                  hoveredCta ? "translate(1.5px, -1.5px)" : "translate(0, 0)",
+                transition: "transform 0.3s ease-out",
+              }}
+            >
+              <path
+                d="M1 9L9 1M9 1H3M9 1V7"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </Link>
         </div>
       </nav>
