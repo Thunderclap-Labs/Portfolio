@@ -282,28 +282,25 @@ export function Footer() {
             >
               All Rights Reserved
             </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span
-              aria-hidden
-              style={{
-                width: "6px",
-                height: "6px",
-                background: "#DFF140",
-                display: "inline-block",
-                boxShadow: "0 0 10px rgba(223, 241, 64, 0.6)",
-              }}
-            />
-            <span
-              style={{
-                fontSize: "10.5px",
-                letterSpacing: "0.42px",
-                textTransform: "uppercase",
-                color: "rgba(255,255,255,0.6)",
-              }}
-            >
-              Online · Kaunas, LT
-            </span>
+            {[
+              { label: "Privacy Policy", href: "/privacy" },
+              { label: "Terms of Service", href: "/terms" },
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                style={{
+                  fontSize: "10.5px",
+                  letterSpacing: "0.42px",
+                  textTransform: "uppercase",
+                  color: "rgba(255,255,255,0.45)",
+                  textDecoration: "none",
+                }}
+                className="hover:text-white transition-colors duration-300"
+              >
+                {item.label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>
