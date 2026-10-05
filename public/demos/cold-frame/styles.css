@@ -273,12 +273,22 @@ body.is-locked {
   aspect-ratio: 1;
   display: grid;
   place-items: center;
+  /* the inks are steered past the edges by the pointer, so they are trimmed to
+     the block rather than being allowed to widen the page */
+  overflow: hidden;
 }
 
+/* The two inks are steered by the pointer in script.js, which writes --bx and
+   --by on each one. They sit on their own layer so only the transform changes
+   as they move. */
 .blob {
   position: absolute;
   border-radius: 50%;
   mix-blend-mode: multiply;
+  --bx: 0px;
+  --by: 0px;
+  transform: translate3d(var(--bx), var(--by), 0);
+  will-change: transform;
 }
 
 .blob--1 {
@@ -1086,6 +1096,10 @@ body.is-locked {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  .blob {
+    transform: none;
   }
 
   .pk {

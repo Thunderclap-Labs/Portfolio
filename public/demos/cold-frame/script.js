@@ -312,4 +312,85 @@
 
     if (s) navIO.observe(s);
   });
+
+  /* ------------------------------------------------------- torch beams -- */
+
+  /* The two ink circles in the hero follow the pointer like a pair of torches
+     held at different distances: the near one keeps up, the far one lags and
+     swings wider, so the overlap between them opens and closes as you move.
+     Pointer position is measured against the centre of the art box, not the
+     viewport, so the beams point at the cursor from wherever the block sits. */
+  (function beams() {
+    var art = document.querySelector(".hero__art");
+    var blobs = [].slice.call(document.querySelectorAll(".blob"));
+
+    if (!art || !blobs.length) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    // reach, as a share of the box, and how quickly each one catches up
+    var TUNE = [
+      { reach: 0.17, ease: 0.085 },
+      { reach: 0.3, ease: 0.045 },
+    ];
+    var want = { x: 0, y: 0 };
+    var at = blobs.map(function () {
+      return { x: 0, y: 0 };
+    });
+    var running = false;
+    var seen = false;
+
+    function point(e) {
+      var r = art.getBoundingClientRect();
+
+      if (!r.width) return;
+      // -1 to 1 either side of the centre of the art, clamped so a pointer far
+      // across the page does not fling the circles off their ground
+      want.x = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width / 2)) / r.width));
+      want.y = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height / 2)) / r.height));
+      seen = true;
+      start();
+    }
+
+    function frame() {
+      var moving = false;
+      var r = art.getBoundingClientRect();
+
+      blobs.forEach(function (b, i) {
+        var t = TUNE[i] || TUNE[TUNE.length - 1];
+        var tx = want.x * t.reach * r.width;
+        var ty = want.y * t.reach * r.height;
+
+        at[i].x += (tx - at[i].x) * t.ease;
+        at[i].y += (ty - at[i].y) * t.ease;
+
+        if (Math.abs(tx - at[i].x) > 0.3 || Math.abs(ty - at[i].y) > 0.3) moving = true;
+
+        b.style.setProperty("--bx", at[i].x.toFixed(2) + "px");
+        b.style.setProperty("--by", at[i].y.toFixed(2) + "px");
+      });
+
+      if (moving) requestAnimationFrame(frame);
+      else running = false;
+    }
+
+    function start() {
+      if (running) return;
+      running = true;
+      requestAnimationFrame(frame);
+    }
+
+    window.addEventListener("pointermove", function (e) {
+      // a finger dragging the page should not drag the artwork with it
+      if (e.pointerType === "touch") return;
+      point(e);
+    });
+
+    // leaving the window lets them drift back to where they were drawn
+    window.addEventListener("pointerleave", function () {
+      if (!seen) return;
+      want.x = 0;
+      want.y = 0;
+      start();
+    });
+  })();
 })();
