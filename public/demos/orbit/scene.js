@@ -32,6 +32,25 @@ window.OrbitScene = (function () {
   var pickHandler = null;
   var ray, ndc;
 
+  /* How far a picked module steps out of the column, how much it grows, and the
+     most any module is ever lifted. The framing is measured against these, so
+     whatever the scene can do to the stack stays inside the frustum. */
+  var PICK_X = 2.7;
+  var PICK_SCALE = 1.14;
+  var LIFT_MAX = 0.55 + 1.5;
+
+  /* Filled in by measure(): the cylinder the stack sweeps as it turns, for the
+     stack on its own and for the wider pose with a module stepped out. resize()
+     turns each into a camera distance; animate() eases between them, so the hub
+     is framed tight by default and the camera only gives ground when a module
+     actually comes out. */
+  var boundsIdle = { r: 2.2, top: 4.2, bottom: -0.6 };
+  var boundsPick = { r: 4.5, top: 5.2, bottom: -0.6 };
+  var viewIdle = { d: 13, y: 1.35 };
+  var viewPick = { d: 18, y: 1.6 };
+  var view = { d: 0, y: 0 };
+  var DIR = { x: 0.05, y: 0.5, z: 0.62 };
+
   var COL = {
     peri: 0x6b84ff,
     periD: 0x4c65e6,
@@ -406,6 +425,7 @@ window.OrbitScene = (function () {
       el.classList.remove("is-dragging");
     });
 
+    measure();
     window.addEventListener("resize", resize);
     resize();
     animate();
@@ -440,6 +460,96 @@ window.OrbitScene = (function () {
     pickHandler = fn;
   };
 
+  /* The cylinder a box sweeps as the stack turns about Y, plus its height. */
+  function sweep(box) {
+    var r = 0;
+
+    [box.min.x, box.max.x].forEach(function (x) {
+      [box.min.z, box.max.z].forEach(function (z) {
+        r = Math.max(r, Math.sqrt(x * x + z * z));
+      });
+    });
+
+    return { r: r, top: box.max.y, bottom: box.min.y };
+  }
+
+  /* Measure the volume the stack occupies, once, from the model itself, in the
+     two poses that matter: fully exploded on its own, and with the top module
+     stepped out, lifted, grown and turned onto its diagonal, which is the
+     widest the scene ever gets. The stack only turns about Y, so what has to
+     fit horizontally is the radius of the cylinder it sweeps rather than the
+     width of any one angle. */
+  function measure() {
+    var saved = order.map(function (key) {
+      var g = mods[key];
+
+      return g
+        ? { g: g, x: g.position.x, y: g.position.y, s: g.scale.x, r: g.rotation.y }
+        : null;
+    });
+    var savedSpin = root.rotation.y;
+
+    root.rotation.y = 0;
+    order.forEach(function (key) {
+      var g = mods[key];
+
+      if (!g) return;
+      g.position.set(0, g.userData.open, 0);
+      g.scale.setScalar(1);
+      g.rotation.y = 0;
+    });
+    root.updateMatrixWorld(true);
+
+    var box = new THREE.Box3().setFromObject(root);
+
+    boundsIdle = sweep(box);
+
+    var out = mods[order[order.length - 1]];
+
+    if (out) {
+      out.position.set(PICK_X, out.userData.open + LIFT_MAX, 0);
+      out.scale.setScalar(PICK_SCALE);
+      out.rotation.y = Math.PI / 4;
+      out.updateMatrixWorld(true);
+      box.union(new THREE.Box3().setFromObject(out));
+    }
+    boundsPick = sweep(box);
+
+    saved.forEach(function (s) {
+      if (!s) return;
+      s.g.position.set(s.x, s.y, 0);
+      s.g.scale.setScalar(s.s);
+      s.g.rotation.y = s.r;
+    });
+    root.rotation.y = savedSpin;
+    root.updateMatrixWorld(true);
+  }
+
+  /* Distance at which a sphere containing `b` clears both fields of view. A
+     sphere is the same size whichever way the model is turned, so this holds at
+     every angle rather than only the one the page loads at. */
+  function fit(b) {
+    var midY = (b.top + b.bottom) / 2;
+    var halfH = (b.top - b.bottom) / 2;
+    var radius = Math.sqrt(b.r * b.r + halfH * halfH);
+
+    var vFov = (camera.fov * Math.PI) / 180;
+    var hFov = 2 * Math.atan(Math.tan(vFov / 2) * camera.aspect);
+
+    return { d: (radius / Math.sin(Math.min(vFov, hFov) / 2)) * 1.04, y: midY };
+  }
+
+  function placeCamera() {
+    var len = Math.sqrt(DIR.x * DIR.x + DIR.y * DIR.y + DIR.z * DIR.z);
+
+    camera.position.set(
+      (DIR.x / len) * view.d,
+      (DIR.y / len) * view.d + view.y,
+      (DIR.z / len) * view.d,
+    );
+    camera.lookAt(0, view.y, 0);
+  }
+
   function resize() {
     if (!renderer || !host) return;
     var w = host.clientWidth;
@@ -449,10 +559,13 @@ window.OrbitScene = (function () {
     renderer.setSize(w, h);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
-    var d = 15 / Math.max(camera.aspect, 0.6);
 
-    camera.position.set(d * 0.05, d * 0.5, d * 0.62);
-    camera.lookAt(0, 1.35, 0);
+    viewIdle = fit(boundsIdle);
+    viewPick = fit(boundsPick);
+
+    // first pass, or a resize while nothing is pulled out: no easing to do
+    if (!view.d || !picked) view = { d: viewIdle.d, y: viewIdle.y };
+    placeCamera();
   }
 
   function animate() {
@@ -485,9 +598,9 @@ window.OrbitScene = (function () {
       g.position.y += (target - g.position.y) * 0.1;
 
       // the picked module steps out of the column and turns to face you
-      var wantX = isPicked ? 2.7 : 0;
+      var wantX = isPicked ? PICK_X : 0;
       var wantSpin = isPicked ? t * 0.9 : 0;
-      var wantScale = isPicked ? 1.14 : 1;
+      var wantScale = isPicked ? PICK_SCALE : 1;
 
       g.position.x += (wantX - g.position.x) * 0.12;
       g.rotation.y += (wantSpin - g.rotation.y) * (isPicked ? 0.3 : 0.1);
@@ -508,6 +621,13 @@ window.OrbitScene = (function () {
       mods.cap.userData.ring.material.emissiveIntensity =
         0.3 + Math.sin(t * 1.6) * 0.18;
     }
+
+    // give ground only while a module is out of the column, then come back in
+    var want = picked ? viewPick : viewIdle;
+
+    view.d += (want.d - view.d) * 0.055;
+    view.y += (want.y - view.y) * 0.055;
+    placeCamera();
 
     renderer.render(scene, camera);
   }
