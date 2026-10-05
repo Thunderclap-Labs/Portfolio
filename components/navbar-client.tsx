@@ -9,7 +9,7 @@ import { NAV_LINKS } from "@/constants/nav";
 import { SOCIALS } from "@/constants/socials";
 import { CONTACT_EMAIL } from "@/constants/contact";
 
-type DropdownKey = "projects" | "articles" | "demos";
+type DropdownKey = "articles" | "demos";
 type PanelKey = DropdownKey | "contact";
 
 interface NavLink {
@@ -24,23 +24,15 @@ const navLinks: NavLink[] = [
     dropdown:
       link.href === "/articles"
         ? ("articles" as PanelKey)
-        : link.href === "/projects"
-          ? ("projects" as PanelKey)
-          : link.href === "/demos"
-            ? ("demos" as PanelKey)
-            : link.href === "/contact"
-              ? ("contact" as PanelKey)
-              : undefined,
+        : link.href === "/demos"
+          ? ("demos" as PanelKey)
+          : link.href === "/contact"
+            ? ("contact" as PanelKey)
+            : undefined,
   })),
 ];
 
 const DROPDOWN_COPY: Record<DropdownKey, { eyebrow: string; description: string; viewAllHref: string; viewAllLabel: string }> = {
-  projects: {
-    eyebrow: "Projects",
-    description: "Selected client work. Websites, storefronts, web apps and 3D product experiences.",
-    viewAllHref: "/projects",
-    viewAllLabel: "View all projects",
-  },
   articles: {
     eyebrow: "Articles",
     description: "News, technical writeups, and notes from the studio.",
@@ -417,7 +409,6 @@ export function NavbarClient({ dropdowns }: NavbarClientProps) {
                   {[
                     { label: "Home", href: "/" },
                     { label: "Demos", href: "/demos" },
-                    { label: "Projects", href: "/projects" },
                     { label: "Articles", href: "/articles" },
                     { label: "Contact Us", href: "/contact" },
                   ].map((link) => {
