@@ -14,11 +14,18 @@ import {
   previewUrl,
 } from "@/constants/demos";
 
-/** Filter chips share the toolbar styling used on the articles page: a hairline
- *  box that fills with the accent once selected. */
+/** Filter chips sit at the eyebrow size from the style guide, the same 10.5px
+ *  uppercase label used by the capability tags on the cards below them. A
+ *  hairline box that fills with the accent once selected. */
+const CHIP_STYLE = {
+  fontSize: "10.5px",
+  letterSpacing: "0.42px",
+  padding: "5px 8px",
+} as const;
+
 function chipClass(active: boolean) {
   return [
-    "font-medium uppercase leading-none px-3 py-2 border transition-colors duration-300 cursor-pointer",
+    "font-medium uppercase leading-none border transition-colors duration-300 cursor-pointer",
     active
       ? "border-accent text-accent bg-[rgba(223,241,64,0.12)]"
       : "border-[rgba(255,255,255,0.18)] text-[rgba(255,255,255,0.6)] hover:text-white hover:border-[rgba(255,255,255,0.45)]",
@@ -202,7 +209,12 @@ export function DemosIndex() {
       {/* Capability filter */}
       <div className="container-content max-w-280 mx-auto pb-10">
         <div className="flex flex-wrap items-center gap-1.5">
-          <button type="button" className={chipClass(filter === "All")} onClick={() => setFilter("All")}>
+          <button
+            type="button"
+            style={CHIP_STYLE}
+            className={chipClass(filter === "All")}
+            onClick={() => setFilter("All")}
+          >
             All ({visibleDemos.length})
           </button>
           {CAPABILITIES.map((cap) => {
@@ -214,6 +226,7 @@ export function DemosIndex() {
               <button
                 key={cap}
                 type="button"
+                style={CHIP_STYLE}
                 className={chipClass(filter === cap)}
                 onClick={() => setFilter(cap)}
               >
