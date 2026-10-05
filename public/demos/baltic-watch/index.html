@@ -81,10 +81,10 @@
                 <g id="pins"></g>
               </svg>
               <div class="map__key">
-                <span><i class="k k--calm"></i>Under 1.0</span>
-                <span><i class="k k--mod"></i>1.0 to 2.0</span>
-                <span><i class="k k--rough"></i>Over 2.0</span>
-                <em>Significant wave height, metres</em>
+                <span><i class="k k--calm"></i><b id="keyCalm">Under 1.0</b></span>
+                <span><i class="k k--mod"></i><b id="keyMod">1.0 to 2.0</b></span>
+                <span><i class="k k--rough"></i><b id="keyRough">Over 2.0</b></span>
+                <em id="keyUnit">Significant wave height, metres</em>
               </div>
             </div>
           </div>
@@ -157,7 +157,7 @@
           <figure class="chart">
             <figcaption>
               <h3>Sea level</h3>
-              <span>Centimetres above chart datum, 72 hours</span>
+              <span id="levelAxis">Centimetres above chart datum, 72 hours</span>
             </figcaption>
             <canvas id="tideCanvas" height="260"></canvas>
             <p class="chart__note" id="tideNote"></p>
@@ -184,7 +184,7 @@
           <figure class="chart">
             <figcaption>
               <h3>Water and air</h3>
-              <span>Degrees, 72 hours, water in blue</span>
+              <span id="tempAxis">Degrees, 72 hours, water in blue</span>
             </figcaption>
             <canvas id="tempCanvas" height="260"></canvas>
             <p class="chart__note" id="tempNote"></p>

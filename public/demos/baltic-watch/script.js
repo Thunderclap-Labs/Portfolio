@@ -220,6 +220,12 @@
     period: function (s) {
       return [n(s, 1), "s"];
     },
+    depth: function (m) {
+      return units === "metric" ? [n(m, 0), "m"] : [n(m * 3.2808, 0), "ft"];
+    },
+    grid: function (km) {
+      return units === "metric" ? [n(km, 0), "km"] : [n(km * 0.6214, 0), "mi"];
+    },
   };
 
   function pair(t) {
@@ -352,7 +358,7 @@
 
     $("#stName").textContent = st.name;
     $("#stMeta").textContent =
-      st.k + " / " + st.kind + " / " + st.depth + " m";
+      st.k + " / " + st.kind + " / " + pair(F.depth(st.depth));
 
     var tiles = [
       [
@@ -371,8 +377,8 @@
           Math.round(r.dir) +
           " deg",
       ],
-      ["Water", pair(F.temp(r.water)), "At 0.5 m depth"],
-      ["Air", pair(F.temp(r.air)), "At 2 m above the deck"],
+      ["Water", pair(F.temp(r.water)), "At " + pair(F.wave(0.5)) + " depth"],
+      ["Air", pair(F.temp(r.air)), "At " + pair(F.wave(2)) + " above the deck"],
       [
         "Sea level",
         pair(F.level(r.level)),
@@ -410,7 +416,7 @@
     $("#seaTp").innerHTML = pair(F.period(r.tp));
     $("#seaDir").innerHTML = card(r.dir) + "<i></i>";
     $("#seaMeta").textContent =
-      "Grid 1 km, " + (offset === 0 ? "observed" : "modelled");
+      "Grid " + pair(F.grid(1)) + ", " + (offset === 0 ? "observed" : "modelled");
 
     if (window.BalticSea) {
       BalticSea.setState({ hs: r.hs, tp: r.tp, dir: r.dir });
@@ -586,7 +592,9 @@
       pair(F.level(lo)) +
       " to " +
       pair(F.level(hi)) +
-      ". The Baltic tide is a few centimetres, so almost all of this is wind pushing water onto the coast.";
+      ". The Baltic tide is a few " +
+      (units === "metric" ? "centimetres" : "inches") +
+      ", so almost all of this is wind pushing water onto the coast.";
   }
 
   function drawWave() {
@@ -995,7 +1003,7 @@
         tag: worst.hs > 2.2 ? "Warning" : "Advisory",
         id: "BW-" + (H0 % 900 + 100),
         title:
-          "Building sea at " + worst.s.name + ", peak " + n(worst.hs, 1) + " m",
+          "Building sea at " + worst.s.name + ", peak " + pair(F.wave(worst.hs)),
         body:
           "Expected around " +
           dayLabel(worst.h) +
@@ -1084,7 +1092,29 @@
 
   /* ------------------------------------------------------------------ wire */
 
+  /* The map legend and the chart captions are written in the markup, so they
+     have to be rewritten when the units change like everything else. */
+  function paintLabels() {
+    var calm = F.wave(1);
+    var rough = F.wave(2);
+
+    $("#keyCalm").textContent = "Under " + calm[0];
+    $("#keyMod").textContent = calm[0] + " to " + rough[0];
+    $("#keyRough").textContent = "Over " + rough[0];
+    $("#keyUnit").textContent =
+      "Significant wave height, " +
+      (units === "metric" ? "metres" : "feet");
+    $("#levelAxis").textContent =
+      (units === "metric" ? "Centimetres" : "Inches") +
+      " above chart datum, 72 hours";
+    $("#tempAxis").textContent =
+      "Degrees " +
+      (units === "metric" ? "C" : "F") +
+      ", 72 hours, water in blue";
+  }
+
   function paintAll() {
+    paintLabels();
     drawPins();
     paintReadout();
     drawCharts();
