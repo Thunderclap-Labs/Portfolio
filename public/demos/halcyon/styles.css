@@ -393,13 +393,16 @@ body.is-locked {
   min-height: 660px;
 }
 
+/* Decorative. Sized against the viewport as well as in pixels, because at a
+   fixed 560px it hung 85px past the right edge on a phone and gave the page a
+   sideways scroll. */
 .stage__ring {
   position: absolute;
   top: 268px;
   left: 50%;
-  width: 560px;
-  height: 560px;
-  margin: -280px 0 0 -280px;
+  width: min(560px, 92vw);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
   border-radius: 50%;
   border: 1px solid var(--rule);
   background: radial-gradient(
