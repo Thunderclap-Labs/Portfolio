@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
+import { HeroBackdrop } from "@/components/home/hero-backdrop";
 
 // easeOutQuint — matches the rest of the site's motion (page transition, etc.)
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -94,16 +95,9 @@ export function HeroSection() {
         className="absolute inset-0 sm:inset-6 overflow-hidden rounded-none sm:rounded-xs"
         style={cardStyle}
       >
-        {/* Video — always full opacity, always fully visible */}
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-          src="/rnd-bg.mp4"
-          aria-hidden="true"
-        />
+{/* The drawing sheet, in place of the old background video. Same box,
+            same object-cover crop, so the framing is unchanged. */}
+        <HeroBackdrop className="absolute inset-0 w-full h-full object-cover" />
 
         {/* ----------------------------- MOBILE ----------------------------- */}
         <div className="sm:hidden absolute inset-0">
